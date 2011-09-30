@@ -62,6 +62,7 @@
 			return json_encode($return);
 		}
 		public function api_post(){
+			global $tiarra_socket_name;
 			global $my_name;
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
 			else
@@ -74,7 +75,7 @@
 						$return = array( 'error' => true, 'msg' => 'channel not found.' );
 					}else{
 						try{
-							$tiarra = new Net_Socket_Tiarra('webreader');
+							$tiarra = new Net_Socket_Tiarra($tiarra_socket_name);
 							$tiarra->message($name, $this->request->post);
 							//$tiarra->noticeMessage($name, "notice!!");
 							$return = array( 'error' => false );
