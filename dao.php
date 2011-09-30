@@ -118,7 +118,7 @@ class dao_log extends dao_base{
 	}
 
 	function postLog( $message, $channel_id, $nick_id ){
-		$sql = "insert into log(channel_id,nick_id,log,created_on,updated_on) values($channel_id,$nick_id,".$this->qs($message).",NOW(),NOW() )";
+		$sql = "insert into log(channel_id,nick_id,log,is_privmsg,created_on,updated_on) values($channel_id,$nick_id,".$this->qs($message).",0,NOW(),NOW() )";
 		return $this->_conn->Execute($sql);
 	}
 }
