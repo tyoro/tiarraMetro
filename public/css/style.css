@@ -43,6 +43,10 @@ table.list td.name{
 	word-break: break-all;
 }
 
+table.list td.notice{
+	color:#bbb;
+}
+
 table.list td.log{
 	word-break: break-all;
 	vertical-align:top;
