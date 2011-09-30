@@ -1,0 +1,19 @@
+<?php
+
+$conf = Array(
+	'mountPoint' => ''
+	,'layout' => 'layout'
+	,'dao' => array('channel','nick','log')
+);
+
+$my_name = 'tyoro';
+$password_md5 = md5('0000');
+$pickup_words = array('tyoro','hogehoge');
+
+// Databaseの設定
+define("DATABASE_HOST","localhost");
+define("DATABASE_ID","tiarra");
+define("DATABASE_PASS","hogehoge");
+define("DATABASE_NAME","tiarra");
+
+?>

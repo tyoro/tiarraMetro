@@ -1,0 +1,95 @@
+a{
+	text-decoration:none;
+}
+
+ul.channel_list li.new{
+	color:#fff;
+}
+
+ul.channel_list li.hit{
+	color:#fbb;
+	text-decoration:blink;
+}
+
+
+ul.channel_list li{
+	font-size:xx-large;
+	padding-top:10px;
+	padding-bottom:10px;
+	color:#bbb;
+}
+
+ul.channel_list li span{
+	font-size:xx-large;
+}
+
+table.list{
+	width:480px;
+}
+
+table.list td.channel{
+	word-break: break-all;
+	vertical-align:top;
+}
+
+table.list td.tyoro.name{
+	color:#bbb !important;
+}
+
+table.list td.name{
+	width:100px;
+	color:#9f9;
+	vertical-align:top;
+	word-break: break-all;
+}
+
+table.list td.log{
+	word-break: break-all;
+	vertical-align:top;
+}
+
+table.list td.time{
+	font-size:15px;
+	word-break: nowrap;
+	align:center;
+	color:#bbb;
+}
+
+table.list tr{
+}
+
+body,div,span,font,input {
+font-size:20px;
+}
+
+div {display:block;}
+dl {margin:0;}
+dd {margin:0 0 0 20px;}
+form {margin:0;}
+input[type=text] {width:180px;}
+span.pickup{ color:#fbb; }
+
+#pad {padding:5px 0px;}
+
+
+/* hack */
+
+.clearfix:after {
+  content: ".";  /* 新しい要素を作る */
+  display: block;  /* ブロックレベル要素に */
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix {
+  min-height: 1px;
+}
+
+* html .clearfix {
+  height: 1px;
+  /*\*//*/
+  height: auto;
+  overflow: hidden;
+  /**/
+}
