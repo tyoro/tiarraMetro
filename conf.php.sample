@@ -17,6 +17,9 @@ define("DATABASE_ID","tiarra");
 define("DATABASE_PASS","hogehoge");
 define("DATABASE_NAME","tiarra");
 
+// utf8, ujis, sjis
+define("DATABASE_CHARSET","utf8");
+
 define("SYSTEM_DEBUG",false);
 define("DATABASE_DEBUG",false);
 

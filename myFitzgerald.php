@@ -9,8 +9,9 @@
             $this->options = new ArrayWrapper($options);
 			if( isset($options['dao']) && count($options['dao']) ){
 				$db_list = array();
-				$conn = &ADONewConnection('mysqli');
+				$conn = ADONewConnection('mysqli');
 				$conn->PConnect(DATABASE_HOST, DATABASE_ID, DATABASE_PASS, DATABASE_NAME);
+				$conn->SetCharSet( DATABASE_CHARSET );
 				if( DATABASE_DEBUG ){
 					$conn->debug = 1;
 				}
