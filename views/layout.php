@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"> 
 <meta name="viewport" content="width=480;initial-scale=1.0;maximum-scale=1.0;user-scalable=0;" />
-<base href="http://tiarra.tyo.ro/">
+<base href="<?php print $uri_base; ?>">
 <title><?php echo TiarraWEB::$page_title; ?></title>
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/jquery.metro.css" />

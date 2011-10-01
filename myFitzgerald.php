@@ -34,6 +34,8 @@
 					$variableArray[ $useHepler ] = new $class();
 				}
 			}
+			$variableArray['uri_base'] = 'http://'.$_SERVER['SERVER_NAME'].$this->options->mountPoint.'/';
+
 			return parent::render($fileName,$variableArray);
 		}
 

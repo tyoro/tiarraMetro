@@ -1,3 +1,3 @@
 <?php
-    include('..//app.php');
+    include('../app.php');
 ?>
