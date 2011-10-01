@@ -63,17 +63,11 @@ $(function(){
 			success:function(json){
 				if( json['update'] ){
 					$.each( json['logs'], function(channel_id, logs){
-						if( channel_id == currentChannel ){
-							$.each( logs, add_log );
-						}
-						
-						$('#ch_'+channel_id).attr('class','new');
-						num = $('#ch_'+channel_id+' span.ch_num');
-						num.text( num.text()-0+logs.length );
 						
 						$.each( pickup_word,function(j,w){
 							$.map( logs, function( log,i){
-								if( log.log.indexOf(w) > 0 ){
+								if( log.log.indexOf(w) >= 0 ){
+									$.jGrowl( log.nick+':'+ log.log +'('+getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
 									log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
 									$('#ch_'+channel_id).attr('class','hit');
 								}
@@ -82,22 +76,33 @@ $(function(){
 						});
 					
 						chLogs[channel_id] = logs.concat(chLogs[channel_id]).slice(0,30);
+
+						if( channel_id == currentChannel ){
+							$.each( logs.reverse(), add_log );
+						}else{
+							if( $('#ch_'+channel_id).attr('class') != 'hit' ){
+								$('#ch_'+channel_id).attr('class','new');
+							}
+							num = $('#ch_'+channel_id+' span.ch_num');
+							num.text( num.text()-0+logs.length );
+						}
+						
 					});
 				}
 				chkTime = json['checktime'];
 			}
 		});	 
 	};
-	var autoReload =  setInterval( 	reload_func, 10*1000);
+	var autoReload =  setInterval( 	reload_func, 5*1000);
 
 	var add_log = function( i, log ){
-		$('#list tbody').prepend('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_privmsg == 1)?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		$('#list tbody').prepend('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_privmsg == '1')?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
 	var more_log = function( i,log ){
-		$('#list tbody').append('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_privmsg == 1)?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		$('#list tbody').append('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_privmsg == '1')?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
 	var add_result = function( i, log ){
-		$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_privmsg==1?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_privmsg=='1'?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
 	var getChannelName = function( i ){
 		return $('li#ch_'+i+' span.ch_name').text();
