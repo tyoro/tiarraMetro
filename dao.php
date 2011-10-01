@@ -91,7 +91,7 @@ class dao_log extends dao_base{
 		$sql = "SELECT nick.name as nick, log.log as log, log.created_on as time, log.is_privmsg as is_privmsg FROM log JOIN nick ON log.nick_id = nick.id WHERE channel_id = $channel_id";
 
 		if( !is_null( $time ) ){
-			$sql .= " AND log.created_on > ".$this->qs($time);
+			$sql .= " AND log.created_on >= ".$this->qs($time);
 		}
 		
 		$sql .= " ORDER BY log.created_on DESC LIMIT $start, $num  ";
