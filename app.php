@@ -64,7 +64,8 @@
 							$ch_log[$log['channel_id']][] = array(
 								'nick' => $log['nick'],
 								'log' => $log['log'],
-								'time' => $log['time']
+								'time' => $log['time'],
+								'is_privmsg' => $log['is_privmsg']
 							);
 						}
 						$return['logs'] = $ch_log;
@@ -163,7 +164,7 @@
 			return $this->db->log->getLog($channel_id, $checktime);
 		}
 		private function getLogs( $channel_id, $checktime = null ){
-			if( is_int( $channel_id ) ){
+			if( ctype_digit( $channel_id ) ){
 				$this->db->channel->updateReaded($channel_id);
 			}
 			return $this->db->log->getLogAll($checktime);
