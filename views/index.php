@@ -135,7 +135,6 @@ $(function(){
 		});
 
 		if( chLogs[channel_id].length >= 30 ){
-		console.log(chLogs[channel_id].length);
 			addMoreButton( );
 		}
 		
