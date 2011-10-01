@@ -7,32 +7,46 @@
 	include_once 'lib/adodb5/adodb-pear.inc.php';
 
 	include_once 'Net/Socket/Tiarra.php';
-	 
+	
 	class TiarraWEB extends MyFitzgerald {
 		public static $page_title = "tiarra";
 		public static $msg = '';
 
-		public function index(){
-			global $pickup_words;
-
+		public function index_main( $pivot = 'default', $default_channel_id = -1 ){
 			if( !$this->isLoggedIn() ){ 
 				return $this->redirect('/login');
 			}
+			global $pickup_words;
+
 			$channel_list = array();
 			$log_list = array();
+			$default_channel = array( 'id'=>$default_channel_id );
 
 			foreach( $this->db->channel->getUnreadList() as $ch ){
 				$channel_list[$ch['id']] = $ch;
 				$log_list[$ch['id']] = $this->db->log->getLog($ch['id']);
+				if( $default_channel_id == $ch['id'] ){ $default_channel[ 'name' ] = $ch['name']; }
 			}
 			return $this->render('index',
 				array(
 					'checktime' => date("Y-m-d H:i:s"),
 					'channels' => $channel_list,
 					'pickup' => $pickup_words,
-					'logs' => $log_list
+					'logs' => $log_list,
+					'pivot' => $pivot,
+					'default_channel' => $default_channel
 					)
 			);
+		}
+
+		public function index(){
+			return $this->index_main( );
+		}
+		public function search_select( ){
+			return $this->index_main( 'search' );
+		}
+		public function channel_select( $channel_id ){
+			return $this->index_main( 'channel', $channel_id );
 		}
 
 		//api
@@ -160,6 +174,8 @@
 
 	//routing
 	$app->get('/','index');
+	$app->get('/search/','search_select');
+	$app->get('/channel/:channel_id','channel_select',array('channel_id'=>'\d+'));
 	$app->post_and_get('/login','login' );
 	
 	//api

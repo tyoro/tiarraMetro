@@ -9,17 +9,8 @@
 <link rel="stylesheet" href="css/jquery.metro.css" />
 <script src= "./js/jquery.js"></script>
 <script src= "./js/jquery.metro.js"></script>
-<script >
-$(
-	function () {
-		$("div.metro-pivot").metroPivot();
-	}
-);
-</script>
 </head>
 <body>
-  <div class="metro-pivot">
       <?php echo $content; ?>
-  </div>
 </body>
 </html>

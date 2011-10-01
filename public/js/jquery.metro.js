@@ -20,7 +20,8 @@
         itemsTemplate: function () { return $("<div class='items' />"); },
         headersTemplate: function () { return $("<div class='headers' />"); },
         controlInitialized: undefined,
-        selectedItemChanged: undefined
+        selectedItemChanged: undefined,
+		clickedItemHeader: undefined
     };
 
     $.fn.metroPivot = function (settings) {
@@ -36,19 +37,23 @@
             items : undefined,
             goToNext: function(){
                 if(this.animating) return;
-                this.headers.children(".current").next().trigger("click");
+                //this.headers.children(".current").next().trigger("click");
+				this.pivotHeader_Move( this.headers.children(".current").next()  );
             },
             goToPrevious: function(){
                 if(this.animating) return;
-                this.headers.children(".header").last().trigger("click");
+                //this.headers.children(".header").last().trigger("click");
+				this.pivotHeader_Move( this.headers.children(".header").last() );
             },
             goToItemByName:function(header){
                 if(this.animating) return;
-                this.headers.children(":contains("+header+")").first().trigger("click");
+                //this.headers.children(":contains("+header+")").first().trigger("click");
+				this.pivotHeader_Move( this.headers.children("span[name="+header+"]").first() );
             },
             goToItemByIndex:function(index){
                 if(this.animating) return;
-                this.headers.children().eq(index).trigger("click");
+                //this.headers.children().eq(index).trigger("click");
+				this.pivotHeader_Move( this.headers.children().eq(index) );
             },
             initialize : function () {
                 var pivot = this;
@@ -71,6 +76,9 @@
                         pivotItem.addClass("current").show();
                     }
                     headerItem.attr("index", index);
+					if( ( name = h3Element.attr('name') ).length > 0 ){
+						headerItem.attr('name',name);
+					}
                     headerItem.click(function() { pivot.pivotHeader_Click($(this)); });
 
                     headers.append(headerItem);
@@ -116,7 +124,7 @@
                     });
                 }
             },
-            setCurrentItem: function(item, index){
+            setCurrentItem: function(item, index ){
                 var pivot = this;
                 
                 // hide current item immediately
@@ -134,27 +142,46 @@
             },
             currentItemChanged: function(index) {
                 this.animating = false;
+                if(this.clickedItemHeader!= undefined)
+                {
+					if( this.click ){
+						this.clickedItemHeader(index);
+						this.click = false;
+					}
+				}
                 if(this.selectedItemChanged != undefined)
                 {
-                    this.selectedItemChanged(index);
+            	    this.selectedItemChanged(index);
                 }
             },
             pivotHeader_Click : function (me) {
+				var index = this._pivotHeader_Move(me);
+				if( index < 0 ){ return; }
+                // find and set current item
+				this.click = true;
+                var item = this.items.children(".pivotItem:nth(" + index + ")");
+                this.setCurrentItem(item, index );
+            },
+            pivotHeader_Move : function (elm) {
+				var index = this._pivotHeader_Move(elm);
+				if( index < 0 ){ return; }
+                // find and set current item
+                var item = this.items.children(".pivotItem:nth(" + index + ")");
+                this.setCurrentItem(item, index );
+            },
+			_pivotHeader_Move : function (elm) {
                 // ignore if already current
-                if (me.is(".current")) return;
+                if (elm.is(".current")) return -1;
 
                 // ignore if still animating
-                if (this.animating) return;
+                if (this.animating) return -1;
                 this.animating = true;
 
                 // set current header
-                this.setCurrentHeader(me);
+                this.setCurrentHeader(elm);
 
-                var index = me.attr("index");
-                // find and set current item
-                var item = this.items.children(".pivotItem:nth(" + index + ")");
-                this.setCurrentItem(item, index);
-            },
+                return elm.attr("index");
+			},
         });
 
         return this.initialize();

@@ -1,5 +1,6 @@
+<div class="metro-pivot">
 <div class='pivot-item'>
-	<h3>channel</h3>
+	<h3 name="list">channel</h3>
 	<ul class="channel_list">
 	<?php foreach( $channels as $ch ){ ?>
 	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>(<span class="ch_num"><?php print $ch['cnt']; ?></span>)</li>
@@ -7,7 +8,7 @@
 	</ul>
 </div>
 <div class='pivot-item'>
-	<h3 id="ch_name"></h3>
+	<h3 id="ch_name" name="channel" ></h3>
 	<form method="POST" id="post_form">
 		<input type="text" name="post" id="message" /><input type="submit" value="post" />
 	</form>
@@ -23,7 +24,7 @@
 	<div id="ch_foot"></div>
 </div>
 <div class='pivot-item'>
-	<h3>search</h3>
+	<h3 name="search">search</h3>
 	<form method="POST" id="search_form">
 	<input type="text" name="word"  id="keyword" />
 	<select name="channel" id="channel_select">
@@ -48,7 +49,8 @@
 <script>
 $(function(){
 	var chkTime = '<?php print $checktime; ?>';
-	var currentChannel = null;
+	var currentChannel = <?php print $default_channel['id']; ?>;
+	if( currentChannel < 0 ){ currentChannel = null; }
 	var chLogs = <?php print json_encode($logs); ?>;
 	var pickup_word = <?php print json_encode($pickup); ?>;
 
@@ -74,7 +76,6 @@ $(function(){
 								if( log.log.indexOf(w) > 0 ){
 									log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
 									$('#ch_'+channel_id).attr('class','hit');
-									//$('span.ch_name',this).html( '<blink>' + $('span.ch_name',this).text() +'</blink>' );
 								}
 								return log;
 							});
@@ -98,30 +99,41 @@ $(function(){
 	var add_result = function( i, log ){
 		$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_privmsg==1?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
+	var getChannelName = function( i ){
+		return $('li#ch_'+i+' span.ch_name').text();
+	}
 
-	var select_channel = function( ){
-		var ch_id = this.id.substring(3);
-		currentChannel = ch_id;
-		
-		$('div.headers span.header[index=1]').html( $('span.ch_name',this).text() );
-		$('#ch_'+ch_id).attr('class','');
-		$('#ch_'+ch_id+' span.ch_num').text(0);
+	var selectChannel = function( channel_id, channel_name ){
+		currentChannel = channel_id;
+
 		$('#list tbody tr').each(function( i,e ){ $(e).remove(); });
-		$('div#ch_foot').html();
+		$('div#ch_foot').html('');
 
-		$.each( [].concat( chLogs[ch_id]).reverse() , add_log );
-		$("div.metro-pivot").data("controller").goToNext();
+		loadChannel( channel_id, channel_name);
+		
+		$("div.metro-pivot").data("controller").goToItemByName('channel');
 		//scrollTo(0,0);
 
+	}
+
+	var loadChannel = function( channel_id, channel_name ){
+		$('div.headers span.header[name=channel]').html( channel_name );
+		$('#ch_'+channel_id).attr('class','');
+		$('#ch_'+channel_id+' span.ch_num').text(0);
+
+		$.each( [].concat( chLogs[channel_id]).reverse() , add_log );
+
 		$.ajax({
-			url:'/api/read/'+ch_id,
+			url:'/api/read/'+channel_id,
 			dataType:'json',
 			type:'POST',
 		});
 
-		if( chLogs[ch_id].length >= 30 ){
+		if( chLogs[channel_id].length >= 30 ){
+		console.log(chLogs[channel_id].length);
 			addMoreButton( );
 		}
+		
 	}
 
 	addMoreButton = function(){
@@ -145,7 +157,14 @@ $(function(){
 			$('div#ch_foot').html(button);
 	}
 
-	$('ul.channel_list li').click(select_channel);
+	$('ul.channel_list li').click(function(){
+		channel_id = this.id.substring(3);
+		channel_name = getChannelName(channel_id);
+
+		selectChannel( channel_id, channel_name );
+
+		history.pushState( '/',channel_name,'/channel/'+channel_id);
+	});
 
 	$('form#post_form').submit(function(){
 		message = $('input#message').val();
@@ -188,5 +207,56 @@ $(function(){
 		})
 		return false;
 	});
+
+	$(window).bind('popstate', function(event) {
+	console.log(event.originalEvent.state);
+		switch( event.originalEvent.state ){
+			case '/':
+				$("div.metro-pivot").data("controller").goToItemByName( 'list' );
+				break;
+			case '/search/':
+				$("div.metro-pivot").data("controller").goToItemByName( 'search');
+				break;
+			default:
+				channel_id = event.originalEvent.state.substring( event.originalEvent.state.lastIndexOf( '/' )+1 );
+				channel_name = getChannelName(channel_id);
+				selectChannel(channel_id,channel_name);
+				break;
+		}
+	}, false);
+
+	$("div.metro-pivot").metroPivot({
+		clickedItemHeader:function(i){
+
+		//console.log('click:'+i);
+		//console.log(window.location.pathname);
+			switch( i ){
+				case '0': //channel list
+					history.pushState( window.location.pathname, 'channel list','/' );
+					break;
+				case '1':
+					history.pushState( window.location.pathname, $('div.headers span.header[index=1]').text(),'/channel/'+currentChannel );
+					break;
+				case '2': //search
+					history.pushState( window.location.pathname, 'search','/search/' );
+					break;
+			}
+		},
+		controlInitialized:function(){
+			default_pivot = '<?php print $pivot; ?>';
+			switch( default_pivot ){
+				case 'channel':
+					loadChannel( <?php print $default_channel['id']; ?>,'<?php print $default_channel['name'];  ?>');
+				default:
+					//$("div.metro-pivot").data("controller").goToItemByName(default_pivot);
+					$("div.metro-pivot").data("controller").goToItemByName( default_pivot);
+					break;
+				case 'list':
+				case 'default':
+					break;
+			}
+		}
+	});
 });
 </script>
+</div>
