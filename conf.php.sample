@@ -17,4 +17,7 @@ define("DATABASE_ID","tiarra");
 define("DATABASE_PASS","hogehoge");
 define("DATABASE_NAME","tiarra");
 
+define("SYSTEM_DEBUG",false);
+define("DATABASE_DEBUG",false);
+
 ?>
