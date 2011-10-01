@@ -90,9 +90,20 @@
 			}
 			return json_encode($return);
 		}
+		public function api_next( $channel_id){
+			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
+			else{
+				$return = array( 'error' => false );
+				$start = 0;
+				if( strlen($this->request->start ) ){ $start = $this->request->start; }
+				$return['logs'] = $this->db->log->getLog($channel_id,null,100,$start); 
+			}
+			return json_encode($return);
+			
+		}
 		public function api_search(){
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
-			$return = $this->db->log->searchLog( $this->request->keyword, $this->request->channel_id );
+			else{ $return = $this->db->log->searchLog( $this->request->keyword, $this->request->channel_id ); }
 			return json_encode($return);
 		}
 		public function api_read($channel_id){
@@ -153,6 +164,7 @@
 	
 	//api
 	$app->post('/api/logs/','api_logs');
+	$app->post('/api/logs/:channel_id','api_next', array('channel_id'=>'\d+' ));
 	$app->post('/api/post/','api_post');
 	$app->post('/api/search/','api_search');
 	$app->post('/api/read/:channel_id','api_read',array('channel_id'=>'\d+'));

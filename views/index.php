@@ -20,6 +20,7 @@
 		</thead>
 		<tbody></tbody>
 	</table>
+	<div id="ch_foot"></div>
 </div>
 <div class='pivot-item'>
 	<h3>search</h3>
@@ -91,6 +92,9 @@ $(function(){
 	var add_log = function( i, log ){
 		$('#list tbody').prepend('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_privmsg == 1)?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
+	var more_log = function( i,log ){
+		$('#list tbody').append('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_privmsg == 1)?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+	}
 	var add_result = function( i, log ){
 		$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_privmsg==1?'':'notice')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
@@ -103,6 +107,8 @@ $(function(){
 		$('#ch_'+ch_id).attr('class','');
 		$('#ch_'+ch_id+' span.ch_num').text(0);
 		$('#list tbody tr').each(function( i,e ){ $(e).remove(); });
+		$('div#ch_foot').html();
+
 		$.each( [].concat( chLogs[ch_id]).reverse() , add_log );
 		$("div.metro-pivot").data("controller").goToNext();
 		//scrollTo(0,0);
@@ -112,6 +118,31 @@ $(function(){
 			dataType:'json',
 			type:'POST',
 		});
+
+		if( chLogs[ch_id].length >= 30 ){
+			addMoreButton( );
+		}
+	}
+
+	addMoreButton = function(){
+			button = $('<input type="button" value="more" />');
+			button.click(function(){
+				$('div#ch_foot').html( 'more loading...' );
+				$.ajax({
+					url:'/api/logs/'+currentChannel,
+					data:{
+						start: $('#list tbody tr').length ,
+					},
+					dataType:'json',
+					type:'POST',
+					success:function(json){
+						if( json['error'] ){ return; }
+						$.each(json['logs'],more_log);
+						addMoreButton( );
+					}
+				});
+			});
+			$('div#ch_foot').html(button);
 	}
 
 	$('ul.channel_list li').click(select_channel);

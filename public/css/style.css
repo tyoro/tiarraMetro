@@ -71,6 +71,13 @@ dl {margin:0;}
 dd {margin:0 0 0 20px;}
 form {margin:0;}
 input[type=text] {width:180px;}
+input[type=button] {
+	width:300px;
+	background: #FF6600;
+	-moz-border-radius: 10px;
+   -webkit-border-radius: 10px;
+   border-radius: 10px,10px,10px,10px;
+}
 span.pickup{ color:#fbb; }
 
 #pad {padding:5px 0px;}
