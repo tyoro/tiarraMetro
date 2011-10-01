@@ -102,6 +102,11 @@ $(function(){
 	var getChannelName = function( i ){
 		return $('li#ch_'+i+' span.ch_name').text();
 	}
+	var myPushState = function( name, url ){
+		if( history.pushState ){
+			history.pushState( window.location.pathname ,name, url );
+		}
+	}
 
 	var selectChannel = function( channel_id, channel_name ){
 		currentChannel = channel_id;
@@ -163,7 +168,7 @@ $(function(){
 
 		selectChannel( channel_id, channel_name );
 
-		history.pushState( '/',channel_name,'/channel/'+channel_id);
+		myPushState(channel_name,'/channel/'+channel_id);
 	});
 
 	$('form#post_form').submit(function(){
@@ -232,13 +237,13 @@ $(function(){
 		//console.log(window.location.pathname);
 			switch( i ){
 				case '0': //channel list
-					history.pushState( window.location.pathname, 'channel list','/' );
+					myPushState( 'channel list','/' );
 					break;
 				case '1':
-					history.pushState( window.location.pathname, $('div.headers span.header[index=1]').text(),'/channel/'+currentChannel );
+					myPushState($('div.headers span.header[index=1]').text(),'/channel/'+currentChannel );
 					break;
 				case '2': //search
-					history.pushState( window.location.pathname, 'search','/search/' );
+					myPushState('search','/search/' );
 					break;
 			}
 		},
