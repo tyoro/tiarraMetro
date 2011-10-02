@@ -55,6 +55,10 @@
                 //this.headers.children().eq(index).trigger("click");
 				this.pivotHeader_Move( this.headers.children().eq(index) );
             },
+			isCurrentByName:function(header){
+                if (this.headers.children("span[name="+header+"]").first().is(".current")) return true;
+				return false;
+			},
             initialize : function () {
                 var pivot = this;
                 // define sections

@@ -6,6 +6,16 @@
 	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>(<span class="ch_num"><?php print $ch['cnt']; ?></span>)</li>
 	<?php } ?>
 	</ul>
+	<form method="POST" id="search_form">
+	<input type="text" name="word"  id="keyword" />
+	<select name="channel" id="channel_select">
+		<option value="" >----</option>
+		<?php foreach( $channels as $ch ){ ?>
+			<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
+		<?php } ?>
+	</select>
+	<input type="submit" name="search" />
+	</form>
 </div>
 <div class='pivot-item'>
 	<h3 id="ch_name" name="channel" ></h3>
@@ -24,18 +34,7 @@
 	<div id="ch_foot"></div>
 </div>
 <div class='pivot-item'>
-	<h3 name="search">search</h3>
-	<form method="POST" id="search_form">
-	<input type="text" name="word"  id="keyword" />
-	<select name="channel" id="channel_select">
-		<option value="" >----</option>
-		<?php foreach( $channels as $ch ){ ?>
-			<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
-		<?php } ?>
-	</select>
-	<input type="submit" name="search" />
-	</form>
-	<hr/>
+	<h3 name="search"></h3>
 	<span id="search_result_message">search result</span>
 	<table id="search-list" class="list">
 		<thead>
@@ -194,6 +193,11 @@ $(function(){
 	$('form#search_form').submit(function(){
 		kw = $('input#keyword').val();
 		if( kw.length == 0 ){ return false; }
+
+		$('div.headers span.header[name=search]').html( 'search' );
+		if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'search' ) ){
+			$("div.metro-pivot").data("controller").goToItemByName('search');
+		}
 
 		d = { keyword:kw };
 		select = $('select#channel_select option:selected').val();
