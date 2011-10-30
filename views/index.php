@@ -102,10 +102,10 @@ $(function(){
 	var autoReload =  setInterval( 	reload_func, 3*1000);
 
 	var add_log = function( i, log ){
-		$('#list tbody').prepend('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		$('#list tbody').prepend('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
 	var more_log = function( i,log ){
-		$('#list tbody').append('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		$('#list tbody').append('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
 	}
 	var add_result = function( i, log ){
 		$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_notice==1?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
@@ -157,7 +157,8 @@ $(function(){
 				$.ajax({
 					url:'/api/logs/'+currentChannel,
 					data:{
-						start: $('#list tbody tr').length ,
+						//start: $('#list tbody tr').length ,
+						prev_id: $('#list tbody tr').last().attr('id'),
 					},
 					dataType:'json',
 					type:'POST',

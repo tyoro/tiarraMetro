@@ -88,7 +88,7 @@ class dao_channel extends dao_base{
 
 class dao_log extends dao_base{
 	function getLog( $channel_id, $log_id = null,  $num = 30, $type = "new"  ){
-		$sql = "SELECT log.id, nick.name as nick, log.log as log, log.created_on as time, log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id WHERE channel_id = $channel_id";
+		$sql = "SELECT log.id as id, nick.name as nick, log.log as log, log.created_on as time, log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id WHERE channel_id = $channel_id";
 
 		if( !is_null( $log_id ) ){
 			$sql .= " AND log.id ". ( $type!="old"? '>': '<'  ). $this->qs($log_id);

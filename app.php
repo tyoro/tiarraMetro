@@ -119,7 +119,7 @@
 			else{
 				$return = array( 'error' => false );
 				$prev_id= null;
-				if( strlen($this->request->prev_id ) ){ $start_id = $this->request->prev_id; }
+				if( strlen($this->request->prev_id ) ){ $prev_id = $this->request->prev_id; }
 				$return['logs'] = $this->db->log->getLog($channel_id,$prev_id,100,'old'); 
 
 			}
