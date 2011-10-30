@@ -47,24 +47,27 @@
 </div>
 <script>
 $(function(){
-	var chkTime = '<?php print $checktime; ?>';
+	var max_id = '<?php print $max_id; ?>';
 	var currentChannel = <?php print $default_channel['id']; ?>;
 	if( currentChannel < 0 ){ currentChannel = null; }
 	var chLogs = <?php print json_encode($logs); ?>;
 	var pickup_word = <?php print json_encode($pickup); ?>;
+	var updating = false;
 
 	var reload_func = function(){
+		if( updating ){ return; }
+		updating = true;
 		$.ajax({
 			url:'/api/logs/',
 			dataType:'json',
 			type:'POST',
-			data:{checktime:chkTime,current:currentChannel},
+			data:{max_id:max_id,current:currentChannel},
 			success:function(json){
 				if( json['update'] ){
 					$.each( json['logs'], function(channel_id, logs){
-						
 						$.each( pickup_word,function(j,w){
 							$.map( logs, function( log,i){
+								if( log.id <= max_id ){ return null; }
 								if( log.log.indexOf(w) >= 0 ){
 									$.jGrowl( log.nick+':'+ log.log +'('+getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
 									log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
@@ -87,12 +90,16 @@ $(function(){
 						}
 						
 					});
+					max_id = json['max_id'];
 				}
-				chkTime = json['checktime'];
+				updating = false;
+			},
+			error:function(){
+				updating = false;
 			}
 		});	 
 	};
-	var autoReload =  setInterval( 	reload_func, 5*1000);
+	var autoReload =  setInterval( 	reload_func, 3*1000);
 
 	var add_log = function( i, log ){
 		$('#list tbody').prepend('<tr><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
@@ -122,7 +129,6 @@ $(function(){
 		
 		$("div.metro-pivot").data("controller").goToItemByName('channel');
 		//scrollTo(0,0);
-
 	}
 
 	var loadChannel = function( channel_id, channel_name ){

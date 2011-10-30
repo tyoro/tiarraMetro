@@ -87,28 +87,28 @@ class dao_channel extends dao_base{
 }
 
 class dao_log extends dao_base{
-	function getLog( $channel_id, $time = null,  $num = 30, $start = 0  ){
-		$sql = "SELECT nick.name as nick, log.log as log, log.created_on as time, log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id WHERE channel_id = $channel_id";
+	function getLog( $channel_id, $log_id = null,  $num = 30, $type = "new"  ){
+		$sql = "SELECT log.id, nick.name as nick, log.log as log, log.created_on as time, log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id WHERE channel_id = $channel_id";
 
-		if( !is_null( $time ) ){
-			$sql .= " AND log.created_on >= ".$this->qs($time);
+		if( !is_null( $log_id ) ){
+			$sql .= " AND log.id ". ( $type!="old"? '>': '<'  ). $this->qs($log_id);
 		}
 		
-		$sql .= " ORDER BY log.created_on DESC LIMIT $start, $num  ";
+		$sql .= " ORDER BY log.created_on DESC LIMIT 0, $num  ";
 		return $this->_conn->getArray($sql);
 	}
 
-	function getLogAll( $time ){
-		if( !strlen($time) ){
+	function getLogAll( $max_id ){
+		if( !strlen($max_id) ){
 			return null;
 		}
-		$sql = "SELECT log.channel_id as channel_id, nick.name as nick, log.log as log, log.created_on as time,log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id WHERE log.created_on > ".$this->qs($time);
+		$sql = "SELECT log.channel_id as channel_id, log.id as id , nick.name as nick, log.log as log, log.created_on as time,log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id WHERE log.id > ".$this->qs($max_id);
 		$sql .= " ORDER BY log.created_on DESC";
 		return $this->_conn->getArray($sql);
 	}
 
 	function searchLog( $word, $channel_id = null ){
-		$sql = "SELECT nick.name as nick, channel.name as channel_name, log.log as log, log.created_on as time,log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id JOIN channel ON log.channel_id = channel.id  WHERE log.log like ".$this->qs("%$word%")." ";
+		$sql = "SELECT log.id, nick.name as nick, channel.name as channel_name, log.log as log, log.created_on as time,log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id JOIN channel ON log.channel_id = channel.id  WHERE log.log like ".$this->qs("%$word%")." ";
 		
 		if( !is_null( $channel_id ) ){
 			$sql .= " AND log.channel_id = $channel_id ";
@@ -121,4 +121,10 @@ class dao_log extends dao_base{
 		$sql = "insert into log(channel_id,nick_id,log,is_notice,created_on,updated_on) values($channel_id,$nick_id,".$this->qs($message).",1,NOW(),NOW() )";
 		return $this->_conn->Execute($sql);
 	}
+
+	function getMaxID( ){
+		$sql = "SELECT max(id) AS max_id FROM log";
+		return $this->_conn->GetOne($sql);
+	}
+
 }

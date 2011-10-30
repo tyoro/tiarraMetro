@@ -21,7 +21,9 @@
 			$channel_list = array();
 			$log_list = array();
 			$default_channel = array( 'id'=>$default_channel_id );
+			$max_id = 0;
 
+			$max_id = $this->db->log->getMaxID();
 			foreach( $this->db->channel->getUnreadList() as $ch ){
 				$channel_list[$ch['id']] = $ch;
 				$log_list[$ch['id']] = $this->db->log->getLog($ch['id']);
@@ -29,7 +31,7 @@
 			}
 			return $this->render('index',
 				array(
-					'checktime' => date("Y-m-d H:i:s"),
+					'max_id' => $max_id,
 					'channels' => $channel_list,
 					'pickup' => $pickup_words,
 					'logs' => $log_list,
@@ -49,19 +51,26 @@
 			return $this->index_main( 'channel', $channel_id );
 		}
 
+		public function channel_name_select( $channel_name ){
+			return $this->channel_select( $this->db->channel->getID( "#".$channel_name ) );
+		}
+
 		//api
 		public function api_logs( ){
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
 			else{
 				$return = array( 'error'=> false, 'update'=>false,'checktime'=>date("Y-m-d H:i:s") );
-				if( !empty($this->request->checktime) && !empty($this->request->current) ){
-					$logs = $this->getLogs($this->request->current,$this->request->checktime);
+
+				if( !empty($this->request->max_id) && !empty($this->request->current) ){
+					$logs = $this->getLogs($this->request->current,$this->request->max_id);
 					if( count($logs) ){
 						$return['update'] = true;
+						$return['max_id'] = $logs[0]['id'];
 
 						$ch_log = array();
 						foreach( $logs as $log ){
-							$ch_log[$log['channel_id']][] = array(
+							$ch_log[$log['channel_id']][ ] = array(
+								'id' => $log['id'],
 								'nick' => $log['nick'],
 								'log' => $log['log'],
 								'time' => $log['time'],
@@ -109,9 +118,10 @@
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
 			else{
 				$return = array( 'error' => false );
-				$start = 0;
-				if( strlen($this->request->start ) ){ $start = $this->request->start; }
-				$return['logs'] = $this->db->log->getLog($channel_id,null,100,$start); 
+				$prev_id= null;
+				if( strlen($this->request->prev_id ) ){ $start_id = $this->request->prev_id; }
+				$return['logs'] = $this->db->log->getLog($channel_id,$prev_id,100,'old'); 
+
 			}
 			return json_encode($return);
 			
@@ -159,15 +169,15 @@
 		}
 
 		//util
-		private function getLog( $channel_id, $checktime = null ){
+		private function getLog( $channel_id, $max_id= null ){
 			$this->db->channel->updateReaded($channel_id);
-			return $this->db->log->getLog($channel_id, $checktime);
+			return $this->db->log->getLog($channel_id, $max_id);
 		}
-		private function getLogs( $channel_id, $checktime = null ){
+		private function getLogs( $channel_id, $max_id= null ){
 			if( ctype_digit( $channel_id ) ){
 				$this->db->channel->updateReaded($channel_id);
 			}
-			return $this->db->log->getLogAll($checktime);
+			return $this->db->log->getLogAll($max_id);
 		}
 	}
 
@@ -178,6 +188,8 @@
 	$app->get('/search/','search_select');
 	$app->get('/channel/:channel_id','channel_select',array('channel_id'=>'\d+'));
 	$app->post_and_get('/login','login' );
+
+	$app->get('/channel/:channel_name','channel_name_select',array('channel_name'=>'.*'));
 	
 	//api
 	$app->post('/api/logs/','api_logs');
