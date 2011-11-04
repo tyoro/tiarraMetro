@@ -53,6 +53,7 @@ $(function(){
 	var chLogs = <?php print json_encode($logs); ?>;
 	var pickup_word = <?php print json_encode($pickup); ?>;
 	var updating = false;
+	var jsConf = <?php print json_encode($jsConf); ?>;
 
 	var reload_func = function(){
 		if( updating ){ return; }
@@ -66,7 +67,7 @@ $(function(){
 				if( json['update'] ){
 					$.each( json['logs'], function(channel_id, logs){
 						$.each( pickup_word,function(j,w){
-							$.map( logs, function( log,i){
+							logs = $.map( logs, function( log,i){
 								if( log.id <= max_id ){ return null; }
 								if( log.log.indexOf(w) >= 0 ){
 									$.jGrowl( log.nick+':'+ log.log +'('+getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
@@ -99,7 +100,7 @@ $(function(){
 			}
 		});	 
 	};
-	var autoReload =  setInterval( 	reload_func, 3*1000);
+	var autoReload =  setInterval( 	reload_func, jsConf["update_time"]*1000);
 
 	var add_log = function( i, log ){
 		$('#list tbody').prepend('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');

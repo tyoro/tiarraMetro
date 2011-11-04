@@ -6,6 +6,11 @@ $conf = Array(
 	,'dao' => array('channel','nick','log')
 );
 
+$jsConf = Array(
+	'update_time' => 3
+);
+
+
 $my_name = 'tyoro';
 $password_md5 = md5('0000');
 $tiarra_socket_name = 'tiarrametro';

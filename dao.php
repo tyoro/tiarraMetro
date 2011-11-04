@@ -69,7 +69,7 @@ class dao_channel extends dao_base{
 	}
 
 	function getUnreadList( $server = "" ){
-		$sql = "SELECT channel.id,channel.name,COALESCE(log_count.cnt,0) as cnt FROM channel LEFT JOIN (SELECT channel.id, count(*) as cnt FROM channel LEFT JOIN log ON channel.id = log.channel_id WHERE channel.readed_on < log.created_on GROUP BY channel.id) as log_count ON channel.id = log_count.id";
+		$sql = "SELECT channel.id,channel.name,COALESCE(log_count.cnt,0) as cnt FROM channel LEFT JOIN (SELECT channel.id, count(*) as cnt FROM channel LEFT JOIN log ON channel.id = log.channel_id WHERE channel.readed_on < log.created_on GROUP BY channel.id) as log_count ON channel.id = log_count.id WHERE view = 1";
 
 		if( !empty($server) ){
 			$sql .= " WHERE name like \"%@".$server."\"";
@@ -102,7 +102,7 @@ class dao_log extends dao_base{
 		if( !strlen($max_id) ){
 			return null;
 		}
-		$sql = "SELECT log.channel_id as channel_id, log.id as id , nick.name as nick, log.log as log, log.created_on as time,log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id WHERE log.id > ".$this->qs($max_id);
+		$sql = "SELECT log.channel_id as channel_id, log.id as id , nick.name as nick, log.log as log, log.created_on as time,log.is_notice as is_notice FROM log JOIN nick ON log.nick_id = nick.id JOIN channel ON log.channel_id = channel.id WHERE channel.view = 1 AND log.id > ".$this->qs($max_id);
 		$sql .= " ORDER BY log.created_on DESC";
 		return $this->_conn->getArray($sql);
 	}

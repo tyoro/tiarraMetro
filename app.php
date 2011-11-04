@@ -1,5 +1,4 @@
 <?php
-
 	include_once 'conf.php';
 	include_once 'dao.php';
 	include_once 'myFitzgerald.php';
@@ -7,7 +6,7 @@
 	include_once 'lib/adodb5/adodb-pear.inc.php';
 
 	include_once 'Net/Socket/Tiarra.php';
-	
+
 	class TiarraWEB extends MyFitzgerald {
 		public static $page_title = "tiarra";
 		public static $msg = '';
@@ -17,6 +16,7 @@
 				return $this->redirect('/login');
 			}
 			global $pickup_words;
+			global $jsConf;
 
 			$channel_list = array();
 			$log_list = array();
@@ -36,7 +36,8 @@
 					'pickup' => $pickup_words,
 					'logs' => $log_list,
 					'pivot' => $pivot,
-					'default_channel' => $default_channel
+					'default_channel' => $default_channel,
+					'jsConf' => $jsConf
 					)
 			);
 		}
