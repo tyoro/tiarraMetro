@@ -44,6 +44,7 @@
 		</thead>
 		<tbody></tbody>
 	</table>
+	<div id="search_foot"></div>
 </div>
 <script>
 $(function(){
@@ -54,12 +55,13 @@ $(function(){
 	var pickup_word = <?php print json_encode($pickup); ?>;
 	var updating = false;
 	var jsConf = <?php print json_encode($jsConf); ?>;
+	var mountPoint = "<?php print $mount_point; ?>";
 
 	var reload_func = function(){
 		if( updating ){ return; }
 		updating = true;
 		$.ajax({
-			url:'/api/logs/',
+			url:mountPoint+'/api/logs/',
 			dataType:'json',
 			type:'POST',
 			data:{max_id:max_id,current:currentChannel},
@@ -140,7 +142,7 @@ $(function(){
 		$.each( [].concat( chLogs[channel_id]).reverse() , add_log );
 
 		$.ajax({
-			url:'/api/read/'+channel_id,
+			url:mountPoint+'/api/read/'+channel_id,
 			dataType:'json',
 			type:'POST',
 		});
@@ -156,7 +158,7 @@ $(function(){
 			button.click(function(){
 				$('div#ch_foot').html( 'more loading...' );
 				$.ajax({
-					url:'/api/logs/'+currentChannel,
+					url:mountPoint+'/api/logs/'+currentChannel,
 					data:{
 						//start: $('#list tbody tr').length ,
 						prev_id: $('#list tbody tr').last().attr('id'),
@@ -186,7 +188,7 @@ $(function(){
 		message = $('input#message').val();
 		if( message.length == 0 ){ return false; }
 		$.ajax({
-			url:'/api/post/',
+			url:mountPoint+'/api/post/',
 			data:{
 				channel_id:currentChannel,
 				post:message,
@@ -202,6 +204,9 @@ $(function(){
 		kw = $('input#keyword').val();
 		if( kw.length == 0 ){ return false; }
 
+		$('#search-list tbody tr').each(function( i,e ){ $(e).remove(); });
+		$('div#search_foot').html( 'now searching...' );
+
 		$('div.headers span.header[name=search]').html( 'search' );
 		if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'search' ) ){
 			$("div.metro-pivot").data("controller").goToItemByName('search');
@@ -214,29 +219,41 @@ $(function(){
 		}
 
 		$.ajax({
-			url:'/api/search/',
+			url:mountPoint+'/api/search/',
 			data:d,
 			dataType:'json',
 			type:'POST',
 			success:function(json){
-				$('#search-list tbody tr').each(function( i,e ){ $(e).remove(); });
 				$('#search_result_message').text('search result '+json.length);
 				if( json.length	){
 					$.each( json, add_result ); 
 				}
+				addCloseButton();
 			}
 		})
 		return false;
 	});
 
+	addCloseButton = function(){
+			button = $('<input type="button" value="close" />');
+			button.click(function(){
+				$('div.headers span.header[name=search]').html( '' );
+				if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'list' ) ){
+					$("div.metro-pivot").data("controller").goToItemByName('list');
+				}
+			});
+			$('div#search_foot').html(button);
+	}
+
 	$(window).bind('popstate', function(event) {
-	console.log(event.originalEvent.state);
 		switch( event.originalEvent.state ){
 			case '/':
 				$("div.metro-pivot").data("controller").goToItemByName( 'list' );
 				break;
 			case '/search/':
 				$("div.metro-pivot").data("controller").goToItemByName( 'search');
+				break;
+			case null:
 				break;
 			default:
 				channel_id = event.originalEvent.state.substring( event.originalEvent.state.lastIndexOf( '/' )+1 );
@@ -248,9 +265,6 @@ $(function(){
 
 	$("div.metro-pivot").metroPivot({
 		clickedItemHeader:function(i){
-
-		//console.log('click:'+i);
-		//console.log(window.location.pathname);
 			switch( i ){
 				case '0': //channel list
 					myPushState( 'channel list','/' );

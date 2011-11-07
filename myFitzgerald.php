@@ -36,6 +36,7 @@
 				}
 			}
 			$variableArray['uri_base'] = 'http://'.$_SERVER['SERVER_NAME'].$this->options->mountPoint.'/';
+			$variableArray['mount_point'] = $this->options->mountPoint;
 
 			return parent::render($fileName,$variableArray);
 		}
