@@ -70,7 +70,8 @@ $(function(){
 					$.each( json['logs'], function(channel_id, logs){
 						$.each( pickup_word,function(j,w){
 							logs = $.map( logs, function( log,i){
-								if( log.id <= max_id ){ return null; }
+								//if( log.id <= max_id ){ return null; }
+								if( $("#"+log.id ).length ){ return null; }
 								if( log.log.indexOf(w) >= 0 ){
 									$.jGrowl( log.nick+':'+ log.log +'('+getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
 									log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
@@ -79,6 +80,7 @@ $(function(){
 								return log;
 							});
 						});
+						if( ! logs.length ){ return; }
 					
 						chLogs[channel_id] = logs.concat(chLogs[channel_id]).slice(0,30);
 
