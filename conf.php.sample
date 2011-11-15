@@ -12,7 +12,7 @@ $jsConf = Array(
 
 
 $my_name = 'tyoro';
-$password_md5 = md5('0000');
+$password_md5 = "";
 $tiarra_socket_name = 'tiarrametro';
 $pickup_words = array('tyoro','hogehoge');
 
