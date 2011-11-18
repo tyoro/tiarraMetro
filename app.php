@@ -140,6 +140,23 @@
 			}
 			return json_encode($return);
 		}
+		public function api_reset_unread(){
+			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
+			else{
+				$this->db->channel->updateReaded();	
+				$return = array( 'error' => false  );
+			}
+			return json_encode($return);
+		}
+		
+		//api template
+		public function api_template(){
+			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
+			else{
+				$return = array( 'error' => false  );
+			}
+			return json_encode($return);
+		}
 
 		//login処理
 		public function login(){
@@ -198,6 +215,7 @@
 	$app->post('/api/post/','api_post');
 	$app->post('/api/search/','api_search');
 	$app->post('/api/read/:channel_id','api_read',array('channel_id'=>'\d+'));
+	$app->post('/api/reset/unread','api_reset_unread');
 	
 	$app->run();
 

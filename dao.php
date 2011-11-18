@@ -80,8 +80,11 @@ class dao_channel extends dao_base{
 		return $this->_conn->getArray($sql);
 	}
 	
-	function updateReaded( $id ){
-		$sql = "UPDATE channel SET readed_on = NOW() WHERE id = $id";
+	function updateReaded( $id = null ){
+		$sql = "UPDATE channel SET readed_on = NOW()";
+		if( !is_null( $id ) ){
+			$sql .=  " WHERE id = $id";
+		}
 		return $this->_conn->Execute($sql);
 	}
 }

@@ -14,8 +14,9 @@
 			<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
 		<?php } ?>
 	</select>
-	<input type="submit" name="search" />
+	<input type="submit" name="search" value="search"/>
 	</form>
+	<input type="button" id="unread_reset" value="unread reset" />
 </div>
 <div class='pivot-item'>
 	<h3 id="ch_name" name="channel" ></h3>
@@ -48,119 +49,244 @@
 </div>
 <script>
 $(function(){
-	var max_id = '<?php print $max_id; ?>';
-	var currentChannel = <?php print $default_channel['id']; ?>;
-	if( currentChannel < 0 ){ currentChannel = null; }
-	var chLogs = <?php print json_encode($logs); ?>;
-	var pickup_word = <?php print json_encode($pickup); ?>;
-	var updating = false;
-	var jsConf = <?php print json_encode($jsConf); ?>;
-	var mountPoint = "<?php print $mount_point; ?>";
+    var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
 
-	var reload_func = function(){
-		if( updating ){ return; }
-		updating = true;
-		$.ajax({
-			url:mountPoint+'/api/logs/',
-			dataType:'json',
-			type:'POST',
-			data:{max_id:max_id,current:currentChannel},
-			success:function(json){
-				if( json['update'] ){
-					$.each( json['logs'], function(channel_id, logs){
-						$.each( pickup_word,function(j,w){
-							logs = $.map( logs, function( log,i){
-								//if( log.id <= max_id ){ return null; }
-								if( $("#"+log.id ).length ){ return null; }
-								if( log.log.indexOf(w) >= 0 ){
-									$.jGrowl( log.nick+':'+ log.log +'('+getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
-									log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
-									$('#ch_'+channel_id).attr('class','hit');
-								}
-								return log;
-							});
-						});
-						if( ! logs.length ){ return; }
-					
-						chLogs[channel_id] = logs.concat(chLogs[channel_id]).slice(0,30);
+	var TiarraMetroClass = new Class();
+	TiarraMetroClass.prototype = {
+		initialize: function( param ){
+			var self = this;
+			this.max_id = param.max_id;
+			this.currentChannel = param.currentChannel;
+			this.chLogs = param.chLogs;
+			this.pickup_word = param.pickup_word;
+			this.updating = param.updating;
+			this.jsConf = param.jsConf;
+			this.mountPoint = param.mountPoint;
 
-						if( channel_id == currentChannel ){
-							$.each( logs.reverse(), add_log );
-						}else{
-							if( $('#ch_'+channel_id).attr('class') != 'hit' ){
-								$('#ch_'+channel_id).attr('class','new');
-							}
-							num = $('#ch_'+channel_id+' span.ch_num');
-							num.text( num.text()-0+logs.length );
-						}
-						
-					});
-					max_id = json['max_id'];
+			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
+			this.htmlInitialize();
+		},
+		htmlInitialize: function(){
+			var self = this;
+			$('ul.channel_list li').click(function(){
+				channel_id = this.id.substring(3);
+				channel_name = self.getChannelName(channel_id);
+
+				self.selectChannel( channel_id, channel_name );
+
+				self.myPushState(channel_name,'/channel/'+channel_id);
+			});
+
+			$('form#post_form').submit(function(){
+				message = $('input#message').val();
+				if( message.length == 0 ){ return false; }
+				$.ajax({
+					url:self.mountPoint+'/api/post/',
+					data:{
+						channel_id:self.currentChannel,
+						post:message,
+					},
+					dataType:'json',
+					type:'POST',
+				});
+				console.log(self.mountPoint+'/api/post/');
+				$('input#message').val('');
+				return false;
+			});
+
+			$('form#search_form').submit(function(){
+				kw = $('input#keyword').val();
+				if( kw.length == 0 ){ return false; }
+
+				$('#search-list tbody tr').each(function( i,e ){ $(e).remove(); });
+				$('div#search_foot').html( 'now searching...' );
+
+				$('div.headers span.header[name=search]').html( 'search' );
+				if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'search' ) ){
+					$("div.metro-pivot").data("controller").goToItemByName('search');
 				}
-				updating = false;
-			},
-			error:function(){
-				updating = false;
+
+				d = { keyword:kw };
+				select = $('select#channel_select option:selected').val();
+				if( select.length ){
+					d['channel_id'] = select;
+				}
+
+				$.ajax({
+					url:self.mountPoint+'/api/search/',
+					data:d,
+					dataType:'json',
+					type:'POST',
+					success:function(json){
+						$('#search_result_message').text('search result '+json.length);
+						if( json.length	){
+							$.each( json, self.add_result ); 
+						}
+						self.addCloseButton();
+					}
+				})
+				return false;
+			});
+
+			$('input#unread_reset').click(function(){
+				$.ajax({
+					url:self.mountPoint+'/api/reset/unread',
+					dataType:'json',
+					type:'POST',
+				});
+				$('.channel_list li').attr('class','');
+				$('.channel_list li span.ch_num').text(0);
+			});
+
+			$(window).bind('popstate', function(event) {
+				switch( event.originalEvent.state ){
+					case '/':
+						$("div.metro-pivot").data("controller").goToItemByName( 'list' );
+						break;
+					case '/search/':
+						$("div.metro-pivot").data("controller").goToItemByName( 'search');
+						break;
+					case null:
+						break;
+					default:
+						channel_id = event.originalEvent.state.substring( event.originalEvent.state.lastIndexOf( '/' )+1 );
+						channel_name = self.getChannelName(channel_id);
+						self.selectChannel(channel_id,channel_name);
+						break;
+				}
+			}, false);
+
+			$("div.metro-pivot").metroPivot({
+				clickedItemHeader:function(i){
+					switch( i ){
+						case '0': //channel list
+							self.myPushState( 'channel list','/' );
+							break;
+						case '1':
+							self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
+							break;
+						case '2': //search
+							self.myPushState('search','/search/' );
+							break;
+					}
+				},
+				controlInitialized:function(){
+					default_pivot = '<?php print $pivot; ?>';
+					switch( default_pivot ){
+						case 'channel':
+							self.loadChannel( <?php print $default_channel['id']; ?>,'<?php print $default_channel['name'];  ?>');
+						default:
+							//$("div.metro-pivot").data("controller").goToItemByName(default_pivot);
+							$("div.metro-pivot").data("controller").goToItemByName( default_pivot);
+							break;
+						case 'list':
+						case 'default':
+							break;
+					}
+				}
+			});
+		},
+		reload: function(){
+			var self = this;
+			if( self.updating ){ return; }
+			self.updating = true;
+			$.ajax({
+				url:self.mountPoint+'/api/logs/',
+				dataType:'json',
+				type:'POST',
+				data:{max_id:self.max_id,current:self.currentChannel},
+				success:function(json){
+					if( json['update'] ){
+						$.each( json['logs'], function(channel_id, logs){
+							$.each( self.pickup_word,function(j,w){
+								logs = $.map( logs, function( log,i){
+									//if( log.id <= max_id ){ return null; }
+									if( $("#"+log.id ).length ){ return null; }
+									if( log.log.indexOf(w) >= 0 ){
+										$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
+										log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
+										$('#ch_'+channel_id).attr('class','hit');
+									}
+									return log;
+								});
+							});
+							if( ! logs.length ){ return; }
+							
+							self.chLogs[channel_id] = logs.concat(self.chLogs[channel_id]).slice(0,30);
+
+							if( channel_id == self.currentChannel ){
+								$.each( logs.reverse(), self.add_log );
+							}else{
+								if( $('#ch_'+channel_id).attr('class') != 'hit' ){
+									$('#ch_'+channel_id).attr('class','new');
+								}
+								num = $('#ch_'+channel_id+' span.ch_num');
+								num.text( num.text()-0+logs.length );
+							}
+						});
+						self.max_id = json['max_id'];
+					}
+					self.updating = false;
+				},
+				error:function(){
+					self.updating = false;
+				}
+			});	 
+		},
+		logFilter : function(log){
+			return log;
+		},
+		add_log:function( i, log ){
+			$('#list tbody').prepend('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		},
+		more_log : function( i,log ){
+			$('#list tbody').append('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		},
+		add_result : function( i, log ){
+			$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_notice==1?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+		},
+		getChannelName : function( i ){
+			return $('li#ch_'+i+' span.ch_name').text();
+		},
+		myPushState : function( name, url ){
+			if( history.pushState ){
+				history.pushState( window.location.pathname ,name, url );
 			}
-		});	 
-	};
-	var autoReload =  setInterval( 	reload_func, jsConf["update_time"]*1000);
+		},
+		selectChannel : function( channel_id, channel_name ){
+			this.currentChannel = channel_id;
 
-	var add_log = function( i, log ){
-		$('#list tbody').prepend('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
-	}
-	var more_log = function( i,log ){
-		$('#list tbody').append('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
-	}
-	var add_result = function( i, log ){
-		$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_notice==1?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
-	}
-	var getChannelName = function( i ){
-		return $('li#ch_'+i+' span.ch_name').text();
-	}
-	var myPushState = function( name, url ){
-		if( history.pushState ){
-			history.pushState( window.location.pathname ,name, url );
-		}
-	}
+			$('#list tbody tr').each(function( i,e ){ $(e).remove(); });
+			$('div#ch_foot').html('');
 
-	var selectChannel = function( channel_id, channel_name ){
-		currentChannel = channel_id;
-
-		$('#list tbody tr').each(function( i,e ){ $(e).remove(); });
-		$('div#ch_foot').html('');
-
-		loadChannel( channel_id, channel_name);
+			this.loadChannel( channel_id, channel_name);
 		
-		$("div.metro-pivot").data("controller").goToItemByName('channel');
-		//scrollTo(0,0);
-	}
+			$("div.metro-pivot").data("controller").goToItemByName('channel');
+			//scrollTo(0,0);
+		},
+		loadChannel : function( channel_id, channel_name ){
+			$('div.headers span.header[name=channel]').html( channel_name );
+			$('#ch_'+channel_id).attr('class','');
+			$('#ch_'+channel_id+' span.ch_num').text(0);
+			
+			$.each( [].concat( this.chLogs[channel_id]).reverse() , this.add_log );
 
-	var loadChannel = function( channel_id, channel_name ){
-		$('div.headers span.header[name=channel]').html( channel_name );
-		$('#ch_'+channel_id).attr('class','');
-		$('#ch_'+channel_id+' span.ch_num').text(0);
+			$.ajax({
+				url:this.mountPoint+'/api/read/'+channel_id,
+				dataType:'json',
+				type:'POST',
+			});
 
-		$.each( [].concat( chLogs[channel_id]).reverse() , add_log );
-
-		$.ajax({
-			url:mountPoint+'/api/read/'+channel_id,
-			dataType:'json',
-			type:'POST',
-		});
-
-		if( chLogs[channel_id].length >= 30 ){
-			addMoreButton( );
-		}
-		
-	}
-
-	addMoreButton = function(){
+			if( this.chLogs[channel_id].length >= 30 ){
+				this.addMoreButton( );
+			}
+		},
+		addMoreButton : function(){
 			button = $('<input type="button" value="more" />');
 			button.click(function(){
 				$('div#ch_foot').html( 'more loading...' );
 				$.ajax({
-					url:mountPoint+'/api/logs/'+currentChannel,
+					url:this.mountPoint+'/api/logs/'+this.currentChannel,
 					data:{
 						//start: $('#list tbody tr').length ,
 						prev_id: $('#list tbody tr').last().attr('id'),
@@ -170,73 +296,13 @@ $(function(){
 					success:function(json){
 						if( json['error'] ){ return; }
 						$.each(json['logs'],more_log);
-						addMoreButton( );
+						this.addMoreButton( );
 					}
 				});
 			});
 			$('div#ch_foot').html(button);
-	}
-
-	$('ul.channel_list li').click(function(){
-		channel_id = this.id.substring(3);
-		channel_name = getChannelName(channel_id);
-
-		selectChannel( channel_id, channel_name );
-
-		myPushState(channel_name,'/channel/'+channel_id);
-	});
-
-	$('form#post_form').submit(function(){
-		message = $('input#message').val();
-		if( message.length == 0 ){ return false; }
-		$.ajax({
-			url:mountPoint+'/api/post/',
-			data:{
-				channel_id:currentChannel,
-				post:message,
-			},
-			dataType:'json',
-			type:'POST',
-		});
-		$('input#message').val('');
-		return false;
-	});
-
-	$('form#search_form').submit(function(){
-		kw = $('input#keyword').val();
-		if( kw.length == 0 ){ return false; }
-
-		$('#search-list tbody tr').each(function( i,e ){ $(e).remove(); });
-		$('div#search_foot').html( 'now searching...' );
-
-		$('div.headers span.header[name=search]').html( 'search' );
-		if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'search' ) ){
-			$("div.metro-pivot").data("controller").goToItemByName('search');
-		}
-
-		d = { keyword:kw };
-		select = $('select#channel_select option:selected').val();
-		if( select.length ){
-			d['channel_id'] = select;
-		}
-
-		$.ajax({
-			url:mountPoint+'/api/search/',
-			data:d,
-			dataType:'json',
-			type:'POST',
-			success:function(json){
-				$('#search_result_message').text('search result '+json.length);
-				if( json.length	){
-					$.each( json, add_result ); 
-				}
-				addCloseButton();
-			}
-		})
-		return false;
-	});
-
-	addCloseButton = function(){
+		},
+		addCloseButton : function(){
 			button = $('<input type="button" value="close" />');
 			button.click(function(){
 				$('div.headers span.header[name=search]').html( '' );
@@ -245,54 +311,17 @@ $(function(){
 				}
 			});
 			$('div#search_foot').html(button);
-	}
-
-	$(window).bind('popstate', function(event) {
-		switch( event.originalEvent.state ){
-			case '/':
-				$("div.metro-pivot").data("controller").goToItemByName( 'list' );
-				break;
-			case '/search/':
-				$("div.metro-pivot").data("controller").goToItemByName( 'search');
-				break;
-			case null:
-				break;
-			default:
-				channel_id = event.originalEvent.state.substring( event.originalEvent.state.lastIndexOf( '/' )+1 );
-				channel_name = getChannelName(channel_id);
-				selectChannel(channel_id,channel_name);
-				break;
 		}
-	}, false);
+	};
 
-	$("div.metro-pivot").metroPivot({
-		clickedItemHeader:function(i){
-			switch( i ){
-				case '0': //channel list
-					myPushState( 'channel list','/' );
-					break;
-				case '1':
-					myPushState($('div.headers span.header[index=1]').text(),'/channel/'+currentChannel );
-					break;
-				case '2': //search
-					myPushState('search','/search/' );
-					break;
-			}
-		},
-		controlInitialized:function(){
-			default_pivot = '<?php print $pivot; ?>';
-			switch( default_pivot ){
-				case 'channel':
-					loadChannel( <?php print $default_channel['id']; ?>,'<?php print $default_channel['name'];  ?>');
-				default:
-					//$("div.metro-pivot").data("controller").goToItemByName(default_pivot);
-					$("div.metro-pivot").data("controller").goToItemByName( default_pivot);
-					break;
-				case 'list':
-				case 'default':
-					break;
-			}
-		}
+	tiarraMetro = new TiarraMetroClass({
+		max_id : '<?php print $max_id; ?>',
+		currentChannel : <?php print $default_channel['id']<0?"null":$default_channel['id']; ?>,
+		chLogs : <?php print json_encode($logs); ?>,
+		pickup_word : <?php print json_encode($pickup); ?>,
+		updating : false,
+		jsConf : <?php print json_encode($jsConf); ?>,
+		mountPoint : "<?php print $mount_point; ?>",
 	});
 });
 </script>
