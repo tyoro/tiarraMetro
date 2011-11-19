@@ -58,7 +58,6 @@ $(function(){
 			this.max_id = param.max_id;
 			this.currentChannel = param.currentChannel;
 			this.chLogs = param.chLogs;
-			this.pickup_word = param.pickup_word;
 			this.updating = param.updating;
 			this.jsConf = param.jsConf;
 			this.mountPoint = param.mountPoint;
@@ -89,7 +88,6 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 				});
-				console.log(self.mountPoint+'/api/post/');
 				$('input#message').val('');
 				return false;
 			});
@@ -198,7 +196,7 @@ $(function(){
 				success:function(json){
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
-							$.each( self.pickup_word,function(j,w){
+							$.each( self.jsConf.pickup_word,function(j,w){
 								logs = $.map( logs, function( log,i){
 									//if( log.id <= max_id ){ return null; }
 									if( $("#"+log.id ).length ){ return null; }
@@ -282,11 +280,12 @@ $(function(){
 			}
 		},
 		addMoreButton : function(){
+			var self = this;
 			button = $('<input type="button" value="more" />');
 			button.click(function(){
 				$('div#ch_foot').html( 'more loading...' );
 				$.ajax({
-					url:this.mountPoint+'/api/logs/'+this.currentChannel,
+					url:self.mountPoint+'/api/logs/'+self.currentChannel,
 					data:{
 						//start: $('#list tbody tr').length ,
 						prev_id: $('#list tbody tr').last().attr('id'),
@@ -295,8 +294,8 @@ $(function(){
 					type:'POST',
 					success:function(json){
 						if( json['error'] ){ return; }
-						$.each(json['logs'],more_log);
-						this.addMoreButton( );
+						$.each(json['logs'],self.more_log);
+						self.addMoreButton( );
 					}
 				});
 			});
@@ -318,7 +317,6 @@ $(function(){
 		max_id : '<?php print $max_id; ?>',
 		currentChannel : <?php print $default_channel['id']<0?"null":$default_channel['id']; ?>,
 		chLogs : <?php print json_encode($logs); ?>,
-		pickup_word : <?php print json_encode($pickup); ?>,
 		updating : false,
 		jsConf : <?php print json_encode($jsConf); ?>,
 		mountPoint : "<?php print $mount_point; ?>",
