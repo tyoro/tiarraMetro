@@ -248,7 +248,7 @@ $(function(){
 		},
 		myPushState : function( name, url ){
 			if( history.pushState ){
-				history.pushState( window.location.pathname ,name, url );
+				history.pushState( window.location.pathname ,name, this.mountPoint+url );
 			}
 		},
 		selectChannel : function( channel_id, channel_name ){
