@@ -90,6 +90,10 @@ $(function(){
 			$('form#post_form').submit(function(){
 				message = $('input#message').val();
 				if( message.length == 0 ){ return false; }
+
+				$('input#message').attr('disabled','disabled');
+				$('form#post_form submit').attr('disabled','disabled');
+
 				$.ajax({
 					url:self.mountPoint+'/api/post/',
 					data:{
@@ -98,8 +102,16 @@ $(function(){
 					},
 					dataType:'json',
 					type:'POST',
+					success:function(){
+						$('input#message').attr('disabled','');
+						$('form#post_form submit').attr('disabled','');
+						$('input#message').val('');
+					},
+					error:function(){
+						$('input#message').attr('disabled','');
+						$('form#post_form submit').attr('disabled','');
+					},
 				});
-				$('input#message').val('');
 				return false;
 			});
 
