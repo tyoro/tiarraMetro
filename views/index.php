@@ -207,18 +207,20 @@ $(function(){
 				success:function(json){
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
-							$.each( self.jsConf.pickup_word,function(j,w){
-								logs = $.map( logs, function( log,i){
-									//if( log.id <= max_id ){ return null; }
-									if( $("#"+log.id ).length ){ return null; }
-									if( log.log.indexOf(w) >= 0 ){
-										$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
-										log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
-										$('#ch_'+channel_id).attr('class','hit');
-									}
-									return log;
+							if( self.jsConf.pickup_word && self.jsConf.pickup_word.length ){
+								$.each( self.jsConf.pickup_word,function(j,w){
+									logs = $.map( logs, function( log,i){
+										//if( log.id <= max_id ){ return null; }
+										if( $("#"+log.id ).length ){ return null; }
+										if( log.log.indexOf(w) >= 0 ){
+											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
+											log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
+											$('#ch_'+channel_id).attr('class','hit');
+										}
+										return log;
+									});
 								});
-							});
+							}
 							if( ! logs.length ){ return; }
 							
 							self.chLogs[channel_id] = logs.concat(self.chLogs[channel_id]).slice(0,30);
