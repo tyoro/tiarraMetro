@@ -3,10 +3,15 @@
 	<h3 name="list">channel</h3>
 	<ul class="channel_list">
 	<?php foreach( $channels as $ch ){ ?>
-	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>(<span class="ch_num"><?php print $ch['cnt']; ?></span>)</li>
+	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>&nbsp;
+		<?php if( !empty($ch['cnt']) ){ ?>
+		<span class="ch_num"><?php print $ch['cnt']; ?></span>
+		<?php } ?>
+	</li>
 	<?php } ?>
 	</ul>
-	<form method="POST" id="search_form">
+	<h4>search</h4>
+	<form method="POST" id="search_form" role="search">
 	<input type="text" name="word"  id="keyword" />
 	<select name="channel" id="channel_select">
 		<option value="" >----</option>
@@ -14,8 +19,9 @@
 			<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
 		<?php } ?>
 	</select>
-	<input type="submit" name="search" value="search"/>
+	<input type="submit" id="search" name="search" value='search' />
 	</form>
+	<h4>util</h4>
 	<input type="button" id="unread_reset" value="unread reset" />
 </div>
 <div class='pivot-item'>
@@ -25,11 +31,12 @@
 	</form>
 	<hr/>
 	<table id="list" class="list">
-		<thead>
+<?php /*		<thead>
 			<tr>
 				<th>nick</th><th>log</th><th>time</th>
 			</tr>
 		</thead>
+*/ ?>
 		<tbody></tbody>
 	</table>
 	<div id="ch_foot"></div>
@@ -38,11 +45,13 @@
 	<h3 name="search"></h3>
 	<span id="search_result_message">search result</span>
 	<table id="search-list" class="list">
+<?php /*
 		<thead>
 		<tr>
 			<th>channel</th><th>nick</th><th>log</th><th>time</th>
 		</tr>
 		</thead>
+*/ ?>
 		<tbody></tbody>
 	</table>
 	<div id="search_foot"></div>
@@ -118,7 +127,7 @@ $(function(){
 					success:function(json){
 						$('#search_result_message').text('search result '+json.length);
 						if( json.length	){
-							$.each( json, self.add_result ); 
+							$.each( json, function(i,log){ self.add_result(i,log); } ); 
 						}
 						self.addCloseButton();
 					}
@@ -133,7 +142,7 @@ $(function(){
 					type:'POST',
 				});
 				$('.channel_list li').attr('class','');
-				$('.channel_list li span.ch_num').text(0);
+				$('.channel_list li span.ch_num').text('');
 			});
 
 			$(window).bind('popstate', function(event) {
@@ -213,13 +222,16 @@ $(function(){
 							self.chLogs[channel_id] = logs.concat(self.chLogs[channel_id]).slice(0,30);
 
 							if( channel_id == self.currentChannel ){
-								$.each( logs.reverse(), self.add_log );
+								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
 							}else{
 								if( $('#ch_'+channel_id).attr('class') != 'hit' ){
 									$('#ch_'+channel_id).attr('class','new');
 								}
 								num = $('#ch_'+channel_id+' span.ch_num');
-								num.text( num.text()-0+logs.length );
+								currentNum = num.text()-0+logs.length;
+								if( currentNum > 0 ){
+									num.text( num.text()-0+logs.length );
+								}
 							}
 						});
 						self.max_id = json['max_id'];
@@ -235,13 +247,28 @@ $(function(){
 			return log;
 		},
 		add_log:function( i, log ){
-			$('#list tbody').prepend('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+			$('#list tbody').prepend(this.createRow(log));
 		},
 		more_log : function( i,log ){
-			$('#list tbody').append('<tr id="'+log.id+'"><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+			$('#list tbody').append(this.createRow(log));
 		},
 		add_result : function( i, log ){
-			$('#search-list tbody').prepend('<tr><td class="channel">'+log.channel_name+'</td><td class="name '+log.nick+'">'+log.nick+'</td><td class="log '+(log.is_notice==1?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>');
+			$('#search-list tbody').prepend(this.createRow(log,true));
+		},
+		createRow : function( log,searchFlag ){
+			var result = '<tr id="'+log.id+'">';
+			searchFlag = (searchFlag==undefined?false:searchFlag);
+			
+			if( this.jsConf['on_icon'] ){ nick = this.getIconString(log)+log.nick; }
+			else{ nick = log.nick; }
+
+			if( searchFlag ){ result += '<td class="channel">'+log.channel_name+'</td>'; }
+
+			result += '<td class="name'+(log.nick==this.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>';
+			return result;
+		},
+		getIconString : function ( log ){
+			return '<img src="http://img.tweetimag.es/i/'+log.nick+'_n" width="64" height="64" alt="'+log.nick+'" />';
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
@@ -263,11 +290,13 @@ $(function(){
 			//scrollTo(0,0);
 		},
 		loadChannel : function( channel_id, channel_name ){
+			var self = this;
+
 			$('div.headers span.header[name=channel]').html( channel_name );
 			$('#ch_'+channel_id).attr('class','');
-			$('#ch_'+channel_id+' span.ch_num').text(0);
+			$('#ch_'+channel_id+' span.ch_num').text('');
 			
-			$.each( [].concat( this.chLogs[channel_id]).reverse() , this.add_log );
+			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
 			$.ajax({
 				url:this.mountPoint+'/api/read/'+channel_id,
@@ -294,7 +323,7 @@ $(function(){
 					type:'POST',
 					success:function(json){
 						if( json['error'] ){ return; }
-						$.each(json['logs'],self.more_log);
+						$.each(json['logs'],function(i,log){ self.more_log(i,log); });
 						self.addMoreButton( );
 					}
 				});

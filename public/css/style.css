@@ -1,12 +1,27 @@
+*{
+	font-family: sans-serif;
+}
+
 a{
 	text-decoration:none;
 }
 
-ul.channel_list li.new{
+#container {
+  width: 100%;
+  overflow: hidden;
+}
+
+h3 {
+	font-size: 2.4em;
+	margin-top: .4em;
+	margin-bottom: 1em;
+}
+
+ul.channel_list li.new {
 	color:#fff;
 }
 
-ul.channel_list li.hit{
+ul.channel_list li.hit {
 	color:#fbb;
 	text-decoration:blink;
 }
@@ -14,73 +29,184 @@ ul.channel_list li.hit{
 
 ul.channel_list li{
 	font-size:xx-large;
-	padding-top:10px;
-	padding-bottom:10px;
-	color:#bbb;
+	padding-top: .5em;
+	padding-bottom: .5em;
+	color:#808080;
 }
 
-ul.channel_list li span{
-	font-size:xx-large;
+ul.channel_list li span {
+	font-size: xx-large;
 }
+/* 新着マーカー */
+ul.channel_list li span.ch_num {
+	font-size: .8em;
+	font-weight: bold;
+	border: 3px solid #a0a0a0;
+	color: #c0c0c0;
+	background-color: #202c64;
+	background: -moz-linear-gradient(top, #404cd0, #202c64);
+	background: -webkit-gradient(linear, left top, left bottom, from(#404cd0), to(#202c64));
+	vertical-align: super;
+	padding-left: .4em;
+	padding-right: .4em;
+	-moz-border-radius: 1em;
+	-webkit-border-radius: 1em;
+	border-radius: 1em,1em,1em,1em;
+
+}
+ul.channel_list li.hit span.ch_num {
+	border: 3px solid #c0c0c0;
+	color: #e0e0e0;
+	background-color: #64202c;
+	background: -moz-linear-gradient(top, #d0404c, #64202c);
+	background: -webkit-gradient(linear, left top, left bottom, from(#d0404c), to(#64202c));
+}
+
 
 table.list{
-	width:480px;
+	width: 100%;
 }
 
-table.list td.channel{
-	word-break: break-all;
-	vertical-align:top;
-}
-
-table.list td.tyoro.name{
+table.list td.self.name {
 	color:#bbb !important;
 }
 
-table.list td.name{
-	width:100px;
-	color:#9f9;
-	vertical-align:top;
+table.list td {
+        border-top: 4px solid black;
+        border-bottom: 1px solid #404040;
+}
+table.list td.channel {
+        word-break: break-all;
+        vertical-align: top;
+	width: 100px;
+	font-size: .8em;
+	vertical-align: top;
+}
+table.list td.name {
+	width: 80px;
+	font-size: .8em;
+	color: #9f9;
+	align: center;
+	vertical-align: top;
+	text-align: center;
 	word-break: break-all;
 }
-
-table.list td.notice{
-	color:#bbb;
+table.list td.icon {
+	width: 80px;
+	align: center;
+	vertical-align: top;
 }
-
-table.list td.log{
+table.list td.name img, table.list td.icon img {
+	display: block;
+	width: 48px;
+	height: 48px;
+	border: 0;
+	margin: 0 auto;
+	background-color: #404040;
+}
+table.list td.notice {
+	color: #aaa;
+}
+table.list td.log {
+	width: auto;
+	line-height: 120%;
 	word-break: break-all;
-	vertical-align:top;
+	vertical-align: top;
 }
-
-table.list td.time{
-	font-size:15px;
+table.list td.time {
+	width: 48px;
+	font-size: .8em;
 	word-break: nowrap;
-	align:center;
+	text-align: right;
+	vertical-align: top;
 	color:#bbb;
 }
 
-table.list tr{
+/*
+table.list tr {
+	border-top: 4px solid black;
+	border-bottom: 1px solid #1a1a1a;
+}
+*/
+span.pickup {
+	color: #fbb;
 }
 
-body,div,span,font,input {
-font-size:20px;
+body,div,span,font,input,select {
+	font-size: 20px;
 }
 
 div {display:block;}
+hr {
+	border: 2px solid #c0c0c0;
+}
+h4 {
+	font-size: .9em;
+	border-bottom: 2px solid #808080;
+}
 dl {margin:0;}
-dd {margin:0 0 0 20px;}
-form {margin:0;}
-input[type=text] {width:180px; padding-top:20px;}
+dd {margin:0 0 0 1em;}
+form {
+	margin:0;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+input[type=text],input[type=password]{
+	width: 320px;
+	height: 1.8em;
+	/* padding-top: 20px; */
+	color: white;
+	background-color: #202020;
+	border: 2px solid #808080;
+}
+input[type=submit] {
+	height: 2.1em;
+	border: 2px solid #808080;
+	color: white;
+	background-color: #202c64;
+	-moz-border-radius: .5em;
+	-webkit-border-radius: .5em;
+	border-radius: .5em,.5em,.5em,.5em;
+}
 input[type=button] {
-	width:300px;
-	background: #FF6600;
-	-moz-border-radius: 10px;
-   -webkit-border-radius: 10px;
-   border-radius: 10px,10px,10px,10px;
+	margin-top: 1em;
+	width:100%;
+	height: 2.4em;
+	border: 3px solid white;
+	color: #ffffff;
+	background: #000000;
+        -moz-border-radius: .5em;
+        -webkit-border-radius: .5em;
+        border-radius: .5em,.5em,.5em,.5em;
+}
+select {
+	height: 1.6em;
+	width: 320px;
+	margin-right: 2px;
+	/* padding-top: 20px; */
+	color: white;
+	background-color: black;
+}
+
+#spinner {
+	margin-top: 20px;
+	width: 100%;
+	height: 48px;
+	border: 2px solid black;
+	text-align: center;
+}
+img#spinner {
+	display: block;
+	width: 32px;
+	height: 32px;
+	border: none;
+	margin: 0 auto;
+	margin-top: .4em;
+	margin-bottom: .4em;
 }
 span.pickup{ color:#fbb; }
 
-#pad {padding:5px 0px;}
+#pad {padding:.25em 0;}
 
 
 /* hack */

@@ -1,5 +1,12 @@
 <?php
 
+$my_name = 'your name';
+$password_md5 = "";
+$tiarra_socket_name = 'tiarrametro';
+
+//twitter icon
+define("TWITTER_ICON_DRAW",false);
+
 $conf = Array(
 	'mountPoint' => ''
 	,'layout' => 'layout'
@@ -7,14 +14,16 @@ $conf = Array(
 );
 
 $jsConf = Array(
-	'update_time' => 3
+	'update_time' => 3,
+	'pickup_word' => array('hogehoge','ほげほげ'),
+	'pickup_channel'=> '.*',
+	'my_name'=> $my_name,
+	'on_icon' => TWITTER_ICON_DRAW
 );
 
-
-$my_name = 'tyoro';
-$password_md5 = "";
-$tiarra_socket_name = 'tiarrametro';
-$pickup_words = array('tyoro','hogehoge');
+$jsConf = Array(
+	'update_time' => 3
+);
 
 // Databaseの設定
 define("DATABASE_HOST","localhost");

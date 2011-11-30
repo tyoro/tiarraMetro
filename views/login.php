@@ -1,8 +1,13 @@
 <?php if( !empty($_GET['redirect']) ){ ?>
 no login!<br/><hr/>
 <?php } ?>
-login.
+<div class="metro-pivot">
+<div class='pivot-item'>
+<h3 name="list">login</h3>
 <form method="POST">
-pass:<input type="password" name="pass" /> 
+<input type="password" name="pass" /> 
 <input type="submit" value="login" />
 </form>
+</div>
+</div>
+
