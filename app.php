@@ -15,7 +15,6 @@
 			if( !$this->isLoggedIn() ){ 
 				return $this->redirect('/login');
 			}
-			global $pickup_words;
 			global $jsConf;
 
 			$channel_list = array();
@@ -33,7 +32,6 @@
 				array(
 					'max_id' => $max_id,
 					'channels' => $channel_list,
-					'pickup' => $pickup_words,
 					'logs' => $log_list,
 					'pivot' => $pivot,
 					'default_channel' => $default_channel,
