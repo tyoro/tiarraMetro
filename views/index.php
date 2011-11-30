@@ -177,6 +177,11 @@ $(function(){
 				}
 			}, false);
 
+			$(document).swipe({
+				swipeLeft: function(event) { $("div.metro-pivot").data("controller").goToPrevious(); },
+				swipeRight: function(event) { $("div.metro-pivot").data("controller").goToNext(); }
+			});
+
 			$("div.metro-pivot").metroPivot({
 				clickedItemHeader:function(i){
 					switch( i ){
