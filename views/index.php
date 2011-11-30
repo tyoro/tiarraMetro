@@ -202,7 +202,10 @@ $(function(){
 				url:self.mountPoint+'/api/logs/',
 				dataType:'json',
 				type:'POST',
-				data:{max_id:self.max_id,current:self.currentChannel},
+				data:{
+					max_id:self.max_id,
+					current: ($("div.metro-pivot").data("controller").isCurrentByName( 'list' )?null:self.currentChannel )
+				},
 				success:function(json){
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
@@ -227,7 +230,9 @@ $(function(){
 
 							if( channel_id == self.currentChannel ){
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
-							}else{
+							}
+							
+							if( channel_id != self.currentChannel || $("div.metro-pivot").data("controller").isCurrentByName( 'list' ) ){
 								if( $('#ch_'+channel_id).attr('class') != 'hit' ){
 									$('#ch_'+channel_id).attr('class','new');
 								}
