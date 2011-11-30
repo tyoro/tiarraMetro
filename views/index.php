@@ -266,9 +266,14 @@ $(function(){
 			if( this.jsConf['on_icon'] ){ nick = this.getIconString(log)+log.nick; }
 			else{ nick = log.nick; }
 
-			if( searchFlag ){ result += '<td class="channel">'+log.channel_name+'</td>'; }
+			if( searchFlag ){
+				result += '<td class="channel">'+log.channel_name+'</td>';
+				time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
+			}else{
+				time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
+			}
 
-			result += '<td class="name'+(log.nick==this.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+log.time.substring(5)+'</td></tr>';
+			result += '<td class="name'+(log.nick==this.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
 			return result;
 		},
 		getIconString : function ( log ){
