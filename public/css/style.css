@@ -161,7 +161,7 @@ input[type=text],input[type=password]{
 	height: 1.8em;
 	/* padding-top: 20px; */
 	color: white;
-	background-color: #202020;
+	background-color: #606060;
 	border: 2px solid #808080;
 }
 input[type=submit] {
