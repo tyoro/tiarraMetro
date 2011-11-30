@@ -124,6 +124,11 @@ table.list td.time {
 	vertical-align: top;
 	color:#bbb;
 }
+table.list td.log a{
+	padding-right: 18px;
+	background: transparent url("../images/icon_external.gif") no-repeat center right;
+	color:#bbf;	
+}
 
 /*
 table.list tr {
@@ -159,7 +164,7 @@ input[type=text],input[type=password]{
 	height: 1.8em;
 	/* padding-top: 20px; */
 	color: white;
-	background-color: #202020;
+	background-color: #606060;
 	border: 2px solid #808080;
 }
 input[type=submit] {
