@@ -185,7 +185,6 @@ $(function(){
 						case 'channel':
 							self.loadChannel( <?php print $default_channel['id']; ?>,'<?php print $default_channel['name'];  ?>');
 						default:
-							//$("div.metro-pivot").data("controller").goToItemByName(default_pivot);
 							$("div.metro-pivot").data("controller").goToItemByName( default_pivot);
 							break;
 						case 'list':
@@ -212,6 +211,7 @@ $(function(){
 									logs = $.map( logs, function( log,i){
 										//if( log.id <= max_id ){ return null; }
 										if( $("#"+log.id ).length ){ return null; }
+										if( log.nick == self.jsConf.my_name ){ return log; }
 										if( log.log.indexOf(w) >= 0 ){
 											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
 											log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
@@ -325,7 +325,6 @@ $(function(){
 				$.ajax({
 					url:self.mountPoint+'/api/logs/'+self.currentChannel,
 					data:{
-						//start: $('#list tbody tr').length ,
 						prev_id: $('#list tbody tr').last().attr('id'),
 					},
 					dataType:'json',
