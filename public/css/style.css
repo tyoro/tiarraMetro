@@ -121,6 +121,11 @@ table.list td.time {
 	vertical-align: top;
 	color:#bbb;
 }
+table.list td.log a{
+	padding-right: 18px;
+	background: transparent url("../images/icon_external.gif") no-repeat center right;
+	color:#bbf;	
+}
 
 /*
 table.list tr {
