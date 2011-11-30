@@ -254,9 +254,9 @@ $(function(){
 			});	 
 		},
 		logFilter : function(log){
+			if( log.filtered ){ return log; }
 			log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
-			
-			
+			log.filtered = true;
 			return log;
 		},
 		add_log:function( i, log ){
