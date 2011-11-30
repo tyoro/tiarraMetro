@@ -108,7 +108,7 @@ $(function(){
 				if( kw.length == 0 ){ return false; }
 
 				$('#search-list tbody tr').each(function( i,e ){ $(e).remove(); });
-				$('div#search_foot').html( 'now searching...' );
+				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..." /></div>' );
 
 				$('div.headers span.header[name=search]').html( 'search' );
 				if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'search' ) ){
@@ -321,7 +321,7 @@ $(function(){
 			var self = this;
 			button = $('<input type="button" value="more" />');
 			button.click(function(){
-				$('div#ch_foot').html( 'more loading...' );
+				$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..." /></div>' );
 				$.ajax({
 					url:self.mountPoint+'/api/logs/'+self.currentChannel,
 					data:{
