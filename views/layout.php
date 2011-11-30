@@ -9,12 +9,12 @@
 <!-- link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png" / -->
 <base href="<?php print $uri_base; ?>">
 <title><?php echo TiarraWEB::$page_title; ?></title>
-<link rel="stylesheet" href="css/style.css" />
-<link rel="stylesheet" href="css/jquery.metro.css" />
-<link rel="stylesheet" href="css/jquery.jgrowl.css" />
-<script src= "./js/jquery.js"></script>
-<script src= "./js/jquery.metro.js"></script>
-<script src= "./js/jquery.jgrowl_minimized.js"></script>
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+<link type="text/css" rel="stylesheet" href="css/jquery.metro.css" />
+<link type="text/css" rel="stylesheet" href="css/jquery.jgrowl.css" />
+<script type="text/javascript" src= "js/jquery.js"></script>
+<script type="text/javascript" src= "js/jquery.metro.js"></script>
+<script type="text/javascript" src= "js/jquery.jgrowl_minimized.js"></script>
 </head>
 <body>
 	<div id='container'>
