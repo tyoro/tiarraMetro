@@ -21,10 +21,6 @@ $jsConf = Array(
 	'on_icon' => TWITTER_ICON_DRAW
 );
 
-$jsConf = Array(
-	'update_time' => 3
-);
-
 // Databaseの設定
 define("DATABASE_HOST","localhost");
 define("DATABASE_ID","tiarra");
