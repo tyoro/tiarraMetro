@@ -209,22 +209,23 @@ $(function(){
 				success:function(json){
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
-							if( self.jsConf.pickup_word && self.jsConf.pickup_word.length ){
-								$.each( self.jsConf.pickup_word,function(j,w){
-									logs = $.map( logs, function( log,i){
-										//if( log.id <= max_id ){ return null; }
-										if( $("#"+log.id ).length ){ return null; }
-										if( log.nick == self.jsConf.my_name ){ return log; }
+							logs = $.map( logs, function( log,i){
+								if( $("#"+log.id ).length ){ return null; }
+								return log;
+							});
+							if( !logs.length ){ return; }
+
+							$.each( logs, function( i,log){
+								if( self.jsConf.pickup_word && self.jsConf.pickup_word.length && log.nick != self.jsConf.my_name ){
+									$.each( self.jsConf.pickup_word,function(j,w){
 										if( log.log.indexOf(w) >= 0 ){
 											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
 											log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
 											$('#ch_'+channel_id).attr('class','hit');
 										}
-										return log;
 									});
-								});
-							}
-							if( ! logs.length ){ return; }
+								}
+							});
 							
 							self.chLogs[channel_id] = logs.concat(self.chLogs[channel_id]).slice(0,30);
 
@@ -253,6 +254,9 @@ $(function(){
 			});	 
 		},
 		logFilter : function(log){
+			log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+			
+			
 			return log;
 		},
 		add_log:function( i, log ){
@@ -270,6 +274,8 @@ $(function(){
 			
 			if( this.jsConf['on_icon'] ){ nick = this.getIconString(log)+log.nick; }
 			else{ nick = log.nick; }
+
+			log = this.logFilter(log);
 
 			if( searchFlag ){
 				result += '<td class="channel">'+log.channel_name+'</td>';
