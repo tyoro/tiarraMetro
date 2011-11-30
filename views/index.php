@@ -4,9 +4,11 @@
 	<ul class="channel_list">
 	<?php foreach( $channels as $ch ){ ?>
 	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>&nbsp;
+		<span class="ch_num">
 		<?php if( !empty($ch['cnt']) ){ ?>
-		<span class="ch_num"><?php print $ch['cnt']; ?></span>
+		<small><?php print $ch['cnt']; ?></small>
 		<?php } ?>
+		</span>
 	</li>
 	<?php } ?>
 	</ul>
@@ -142,7 +144,7 @@ $(function(){
 					type:'POST',
 				});
 				$('.channel_list li').attr('class','');
-				$('.channel_list li span.ch_num').text('');
+				$('.channel_list li span.ch_num').html('');
 			});
 
 			$(window).bind('popstate', function(event) {
@@ -228,9 +230,9 @@ $(function(){
 									$('#ch_'+channel_id).attr('class','new');
 								}
 								num = $('#ch_'+channel_id+' span.ch_num');
-								currentNum = num.text()-0+logs.length;
+								currentNum = $('small',num).text()-0+logs.length;
 								if( currentNum > 0 ){
-									num.text( num.text()-0+logs.length );
+									num.html( '<small>'+currentNum+'</small>' );
 								}
 							}
 						});
@@ -294,7 +296,7 @@ $(function(){
 
 			$('div.headers span.header[name=channel]').html( channel_name );
 			$('#ch_'+channel_id).attr('class','');
-			$('#ch_'+channel_id+' span.ch_num').text('');
+			$('#ch_'+channel_id+' span.ch_num').html('');
 			
 			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
