@@ -14,7 +14,7 @@
 <link type="text/css" rel="stylesheet" href="css/jquery.jgrowl.css" />
 <script type="text/javascript" src= "js/jquery.js"></script>
 <script type="text/javascript" src= "js/jquery.metro.js"></script>
-<script type="text/javascript" src= "js/jquery.touchSwipe.js"></script>
+<script type="text/javascript" src= "js/jquery.touchwipe.min.js"></script>
 <script type="text/javascript" src= "js/jquery.jgrowl_minimized.js"></script>
 </head>
 <body>

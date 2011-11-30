@@ -40,7 +40,8 @@ ul.channel_list li {
 	cursor: pointer;
 }
 
-ul.channel_list li:hover {
+ul.channel_list li:hover,
+ul.channel_list li:active {
 	color: #FFFFFF;
 	background-color: #004060;
 }

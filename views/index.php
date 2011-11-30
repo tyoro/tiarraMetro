@@ -177,9 +177,11 @@ $(function(){
 				}
 			}, false);
 
-			$(document).swipe({
-				swipeLeft: function(event) { $("div.metro-pivot").data("controller").goToPrevious(); },
-				swipeRight: function(event) { $("div.metro-pivot").data("controller").goToNext(); }
+			$(document).touchwipe({
+				preventDefaultEvents: false,
+				min_move_x: 75,
+				wipeLeft: function() { $("div.metro-pivot").data("controller").goToPrevious(); },
+				wipeRight: function() { $("div.metro-pivot").data("controller").goToNext(); }
 			});
 
 			$("div.metro-pivot").metroPivot({
