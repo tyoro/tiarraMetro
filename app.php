@@ -188,6 +188,8 @@
 		}
 			
         private function isLoggedIn() {
+			global $password_md5;
+			if( empty($password_md5) ){ return true; }
 			return !is_null($this->session->login);
 		}
 
