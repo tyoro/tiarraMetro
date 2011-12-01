@@ -13,15 +13,17 @@ $conf = Array(
 	'mountPoint' => ''
 	,'layout' => 'layout'
 	,'dao' => array('channel','nick','log')
+	//applicaiton
+	,'channel_list_label' => 'channels'
 );
 
 $jsConf = Array(
-	'update_time' => 3,
-	'pickup_word' => array('hogehoge','ほげほげ'),
-	'pickup_channel'=> '.*',
-	'my_name'=> $my_name,
-	'on_icon' => TWITTER_ICON_DRAW,
-	'on_image' => LINK_IMAGE_DRAW
+	'update_time' => 3
+	,'pickup_word' => array('hogehoge','ほげほげ')
+	,'pickup_channel'=> '.*'
+	,'my_name'=> $my_name
+	,'on_icon' => TWITTER_ICON_DRAW
+	,'on_image' => LINK_IMAGE_DRAW
 );
 
 // Databaseの設定
