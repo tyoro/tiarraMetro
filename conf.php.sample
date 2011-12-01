@@ -1,24 +1,29 @@
 <?php
 
 $my_name = 'your name';
-$password_md5 = "";
+$password_md5 = "4a7d1ed414474e4033ac29ccb8653d9b";	//default pass '0000'
 $tiarra_socket_name = 'tiarrametro';
 
 //twitter icon
 define("TWITTER_ICON_DRAW",false);
+//link image  0:off  1:Embedded  2:button
+define("LINK_IMAGE_DRAW",0);
 
 $conf = Array(
 	'mountPoint' => ''
 	,'layout' => 'layout'
 	,'dao' => array('channel','nick','log')
+	//applicaiton
+	,'channel_list_label' => 'channels'
 );
 
 $jsConf = Array(
-	'update_time' => 3,
-	'pickup_word' => array('hogehoge','ほげほげ'),
-	'pickup_channel'=> '.*',
-	'my_name'=> $my_name,
-	'on_icon' => TWITTER_ICON_DRAW
+	'update_time' => 3
+	,'pickup_word' => array('hogehoge','ほげほげ')
+	,'pickup_channel'=> '.*'
+	,'my_name'=> $my_name
+	,'on_icon' => TWITTER_ICON_DRAW
+	,'on_image' => LINK_IMAGE_DRAW
 );
 
 // Databaseの設定

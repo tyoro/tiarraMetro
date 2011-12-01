@@ -60,7 +60,7 @@
 			else{
 				$return = array( 'error'=> false, 'update'=>false,'checktime'=>date("Y-m-d H:i:s") );
 
-				if( !empty($this->request->max_id) && !empty($this->request->current) ){
+				if( !empty($this->request->max_id) ){
 					$logs = $this->getLogs($this->request->current,$this->request->max_id);
 					if( count($logs) ){
 						$return['update'] = true;
@@ -179,8 +179,17 @@
 			}
 			return $this->render('login',array( 'error_msg' => $error_msg ));
 		}
+
+		//logout
+		public function logout(){
+			if( !$this->isLoggedIn() ){ return  $this->redirect('/'); }
+			$this->session->login = null;
+			$this->redirect('/');
+		}
 			
         private function isLoggedIn() {
+			global $password_md5;
+			if( empty($password_md5) ){ return true; }
 			return !is_null($this->session->login);
 		}
 
@@ -190,7 +199,7 @@
 			return $this->db->log->getLog($channel_id, $max_id);
 		}
 		private function getLogs( $channel_id, $max_id= null ){
-			if( ctype_digit( $channel_id ) ){
+			if( !empty($channel_id) && ctype_digit( $channel_id ) ){
 				$this->db->channel->updateReaded($channel_id);
 			}
 			return $this->db->log->getLogAll($max_id);
@@ -204,6 +213,7 @@
 	$app->get('/search/','search_select');
 	$app->get('/channel/:channel_id','channel_select',array('channel_id'=>'\d+'));
 	$app->post_and_get('/login','login' );
+	$app->get('/logout','logout' );
 
 	$app->get('/channel/:channel_name','channel_name_select',array('channel_name'=>'.*'));
 	

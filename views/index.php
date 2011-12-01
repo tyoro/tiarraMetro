@@ -1,6 +1,6 @@
 <div class="metro-pivot">
 <div class='pivot-item'>
-	<h3 name="list">channel</h3>
+	<h3 name="list"><?php print isset($options->channel_list_label)?$options->channel_list_label:'channels'; ?></h3>
 	<ul class="channel_list">
 	<?php foreach( $channels as $ch ){ ?>
 	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>&nbsp;
@@ -25,6 +25,7 @@
 	</form>
 	<h4>util</h4>
 	<input type="button" id="unread_reset" value="unread reset" />
+	<input type="button" id="logout" value="logout" />
 </div>
 <div class='pivot-item'>
 	<h3 id="ch_name" name="channel" ></h3>
@@ -60,6 +61,11 @@
 </div>
 <script>
 $(function(){
+
+	$.escapeHTML = function(val) {
+		return $("<div/>").text(val).html();
+	};
+
     var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
 
 	var TiarraMetroClass = new Class();
@@ -158,6 +164,10 @@ $(function(){
 				$('.channel_list li').attr('class','');
 				$('.channel_list li span.ch_num').html('');
 			});
+			
+			$('input#logout').click(function(){
+				location.href = self.mountPoint+'/logout';
+			});
 
 			$(window).bind('popstate', function(event) {
 				switch( event.originalEvent.state ){
@@ -224,7 +234,7 @@ $(function(){
 				type:'POST',
 				data:{
 					max_id:self.max_id,
-					current: ($("div.metro-pivot").data("controller").isCurrentByName( 'list' )?null:self.currentChannel )
+					current: ($("div.metro-pivot").data("controller").isCurrentByName( 'list' )?'':self.currentChannel )
 				},
 				success:function(json){
 					if( json['update'] ){
@@ -275,7 +285,19 @@ $(function(){
 		},
 		logFilter : function(log){
 			if( log.filtered ){ return log; }
-			log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+
+			log.log = $.escapeHTML( log.log );
+
+			if( ! this.jsConf.on_image ){
+				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
+			}else if( this.jsConf.on_image == 1 ){
+				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
+				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50%"/>'  );
+/*			}else if( this.jsConf.on_image == 2 ){
+				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<input type="button" value="img" onclick="createImg(this,\'$1\')" />'  );
+*/			}
+			
 			log.filtered = true;
 			return log;
 		},
