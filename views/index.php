@@ -61,6 +61,11 @@
 </div>
 <script>
 $(function(){
+
+	$.escapeHTML = function(val) {
+		return $("<div/>").text(val).html();
+	};
+
     var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
 
 	var TiarraMetroClass = new Class();
@@ -279,6 +284,9 @@ $(function(){
 		},
 		logFilter : function(log){
 			if( log.filtered ){ return log; }
+
+			log.log = $.escapeHTML( log.log );
+
 			if( ! this.jsConf.on_image ){
 				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
 			}else if( this.jsConf.on_image == 1 ){
