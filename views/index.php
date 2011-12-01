@@ -177,6 +177,13 @@ $(function(){
 				}
 			}, false);
 
+			$(document).touchwipe({
+				preventDefaultEvents: false,
+				min_move_x: 75,
+				wipeLeft: function() { $("div.metro-pivot").data("controller").goToPrevious(); },
+				wipeRight: function() { $("div.metro-pivot").data("controller").goToNext(); }
+			});
+
 			$("div.metro-pivot").metroPivot({
 				clickedItemHeader:function(i){
 					switch( i ){
