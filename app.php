@@ -60,7 +60,7 @@
 			else{
 				$return = array( 'error'=> false, 'update'=>false,'checktime'=>date("Y-m-d H:i:s") );
 
-				if( !empty($this->request->max_id) && !empty($this->request->current) ){
+				if( !empty($this->request->max_id) ){
 					$logs = $this->getLogs($this->request->current,$this->request->max_id);
 					if( count($logs) ){
 						$return['update'] = true;
@@ -197,7 +197,7 @@
 			return $this->db->log->getLog($channel_id, $max_id);
 		}
 		private function getLogs( $channel_id, $max_id= null ){
-			if( ctype_digit( $channel_id ) ){
+			if( !empty($channel_id) && ctype_digit( $channel_id ) ){
 				$this->db->channel->updateReaded($channel_id);
 			}
 			return $this->db->log->getLogAll($max_id);
