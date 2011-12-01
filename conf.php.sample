@@ -6,8 +6,8 @@ $tiarra_socket_name = 'tiarrametro';
 
 //twitter icon
 define("TWITTER_ICON_DRAW",false);
-//link image
-define("LINK_IMAGE_DRAW",false);
+//link image  0:off  1:Embedded  2:button
+define("LINK_IMAGE_DRAW",0);
 
 $conf = Array(
 	'mountPoint' => ''

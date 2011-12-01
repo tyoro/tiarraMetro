@@ -279,11 +279,11 @@ $(function(){
 		},
 		logFilter : function(log){
 			if( log.filtered ){ return log; }
-			if( this.jsConf.on_image ){
+			if( ! this.jsConf.on_image ){
+				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+			}else if( this.jsConf.on_image == 1 ){
 				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
 				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50%"/>'  );
-			}else{
-				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
 			}
 			
 			log.filtered = true;
