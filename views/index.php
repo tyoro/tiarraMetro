@@ -228,7 +228,7 @@ $(function(){
 				type:'POST',
 				data:{
 					max_id:self.max_id,
-					current: ($("div.metro-pivot").data("controller").isCurrentByName( 'list' )?null:self.currentChannel )
+					current: ($("div.metro-pivot").data("controller").isCurrentByName( 'list' )?'':self.currentChannel )
 				},
 				success:function(json){
 					if( json['update'] ){
@@ -284,7 +284,10 @@ $(function(){
 			}else if( this.jsConf.on_image == 1 ){
 				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
 				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50%"/>'  );
-			}
+/*			}else if( this.jsConf.on_image == 2 ){
+				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<input type="button" value="img" onclick="createImg(this,\'$1\')" />'  );
+*/			}
 			
 			log.filtered = true;
 			return log;
