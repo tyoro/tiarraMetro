@@ -28,7 +28,7 @@
 </div>
 <div class='pivot-item'>
 	<h3 id="ch_name" name="channel" ></h3>
-	<form method="POST" id="post_form">
+	<form method="POST" id="post_form" class="theme-bg">
 		<input type="text" name="post" id="message" /><input type="submit" value="post" />
 	</form>
 	<hr/>
@@ -185,6 +185,7 @@ $(function(){
 			});
 
 			$("div.metro-pivot").metroPivot({
+                headersTemplate: function () { return $("<div class='headers theme-bg' />"); },
 				clickedItemHeader:function(i){
 					switch( i ){
 						case '0': //channel list

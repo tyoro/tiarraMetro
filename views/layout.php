@@ -17,7 +17,7 @@
 <script type="text/javascript" src= "js/jquery.touchwipe.min.js"></script>
 <script type="text/javascript" src= "js/jquery.jgrowl_minimized.js"></script>
 </head>
-<body>
+<body theme="dark" accent="tiarra">
 	<div id='container'>
       <?php echo $content; ?>
 	</div>
