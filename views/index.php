@@ -25,6 +25,7 @@
 	</form>
 	<h4>util</h4>
 	<input type="button" id="unread_reset" value="unread reset" />
+	<input type="button" id="logout" value="logout" />
 </div>
 <div class='pivot-item'>
 	<h3 id="ch_name" name="channel" ></h3>
@@ -158,6 +159,10 @@ $(function(){
 				$('.channel_list li').attr('class','');
 				$('.channel_list li span.ch_num').html('');
 			});
+			
+			$('input#logout').click(function(){
+				location.href = self.mountPoint+'/logout';
+			});
 
 			$(window).bind('popstate', function(event) {
 				switch( event.originalEvent.state ){
@@ -274,7 +279,13 @@ $(function(){
 		},
 		logFilter : function(log){
 			if( log.filtered ){ return log; }
-			log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+			if( this.jsConf.on_image ){
+				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50%"/>'  );
+			}else{
+				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+			}
+			
 			log.filtered = true;
 			return log;
 		},

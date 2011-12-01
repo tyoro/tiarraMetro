@@ -179,6 +179,13 @@
 			}
 			return $this->render('login',array( 'error_msg' => $error_msg ));
 		}
+
+		//logout
+		public function logout(){
+			if( !$this->isLoggedIn() ){ return  $this->redirect('/'); }
+			$this->session->login = null;
+			$this->redirect('/');
+		}
 			
         private function isLoggedIn() {
 			return !is_null($this->session->login);
@@ -204,6 +211,7 @@
 	$app->get('/search/','search_select');
 	$app->get('/channel/:channel_id','channel_select',array('channel_id'=>'\d+'));
 	$app->post_and_get('/login','login' );
+	$app->get('/logout','logout' );
 
 	$app->get('/channel/:channel_name','channel_name_select',array('channel_name'=>'.*'));
 	

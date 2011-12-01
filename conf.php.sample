@@ -6,6 +6,8 @@ $tiarra_socket_name = 'tiarrametro';
 
 //twitter icon
 define("TWITTER_ICON_DRAW",false);
+//link image
+define("LINK_IMAGE_DRAW",false);
 
 $conf = Array(
 	'mountPoint' => ''
@@ -18,7 +20,8 @@ $jsConf = Array(
 	'pickup_word' => array('hogehoge','ほげほげ'),
 	'pickup_channel'=> '.*',
 	'my_name'=> $my_name,
-	'on_icon' => TWITTER_ICON_DRAW
+	'on_icon' => TWITTER_ICON_DRAW,
+	'on_image' => LINK_IMAGE_DRAW
 );
 
 // Databaseの設定
