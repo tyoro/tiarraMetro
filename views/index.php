@@ -201,7 +201,11 @@ $(function(){
 						case '0': //channel list
 							self.myPushState( 'channel list','/' );
 							$('div.headers span.header[name=list]').removeClass('new');
-							$('ul.channel_list').addClass('invisible');
+							if( $('ul.channel_list li.new').length ){
+								$('ul.channel_list').addClass('invisible');
+							}else{
+								$('ul.channel_list').removeClass('invisible');
+							}
 							break;
 						case '1':
 							self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
