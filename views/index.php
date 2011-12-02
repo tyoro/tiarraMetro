@@ -128,7 +128,7 @@ $(function(){
 				$('#search-list tbody tr').each(function( i,e ){ $(e).remove(); });
 				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..." /></div>' );
 
-				$('div.headers span.header[name=search]').html( 'search' );
+				$('div.headers span.header[name=search]').text( 'search' );
 				if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'search' ) ){
 					$("div.metro-pivot").data("controller").goToItemByName('search');
 				}
@@ -190,12 +190,12 @@ $(function(){
 			$(document).touchwipe({
 				preventDefaultEvents: false,
 				min_move_x: 75,
-				wipeLeft: function() { $("div.metro-pivot").data("controller").goToPrevious(); },
-				wipeRight: function() { $("div.metro-pivot").data("controller").goToNext(); }
+				wipeLeft: function() { self.goToNextPivot(); },
+				wipeRight: function() { self.goToPreviousPivot(); }
 			});
 
 			$("div.metro-pivot").metroPivot({
-                headersTemplate: function () { return $("<div class='headers theme-bg' />"); },
+				headersTemplate: function () { return $("<div class='headers theme-bg' />"); },
 				clickedItemHeader:function(i){
 					switch( i ){
 						case '0': //channel list
@@ -400,7 +400,17 @@ $(function(){
 				}
 			});
 			$('div#search_foot').html(button);
-		}
+		},
+		goToNextPivot: function(){
+			var header = $(".metro-pivot .headers .header.current");
+			do { header = header.next(); } while (header.length > 0 && header.text() == "");
+			$("div.metro-pivot").data("controller").goToItemByName(header.attr("name"));
+		},
+		goToPreviousPivot: function(){
+			var header = $(".metro-pivot .headers .header").last();
+			while (header.length > 0 && header.text() == "") { header = header.prev(); }
+			$("div.metro-pivot").data("controller").goToItemByName(header.attr("name"));
+		},
 	};
 
 	tiarraMetro = new TiarraMetroClass({
