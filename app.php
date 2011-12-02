@@ -8,7 +8,7 @@
 	include_once 'Net/Socket/Tiarra.php';
 
 	class TiarraWEB extends MyFitzgerald {
-		public static $page_title = "tiarra";
+		public static $page_title = "tiarraMetro";
 		public static $msg = '';
 
 		public function index_main( $pivot = 'default', $default_channel_id = -1 ){
