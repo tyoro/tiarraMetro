@@ -250,8 +250,8 @@ $(function(){
 									$.each( self.jsConf.pickup_word,function(j,w){
 										if( log.log.indexOf(w) >= 0 ){
 											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
-											log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
 											$('#ch_'+channel_id).attr('class','hit');
+											logs[i].pickup = true;
 										}
 									});
 								}
@@ -284,9 +284,17 @@ $(function(){
 			});	 
 		},
 		logFilter : function(log){
+			var self = this;
 			if( log.filtered ){ return log; }
 
 			log.log = $.escapeHTML( log.log );
+
+			if( log.pickup ){
+				$.each( self.jsConf.pickup_word,function(j,w){
+					log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
+				});
+			}
+
 
 			if( ! this.jsConf.on_image ){
 				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
