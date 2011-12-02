@@ -200,6 +200,7 @@ $(function(){
 					switch( i ){
 						case '0': //channel list
 							self.myPushState( 'channel list','/' );
+							$('div.headers span.header[name=list]').attr('class','header');
 							break;
 						case '1':
 							self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
@@ -263,7 +264,8 @@ $(function(){
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
 							}
 							
-							if( channel_id != self.currentChannel || $("div.metro-pivot").data("controller").isCurrentByName( 'list' ) ){
+							now_list = $("div.metro-pivot").data("controller").isCurrentByName( 'list' );
+							if( channel_id != self.currentChannel || now_list  ){
 								if( $('#ch_'+channel_id).attr('class') != 'hit' ){
 									$('#ch_'+channel_id).attr('class','new');
 								}
@@ -271,6 +273,9 @@ $(function(){
 								currentNum = $('small',num).text()-0+logs.length;
 								if( currentNum > 0 ){
 									num.html( '<small>'+currentNum+'</small>' );
+								}
+								if( !now_list ){
+									$('div.headers span.header[name=list]').attr('class','header new');
 								}
 							}
 						});

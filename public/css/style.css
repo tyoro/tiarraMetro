@@ -33,6 +33,10 @@ h3 {
 	margin-bottom: 1em;
 }
 
+span[name="list"].header.new {
+	color: #a0a0f0;
+}
+
 ul.channel_list {
 	margin: 0;
 	padding: 0;
