@@ -438,7 +438,7 @@ $(function(){
 			$("div.metro-pivot").data("controller").goToItemByName(header.attr("name"));
 		},
 		onListInvisible: function(){
-			if( $('ul.channel_list li.new').length ){
+			if( $('ul.channel_list li.new').length || $('ul.channel_list li.hit').length ){
 				$('ul.channel_list').addClass('invisible');
 			}else{
 				$('ul.channel_list').removeClass('invisible');
