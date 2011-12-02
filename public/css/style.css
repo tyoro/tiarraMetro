@@ -53,7 +53,7 @@ ul.channel_list li {
 ul.invisible li {
 	display:none;
 }
-ul.invisible li.new {
+ul.invisible li.new, ul.invisible li.hit {
 	display:block;
 }
 
