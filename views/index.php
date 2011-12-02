@@ -200,6 +200,12 @@ $(function(){
 					switch( i ){
 						case '0': //channel list
 							self.myPushState( 'channel list','/' );
+							$('div.headers span.header[name=list]').removeClass('new');
+							if( $('ul.channel_list li.new').length ){
+								$('ul.channel_list').addClass('invisible');
+							}else{
+								$('ul.channel_list').removeClass('invisible');
+							}
 							break;
 						case '1':
 							self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
@@ -221,6 +227,11 @@ $(function(){
 						case 'default':
 							break;
 					}
+				},
+				clickedCurrentItemHeader:function(i){
+					if( i == 0 ){	//list
+						$('ul.channel_list').toggleClass('invisible');
+					}
 				}
 			});
 		},
@@ -238,6 +249,8 @@ $(function(){
 				},
 				success:function(json){
 					if( json['update'] ){
+						now_list = $("div.metro-pivot").data("controller").isCurrentByName( 'list' );
+						listHeader = $('div.headers span.header[name=list]');
 						$.each( json['logs'], function(channel_id, logs){
 							logs = $.map( logs, function( log,i){
 								if( $("#"+log.id ).length ){ return null; }
@@ -250,8 +263,8 @@ $(function(){
 									$.each( self.jsConf.pickup_word,function(j,w){
 										if( log.log.indexOf(w) >= 0 ){
 											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
-											log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
 											$('#ch_'+channel_id).attr('class','hit');
+											logs[i].pickup = true;
 										}
 									});
 								}
@@ -263,7 +276,7 @@ $(function(){
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
 							}
 							
-							if( channel_id != self.currentChannel || $("div.metro-pivot").data("controller").isCurrentByName( 'list' ) ){
+							if( channel_id != self.currentChannel || now_list  ){
 								if( $('#ch_'+channel_id).attr('class') != 'hit' ){
 									$('#ch_'+channel_id).attr('class','new');
 								}
@@ -272,6 +285,9 @@ $(function(){
 								if( currentNum > 0 ){
 									num.html( '<small>'+currentNum+'</small>' );
 								}
+								//if( !now_list ){
+									listHeader.addClass('new');
+								//}
 							}
 						});
 						self.max_id = json['max_id'];
@@ -284,9 +300,17 @@ $(function(){
 			});	 
 		},
 		logFilter : function(log){
+			var self = this;
 			if( log.filtered ){ return log; }
 
 			log.log = $.escapeHTML( log.log );
+
+			if( log.pickup ){
+				$.each( self.jsConf.pickup_word,function(j,w){
+					log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
+				});
+			}
+
 
 			if( ! this.jsConf.on_image ){
 				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
