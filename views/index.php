@@ -161,6 +161,7 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 				});
+				self.offListInvisible();
 				$('.channel_list li').attr('class','');
 				$('.channel_list li span.ch_num').html('');
 			});
@@ -201,11 +202,7 @@ $(function(){
 						case '0': //channel list
 							self.myPushState( 'channel list','/' );
 							$('div.headers span.header[name=list]').removeClass('new');
-							if( $('ul.channel_list li.new').length ){
-								$('ul.channel_list').addClass('invisible');
-							}else{
-								$('ul.channel_list').removeClass('invisible');
-							}
+							self.onListInvisible();
 							break;
 						case '1':
 							self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
@@ -224,6 +221,9 @@ $(function(){
 							$("div.metro-pivot").data("controller").goToItemByName( default_pivot);
 							break;
 						case 'list':
+/**
+ *  
+ */
 						case 'default':
 							break;
 					}
@@ -416,11 +416,13 @@ $(function(){
 			$('div#ch_foot').html(button);
 		},
 		addCloseButton : function(){
+			var self = this;
 			button = $('<input type="button" value="close" />');
 			button.click(function(){
 				$('div.headers span.header[name=search]').html( '' );
 				if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'list' ) ){
 					$("div.metro-pivot").data("controller").goToItemByName('list');
+					self.onListInvisible();
 				}
 			});
 			$('div#search_foot').html(button);
@@ -434,6 +436,16 @@ $(function(){
 			var header = $(".metro-pivot .headers .header").last();
 			while (header.length > 0 && header.text() == "") { header = header.prev(); }
 			$("div.metro-pivot").data("controller").goToItemByName(header.attr("name"));
+		},
+		onListInvisible: function(){
+			if( $('ul.channel_list li.new').length ){
+				$('ul.channel_list').addClass('invisible');
+			}else{
+				$('ul.channel_list').removeClass('invisible');
+			}
+		},
+		offListInvisible: function(){
+			$('ul.channel_list').removeClass('invisible');
 		},
 	};
 
