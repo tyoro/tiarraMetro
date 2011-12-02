@@ -21,7 +21,8 @@
         headersTemplate: function () { return $("<div class='headers' />"); },
         controlInitialized: undefined,
         selectedItemChanged: undefined,
-		clickedItemHeader: undefined
+		clickedItemHeader: undefined,
+		clickedCurrentItemHeader: undefined
     };
 
     $.fn.metroPivot = function (settings) {
@@ -35,6 +36,7 @@
             animating : false,
             headers : undefined,
             items : undefined,
+			currentHeaderClickCallbak : {},
             goToNext: function(){
                 if(this.animating) return;
                 //this.headers.children(".current").next().trigger("click");
@@ -160,7 +162,14 @@
             },
             pivotHeader_Click : function (me) {
 				var index = this._pivotHeader_Move(me);
-				if( index < 0 ){ return; }
+				if( index < 0 ){
+					if( index == -1 ){ //current header click
+						if(this.clickedCurrentItemHeader != undefined){
+							this.clickedCurrentItemHeader(me.attr("index"));
+						}
+					}
+					return;
+				}
                 // find and set current item
 				this.click = true;
                 var item = this.items.children(".pivotItem:nth(" + index + ")");
@@ -178,7 +187,7 @@
                 if (elm.is(".current")) return -1;
 
                 // ignore if still animating
-                if (this.animating) return -1;
+                if (this.animating) return -2;
                 this.animating = true;
 
                 // set current header

@@ -200,7 +200,8 @@ $(function(){
 					switch( i ){
 						case '0': //channel list
 							self.myPushState( 'channel list','/' );
-							$('div.headers span.header[name=list]').attr('class','header');
+							$('div.headers span.header[name=list]').removeClass('new');
+							$('ul.channel_list').addClass('invisible');
 							break;
 						case '1':
 							self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
@@ -222,6 +223,11 @@ $(function(){
 						case 'default':
 							break;
 					}
+				},
+				clickedCurrentItemHeader:function(i){
+					if( i == 0 ){	//list
+						$('ul.channel_list').toggleClass('invisible');
+					}
 				}
 			});
 		},
@@ -239,6 +245,8 @@ $(function(){
 				},
 				success:function(json){
 					if( json['update'] ){
+						now_list = $("div.metro-pivot").data("controller").isCurrentByName( 'list' );
+						listHeader = $('div.headers span.header[name=list]');
 						$.each( json['logs'], function(channel_id, logs){
 							logs = $.map( logs, function( log,i){
 								if( $("#"+log.id ).length ){ return null; }
@@ -264,7 +272,6 @@ $(function(){
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
 							}
 							
-							now_list = $("div.metro-pivot").data("controller").isCurrentByName( 'list' );
 							if( channel_id != self.currentChannel || now_list  ){
 								if( $('#ch_'+channel_id).attr('class') != 'hit' ){
 									$('#ch_'+channel_id).attr('class','new');
@@ -274,9 +281,9 @@ $(function(){
 								if( currentNum > 0 ){
 									num.html( '<small>'+currentNum+'</small>' );
 								}
-								if( !now_list ){
-									$('div.headers span.header[name=list]').attr('class','header new');
-								}
+								//if( !now_list ){
+									listHeader.addClass('new');
+								//}
 							}
 						});
 						self.max_id = json['max_id'];

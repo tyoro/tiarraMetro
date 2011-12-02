@@ -50,6 +50,13 @@ ul.channel_list li {
 	cursor: pointer;
 }
 
+ul.invisible li {
+	display:none;
+}
+ul.invisible li.new {
+	display:block;
+}
+
 ul.channel_list li.hit {
 	text-decoration:blink;
 }
