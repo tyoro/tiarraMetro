@@ -9,6 +9,7 @@ a{
 #container {
 	width: 95%;
 	margin: auto;
+	overflow: hidden;
 }
 
 .metro-pivot .headers {
@@ -22,9 +23,8 @@ a{
 }
 
 .metro-pivot .items {
-	/* headers.height = 60px + .5em + .5em */
-	top: 60px;
-	margin-top: 1.0em;
+	margin-top: 60px;
+	padding-top: 1.0em;
 }
 
 h3 {
