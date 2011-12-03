@@ -12,20 +12,24 @@
 	</li>
 	<?php } ?>
 	</ul>
-	<h4>search</h4>
-	<form method="POST" id="search_form" role="search">
-	<input type="text" name="word"  id="keyword" />
-	<select name="channel" id="channel_select">
-		<option value="" >----</option>
-		<?php foreach( $channels as $ch ){ ?>
-			<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
-		<?php } ?>
-	</select>
-	<input type="submit" id="search" name="search" value='search' />
-	</form>
-	<h4>util</h4>
-	<input type="button" id="unread_reset" value="unread reset" />
-	<input type="button" id="logout" value="logout" />
+	<div class="search">
+		<h4>search</h4>
+		<form method="POST" id="search_form" role="search">
+			<input type="text" name="word"  id="keyword" />
+			<select name="channel" id="channel_select">
+				<option value="" >----</option>
+				<?php foreach( $channels as $ch ){ ?>
+					<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
+				<?php } ?>
+			</select>
+			<input type="submit" id="search" name="search" value='search' />
+		</form>
+	</div>
+	<div class="util">
+		<h4>util</h4>
+		<input type="button" id="unread_reset" value="unread reset" />
+		<input type="button" id="logout" value="logout" />
+	</div>
 </div>
 <div class='pivot-item'>
 	<h3 id="ch_name" name="channel" ></h3>
@@ -428,14 +432,12 @@ $(function(){
 			$('div#search_foot').html(button);
 		},
 		goToNextPivot: function(){
-			var header = $(".metro-pivot .headers .header.current");
-			do { header = header.next(); } while (header.length > 0 && header.text() == "");
-			$("div.metro-pivot").data("controller").goToItemByName(header.attr("name"));
+			var next = $(".metro-pivot .headers .header:gt(0):not(:empty):first");
+			if (next) $("div.metro-pivot").data("controller").goToItemByName(next.attr("name"));
 		},
 		goToPreviousPivot: function(){
-			var header = $(".metro-pivot .headers .header").last();
-			while (header.length > 0 && header.text() == "") { header = header.prev(); }
-			$("div.metro-pivot").data("controller").goToItemByName(header.attr("name"));
+			var prev = $(".metro-pivot .headers .header:not(:empty):last");
+			if (prev) $("div.metro-pivot").data("controller").goToItemByName(prev.attr("name"));
 		},
 		onListInvisible: function(){
 			if( $('ul.channel_list li.new').length || $('ul.channel_list li.hit').length ){
