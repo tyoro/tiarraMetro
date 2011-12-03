@@ -64,8 +64,10 @@ ul.channel_list li.hit {
 body[accent="tiarra"] ul.channel_list li.new { color: #FFFFFF; }
 body[accent="tiarra"] ul.channel_list li.hit { color: #F0B0B0; }
 body[accent="tiarra"] ul.channel_list li:hover {
+    /*
 	color: #FFFFFF;
 	background-color: #004060;
+    */
 }
 
 ul.channel_list li span {
