@@ -75,7 +75,7 @@
 								'nick' => $log['nick'],
 								'log' => $log['log'],
 								'time' => $log['time'],
-								'is_privmsg' => $log['is_privmsg']
+								'is_notice' => $log['is_notice']
 							);
 						}
 						$return['logs'] = $ch_log;
