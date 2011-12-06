@@ -108,7 +108,7 @@
 							}
 							$return = array( 'error' => false );
 
-							$this->db->log->postLog( $this->request->post, $this->request->channel_id, $this->db->nick->getID( $my_name ) );
+							$this->db->log->postLog( $this->request->post, $this->request->channel_id, $this->db->nick->getID( $my_name ), $this->request->notice );
 
 						} catch (Net_Socket_Tiarra_Exception $e) {
 							$return = array( 'error' => true, 'msg' => $e->getMessage() );

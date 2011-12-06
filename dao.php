@@ -192,13 +192,13 @@ class dao_log extends dao_base{
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
 
-	function postLog( $message, $channel_id, $nick_id ){
+	function postLog( $message, $channel_id, $nick_id, $notice ){
 		$sql = "INSERT INTO `log` 
 					(`channel_id`, `nick_id`, `log`, `is_notice`, `created_on`, `updated_on`) 
 				VALUES 
 					(?, ?, ?, ?, NOW(), NOW() )
 				";
-		$values = array($channel_id, $nick_id, $message, 1);
+		$values = array($channel_id, $nick_id, $message, $notice?1:0);
 		
 		return $this->_conn->Execute($this->_conn->Prepare($sql), $values);
 	}
