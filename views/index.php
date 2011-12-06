@@ -38,12 +38,6 @@
 	</form>
 	<hr/>
 	<table id="list" class="list">
-<?php /*		<thead>
-			<tr>
-				<th>nick</th><th>log</th><th>time</th>
-			</tr>
-		</thead>
-*/ ?>
 		<tbody></tbody>
 	</table>
 	<div id="ch_foot"></div>
@@ -52,13 +46,6 @@
 	<h3 name="search"></h3>
 	<span id="search_result_message">search result</span>
 	<table id="search-list" class="list">
-<?php /*
-		<thead>
-		<tr>
-			<th>channel</th><th>nick</th><th>log</th><th>time</th>
-		</tr>
-		</thead>
-*/ ?>
 		<tbody></tbody>
 	</table>
 	<div id="search_foot"></div>
@@ -103,7 +90,6 @@ $(function(){
 
 				$('input#message').attr('disabled','disabled');
 				$('form#post_form submit').attr('disabled','disabled');
-
 				$.ajax({
 					url:self.mountPoint+'/api/post/',
 					data:{
@@ -113,13 +99,13 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 					success:function(){
-						$('input#message').attr('disabled','');
-						$('form#post_form submit').attr('disabled','');
+						$('input#message').removeAttr('disabled');
+						$('form#post_form submit').removeAttr('disabled');
 						$('input#message').val('');
 					},
 					error:function(){
-						$('input#message').attr('disabled','');
-						$('form#post_form submit').attr('disabled','');
+						$('input#message').removeAttr('disabled');
+						$('form#post_form submit').removeAttr('disabled');
 					},
 				});
 				return false;
