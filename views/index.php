@@ -34,7 +34,9 @@
 <div class='pivot-item'>
 	<h3 id="ch_name" name="channel" ></h3>
 	<form method="POST" id="post_form" class="theme-bg">
-		<input type="text" name="post" id="message" /><input type="submit" value="post" />
+		<input type="text" name="post" id="message" />
+		<input type="submit" value="post" />
+		<input type="checkbox" name="notice" id="notice" value="true" />
 	</form>
 	<hr/>
 	<table id="list" class="list">
@@ -95,6 +97,7 @@ $(function(){
 					data:{
 						channel_id:self.currentChannel,
 						post:message,
+						notice:$('input#notice').attr('checked'),
 					},
 					dataType:'json',
 					type:'POST',
@@ -102,6 +105,7 @@ $(function(){
 						$('input#message').removeAttr('disabled');
 						$('form#post_form submit').removeAttr('disabled');
 						$('input#message').val('');
+						$('input#notice').removeAttr('checked');
 					},
 					error:function(){
 						$('input#message').removeAttr('disabled');

@@ -1,4 +1,6 @@
 <?php
+	ini_set("date.timezone", "Asia/Tokyo");
+
 	include_once 'conf.php';
 	include_once 'dao.php';
 	include_once 'myFitzgerald.php';
@@ -99,8 +101,11 @@
 					}else{
 						try{
 							$tiarra = new Net_Socket_Tiarra($tiarra_socket_name);
-							$tiarra->message($name, $this->request->post);
-							//$tiarra->noticeMessage($name, "notice!!");
+							if( $this->request->notice != 'true' ){
+								$tiarra->message($name, $this->request->post);
+							}else{
+								$tiarra->noticeMessage($name, $this->request->post);
+							}
 							$return = array( 'error' => false );
 
 							$this->db->log->postLog( $this->request->post, $this->request->channel_id, $this->db->nick->getID( $my_name ) );
