@@ -99,7 +99,7 @@ $(function(){
 					data:{
 						channel_id:self.currentChannel,
 						post:message,
-						notice:$('input#notice').attr('checked'),
+						notice:$('input#notice').attr('checked') == 'checked',
 					},
 					dataType:'json',
 					type:'POST',

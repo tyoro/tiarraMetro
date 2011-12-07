@@ -198,7 +198,7 @@ class dao_log extends dao_base{
 				VALUES 
 					(?, ?, ?, ?, NOW(), NOW() )
 				";
-		$values = array($channel_id, $nick_id, $message, $notice?1:0);
+		$values = array($channel_id, $nick_id, $message, $notice=='true'?1:0);
 		
 		return $this->_conn->Execute($this->_conn->Prepare($sql), $values);
 	}
