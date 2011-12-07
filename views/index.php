@@ -271,7 +271,6 @@ $(function(){
 				},
 				success:function(json){
 					if( json['update'] ){
-						now_list = self.isCurrentPivotByName("list");
 						listHeader = $('div.headers span.header[name=list]');
 						$.each( json['logs'], function(channel_id, logs){
 							logs = $.map( logs, function( log,i){
@@ -286,7 +285,7 @@ $(function(){
 									$.each( self.jsConf.pickup_word,function(j,w){
 										if( log.log.indexOf(w) >= 0 ){
 											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
-											$('#ch_'+channel_id).attr('class','hit');
+											$('#ch_'+channel_id).addClass('hit');
 											logs[i].pickup = true;
 										}
 									});
@@ -301,18 +300,16 @@ $(function(){
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
 							}
 							
-							if( channel_id != self.currentChannel || now_list  ){
-								if( $('#ch_'+channel_id).attr('class') != 'hit' ){
-									$('#ch_'+channel_id).attr('class','new');
-								}
+							if( channel_id != self.currentChannel || self.isCurrentPivotByName("list") ){
+								$('#ch_'+channel_id).addClass('new');
 								num = $('#ch_'+channel_id+' span.ch_num');
 								currentNum = $('small',num).text()-0+logs.length;
 								if( currentNum > 0 ){
 									num.html( '<small>'+currentNum+'</small>' );
 								}
-								//if( !now_list ){
-									listHeader.addClass('new');
-								//}
+								listHeader.addClass('new');
+							}else{
+								$('#ch_'+channel_id).removeClass('hit').removeClass('new');
 							}
 						});
 						self.max_id = json['max_id'];
