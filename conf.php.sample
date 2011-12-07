@@ -16,6 +16,7 @@ $conf = Array(
 	//applicaiton
 	,'style' => 'style.css'
 	,'channel_list_label' => 'channels'
+	,'cookie_save_time' => 7*86400
 );
 
 $jsConf = Array(
