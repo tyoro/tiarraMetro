@@ -102,7 +102,7 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 					success:function(){
-						$('input#message').removeAttr('disabled');
+						$('input#message').removeAttr('disabled').removeClass('error');
 						$('form#post_form input[type=submit]').removeAttr('disabled');
 						$('input#message').val('');
 						$('input#notice').removeAttr('checked');
