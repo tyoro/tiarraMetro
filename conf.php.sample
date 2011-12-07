@@ -28,6 +28,29 @@ $jsConf = Array(
 	,'on_image' => LINK_IMAGE_DRAW
 );
 
+$jsConf['click_menu'] = Array(
+	'@tig' => Array(
+		'match' => '\((\w+)\)',
+		'menu' => Array(
+			're' => Array( 'type' => 'typablemap_comment' ),
+			'fav' => Array( 'type' => 'typablemap' ),
+			'block' => Array( 'type' => 'typablemap' ),
+			'rt' => Array( 'type' => 'typablemap' ),
+			'mrt' => Array( 'type' => 'typablemap_comment' ),
+			'res' => Array( 'type' => 'typablemap' ),
+		)
+	),
+	'@fig' => Array(
+		'match' => '\((\w+)\)',
+		'menu' => Array(
+			're' => Array( 'type' => 'typablemap_comment' ),
+			'like' => Array( 'type' => 'typablemap' ),
+			'fav' => Array( 'type' => 'typablemap' ),
+			'arr' => Array( 'type' => 'typablemap' ),
+		)
+	),
+);
+
 // Databaseの設定
 define("DATABASE_HOST","localhost");
 define("DATABASE_ID","tiarra");

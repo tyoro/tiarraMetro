@@ -367,12 +367,14 @@ $(function(){
 							switch( menu['type'] ){
 								case 'typablemap':
 									li.on('click',function(event){
-										$('input#message').val(label+' '+matchStr);
+										$('input#message').val(label+' '+matchStr).focus();
+										$('#popup_menu').remove();
 									});
 									break;
 								case 'typablemap_comment':
 									li.on('click',function(event){
-										$('input#message').val(label+' '+matchStr+' ' );
+										$('input#message').val(label+' '+matchStr+' ' ).focus();
+										$('#popup_menu').remove();
 									});
 									break;
 							}
@@ -384,7 +386,7 @@ $(function(){
 						}else{
 							popup = $('<div id="popup_menu"/>');
 						}
-						console.log(event);
+						popup.css('top', event.pageY);
 						popup.append(ul);
 						popup.appendTo('body');
 					} );

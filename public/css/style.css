@@ -254,6 +254,23 @@ span.pickup{ color:#fbb; }
 
 #pad {padding:.25em 0;}
 
+div#popup_menu {
+	position:absolute;
+	background-color:black;
+	width: 100%;
+}
+div#popup_menu ul {
+	margin: 0;
+	padding: 0;
+}
+
+div#popup_menu ul li{
+	font-size:xx-large;
+	padding: .4em .8em;
+	color: #808080;
+	list-style-type: none;
+	cursor: pointer;
+}
 
 /* hack */
 
