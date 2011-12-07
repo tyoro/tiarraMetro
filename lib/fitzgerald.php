@@ -5,8 +5,8 @@
 
 
     /*  Fitzgerald - a single file PHP framework
-     *  (c) 2008 Jim Benton, released under the MIT license
-     *  Version 0.2
+     *  (c) 2010 Jim Benton and contributors, released under the MIT license
+     *  Version 0.3
      */
 
     class Template {
@@ -19,7 +19,7 @@
         public function render($locals) {
             extract($locals);
             ob_start();
-            include($this->root . 'views/' . $this->fileName . '.php');
+            include(realpath($this->root . 'views/' . $this->fileName . '.php'));
             return ob_get_clean();
         }
     }
@@ -29,18 +29,13 @@
         private $method;
         private $conditions;
 
-        private $filters = array();
         public $params = array();
         public $match = false;
 
         public function __construct($httpMethod, $url, $conditions=array(), $mountPoint) {
 
             $requestMethod = $_SERVER['REQUEST_METHOD'];
-            $requestUri = str_replace($mountPoint, '', $_SERVER['REQUEST_URI']);
-
-			//custmize:2010/12/21 by tyoro
-			$requestUri = str_replace('?' . $_SERVER["QUERY_STRING"], '', $requestUri);
-			
+            $requestUri = str_replace($mountPoint, '', preg_replace('/\?.+/', '', $_SERVER['REQUEST_URI']));
 
             $this->url = $url;
             $this->method = $httpMethod;
@@ -51,13 +46,10 @@
                 $paramNames = array();
                 $paramValues = array();
 
-                preg_match_all('@:([a-zA-Z_]+)@', $url, $paramNames, PREG_PATTERN_ORDER);                    // get param names
-                //preg_match_all('@:([a-zA-Z]+)@', $url, $paramNames, PREG_PATTERN_ORDER);                    // get param names
+                preg_match_all('@:([a-zA-Z]+)@', $url, $paramNames, PREG_PATTERN_ORDER);                    // get param names
                 
-				$paramNames = $paramNames[1];                                                               // we want the set of matches
-                $regexedUrl = preg_replace_callback('@:([a-zA-Z_\-]+)@', array($this, 'regexValue'), $url);     // replace param with regex capture
-                //$regexedUrl = preg_replace_callback('@:[a-zA-Z_\-]+@', array($this, 'regexValue'), $url);     // replace param with regex capture
-
+                $paramNames = $paramNames[1];                                                               // we want the set of matches
+                $regexedUrl = preg_replace_callback('@:[a-zA-Z_\-]+@', array($this, 'regexValue'), $url);     // replace param with regex capture
                 if (preg_match('@^' . $regexedUrl . '$@', $requestUri, $paramValues)){                      // determine match and get param values
                     array_shift($paramValues);                                                              // remove the complete text match
                     for ($i=0; $i < count($paramNames); $i++) {
@@ -69,8 +61,7 @@
         }
 
         private function regexValue($matches) {
-			$key = $matches[1];
-			//$key = str_replace(':', '', $matches[0]);
+            $key = str_replace(':', '', $matches[0]);
             if (array_key_exists($key, $this->conditions)) {
                 return '(' . $this->conditions[$key] . ')';
             } else {
@@ -144,7 +135,7 @@
 
     class Fitzgerald {
 
-        private $mappings = array();
+        private $mappings = array(), $before_filters = Array(), $after_filters = Array();
         protected $options;
         protected $session;
         protected $request;
@@ -160,42 +151,63 @@
 
         public function handleError($number, $message, $file, $line) {
             header("HTTP/1.0 500 Server Error");
-			//TODO:
-			var_dump( "$file:$line:$message" );
-            echo $this->render('500');
+            echo $this->render('500', compact('number', 'message', 'file', 'line'));
             die();
         }
 
         public function show404() {
             header("HTTP/1.0 404 Not Found");
             echo $this->render('404');
-            die();
-        }
-        
-		public function show403() {
-            header("HTTP/1.0 403 Forbidden");
-            echo $this->render('403');
-            die();
+t            die();
         }
 
-        public function get($url, $methodName, $conditions=array()) {
+        public function get($url, $methodName, $conditions = array()) {
            $this->event('get', $url, $methodName, $conditions);
         }
 
-        public function post($url, $methodName, $conditions=array()) {
+        public function post($url, $methodName, $conditions = array()) {
            $this->event('post', $url, $methodName, $conditions);
         }
 
+        public function put($url, $methodName, $conditions = array()) {
+           $this->event('put', $url, $methodName, $conditions);
+        }
+
+        public function delete($url, $methodName, $conditions = array()) {
+           $this->event('delete', $url, $methodName, $conditions);
+        }
+
         public function before($methodName, $filterName) {
+            $this->push_filter($this->before_filters, $methodName, $filterName);
+        }
+
+        public function after($methodName, $filterName) {
+            $this->push_filter($this->after_filters, $methodName, $filterName);
+        }
+
+        protected function push_filter(&$arr_filter, $methodName, $filterName) {
             if (!is_array($methodName)) {
                 $methodName = explode('|', $methodName);
             }
+
             for ($i = 0; $i < count($methodName); $i++) {
                 $method = $methodName[$i];
-                if (!isset($this->filters[$method])) {
-                    $this->filters[$method] = array();
+                if (!isset($arr_filter[$method])) {
+                    $arr_filter[$method] = array();
                 }
-                array_push($this->filters[$method], $filterName);
+                array_push($arr_filter[$method], $filterName);
+            }
+        }
+
+        protected function run_filter($arr_filter, $methodName) {
+            if(isset($arr_filter[$methodName])) {
+                for ($i=0; $i < count($arr_filter[$methodName]); $i++) {
+                    $return = call_user_func(array($this, $arr_filter[$methodName][$i]));
+
+                    if(!is_null($return)) {
+                        return $return;
+                    }
+                }
             }
         }
 
@@ -204,11 +216,15 @@
         }
 
         protected function redirect($path) {
-            $protocol = $_SERVER['HTTPS'] ? 'https' : 'http';
+            $protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
             $host = (preg_match('%^http://|https://%', $path) > 0) ? '' : "$protocol://" . $_SERVER['HTTP_HOST'];
             $uri = is_string($this->options->mountPoint) ? $this->options->mountPoint : '';
-            $this->session->error = $this->error;
-            $this->session->success = $this->success;
+            if (!empty($this->error)) {
+              $this->session->error = $this->error;
+            }
+            if (!empty($this->success)) {
+              $this->session->success = $this->success;
+            }
             header("Location: $host$uri$path");
             return false;
         }
@@ -223,7 +239,6 @@
             if(isset($this->success)) {
                 $variableArray['success'] = $this->success;
             }
-
 
             if (is_string($this->options->layout)) {
                 $contentTemplate = new Template($this->root(), $fileName);              // create content template
@@ -252,20 +267,17 @@
             return readfile($path);
         }
 
-        private function execute($methodName, $params) {
-            if (isset($this->filters[$methodName])) {
-                for ($i=0; $i < count($this->filters[$methodName]); $i++) {
-                    $return = call_user_func(array($this, $this->filters[$methodName][$i]));
-                    if (!is_null($return)) {
-                        return $return;
-                    }
-                }
+        protected function execute($methodName, $params) {
+            $return = $this->run_filter($this->before_filters, $methodName);
+            if (!is_null($return)) {
+              return $return;
             }
 
             if ($this->session->error) {
                 $this->error = $this->session->error;
                 $this->session->error = null;
             }
+
             if ($this->session->success) {
                 $this->success = $this->session->success;
                 $this->session->success = null;
@@ -274,35 +286,56 @@
             $reflection = new ReflectionMethod(get_class($this), $methodName);
             $args = array();
 
-            foreach ($reflection->getParameters() as $i => $param) {
-                $args[$param->name] = $params[$param->name];
+            foreach($reflection->getParameters() as $param) {
+                if(isset($params[$param->name])) {
+                    $args[$param->name] = $params[$param->name];
+                }
+                else if($param->isDefaultValueAvailable()) {
+                    $args[$param->name] = $param->getDefaultValue();
+                }
             }
-            return call_user_func_array(array($this, $methodName), $args);
+
+            $response = $reflection->invokeArgs($this, $args);
+
+            $return = $this->run_filter($this->after_filters, $methodName);
+            if (!is_null($return)) {
+              return $return;
+            }
+
+            return $response;
         }
 
-        private function event($httpMethod, $url, $methodName, $conditions=array()) {
+        protected function event($httpMethod, $url, $methodName, $conditions=array()) {
             if (method_exists($this, $methodName)) {
                 array_push($this->mappings, array($httpMethod, $url, $methodName, $conditions));
             }
         }
 
         protected function root() {
-            return dirname(__FILE__) . '/../';
+            if($root = $this->options->root)
+              return $root;
+            else
+              return dirname(__FILE__) . '/../';
         }
 
         protected function path($path) {
             return $this->root() . $path;
         }
 
-        private function processRequest() {
-            for ($i = 0; $i < count($this->mappings); $i++) {
+        protected function processRequest() {
+            $charset = (is_string($this->options->charset)) ? ";charset={$this->options->charset}" : "";
+            header("Content-type: text/html" . $charset);
+
+            for($i = 0; $i < count($this->mappings); $i++) {
                 $mapping = $this->mappings[$i];
                 $mountPoint = is_string($this->options->mountPoint) ? $this->options->mountPoint : '';
                 $url = new Url($mapping[0], $mapping[1], $mapping[3], $mountPoint);
-                if ($url->match) {
+
+                if($url->match) {
                     return $this->execute($mapping[2], $url->params);
                 }
             }
+
             return $this->show404();
         }
     }
