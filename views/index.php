@@ -91,7 +91,7 @@ $(function(){
 				if( message.length == 0 ){ return false; }
 
 				$('input#message').attr('disabled','disabled');
-				$('form#post_form submit').attr('disabled','disabled');
+				$('form#post_form input[type=submit]').attr('disabled','disabled');
 				$.ajax({
 					url:self.mountPoint+'/api/post/',
 					data:{
@@ -103,13 +103,13 @@ $(function(){
 					type:'POST',
 					success:function(){
 						$('input#message').removeAttr('disabled');
-						$('form#post_form submit').removeAttr('disabled');
+						$('form#post_form input[type=submit]').removeAttr('disabled');
 						$('input#message').val('');
 						$('input#notice').removeAttr('checked');
 					},
 					error:function(){
 						$('input#message').removeAttr('disabled').addClass('error');
-						$('form#post_form submit').removeAttr('disabled');
+						$('form#post_form input[type=submit]').removeAttr('disabled');
 					},
 				});
 				return false;
