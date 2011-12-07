@@ -79,6 +79,7 @@ $(function(){
 		htmlInitialize: function(){
 			var self = this;
 
+			/* チャンネルの選択 */
 			$("ul.channel_list").on("click", "li", function() {
 				channel_id = this.id.substring(3);
 				channel_name = self.getChannelName(channel_id);
@@ -86,6 +87,7 @@ $(function(){
 				self.myPushState(channel_name,'/channel/'+channel_id);
 			});
 
+			/* 投稿 */
 			$('form#post_form').submit(function(){
 				message = $('input#message').val();
 				if( message.length == 0 ){ return false; }
@@ -115,6 +117,7 @@ $(function(){
 				return false;
 			});
 
+			/* 検索 */
 			$('form#search_form').submit(function(){
 				kw = $('input#keyword').val();
 				if( kw.length == 0 ){ return false; }
@@ -149,6 +152,7 @@ $(function(){
 				return false;
 			});
 
+			/* 未読のリセット */
 			$('input#unread_reset').click(function(){
 				$.ajax({
 					url:self.mountPoint+'/api/reset/unread',
@@ -160,10 +164,12 @@ $(function(){
 				$('.channel_list li span.ch_num').html('');
 			});
 			
+			/* ログアウト */
 			$('input#logout').click(function(){
 				location.href = self.mountPoint+'/logout';
 			});
 
+			/* ブラウザの戻る、進むのフック */
 			$(window).bind('popstate', function(event) {
 				switch( event.originalEvent.state ){
 					case '/':
@@ -182,6 +188,7 @@ $(function(){
 				}
 			}, false);
 
+			/* フリックによるヘッダー遷移 */
 			$(document).touchwipe({
 				preventDefaultEvents: false,
 				min_move_x: 75,
@@ -189,6 +196,7 @@ $(function(){
 				wipeRight: function() { self.goToPreviousPivot(); }
 			});
 
+			/* pivot化 */
 			$(".metro-pivot").metroPivot({
 				controlInitialized: function() {
 					var metroPivot = $(this);
@@ -271,6 +279,7 @@ $(function(){
 							});
 							if( !logs.length ){ return; }
 
+							/* pickup word の検出とフラグの追加 */
 							$.each( logs, function( i,log){
 								if( self.jsConf.pickup_word && self.jsConf.pickup_word.length && log.nick != self.jsConf.my_name ){
 									$.each( self.jsConf.pickup_word,function(j,w){
@@ -283,8 +292,10 @@ $(function(){
 								}
 							});
 							
+							/* 内部的に保持するログを各チャンネル30に制限 */
 							self.chLogs[channel_id] = logs.concat(self.chLogs[channel_id]).slice(0,30);
 
+							/* 選択中のチャンネルの場合、domへの流し込みを行う */
 							if( channel_id == self.currentChannel ){
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
 							}
@@ -312,19 +323,22 @@ $(function(){
 				}
 			});	 
 		},
+
+		/* log build */
 		logFilter : function(log){
 			var self = this;
 			if( log.filtered ){ return log; }
 
 			log.log = $.escapeHTML( log.log );
 
+			/* pickupタグの適用 */
 			if( log.pickup ){
 				$.each( self.jsConf.pickup_word,function(j,w){
 					log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
 				});
 			}
 
-
+			/* URLと画像の展開 */
 			if( ! this.jsConf.on_image ){
 				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
 			}else if( this.jsConf.on_image == 1 ){
@@ -352,11 +366,13 @@ $(function(){
 			var result = '<tr id="'+log.id+'">';
 			searchFlag = (searchFlag==undefined?false:searchFlag);
 			
+			/* twitterアイコンの適用 */
 			if( self.jsConf['on_icon'] ){ nick = self.getIconString(log)+log.nick; }
 			else{ nick = log.nick; }
 
 			log = self.logFilter(log);
 
+			/* 検索の場合はチャンネルも記述する */
 			if( searchFlag ){
 				result += '<td class="channel">'+log.channel_name+'</td>';
 				time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
@@ -365,8 +381,9 @@ $(function(){
 			}
 
 			result += '<td class="name'+(log.nick==self.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
-
 			result = $(result);
+
+			/* popup menuの処理 */
 			if( self.currentMenu != null ){
 				logElement = $('td.log',result);
 				if( logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
@@ -411,6 +428,7 @@ $(function(){
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
 		},
+
 		myPushState : function( name, url ){
 			if( history.pushState ){
 				history.pushState( window.location.pathname ,name, this.mountPoint+url );
