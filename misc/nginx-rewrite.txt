@@ -1,0 +1,3 @@
+if (-f $request_filename) { break; }
+if (-d $request_filename) { break; }
+rewrite . /index.php last;
