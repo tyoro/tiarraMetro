@@ -34,7 +34,7 @@ $jsConf['click_menu'] = Array(
 		'menu' => Array(
 			're' => Array( 'type' => 'typablemap_comment' ),
 			'fav' => Array( 'type' => 'typablemap' ),
-			'block' => Array( 'type' => 'typablemap' ),
+			//'block' => Array( 'type' => 'typablemap' ),
 			'rt' => Array( 'type' => 'typablemap' ),
 			'mrt' => Array( 'type' => 'typablemap_comment' ),
 			'res' => Array( 'type' => 'typablemap' ),
