@@ -191,13 +191,16 @@ $(function(){
 
 			$(".metro-pivot").metroPivot({
 				controlInitialized: function() {
+					var metroPivot = $(this);
+					var headers = metroPivot.find(".headers .header");
+
 					/* ホビロン */
-					$(this).find(".pivot-item").each(function(i, item) {
+					metroPivot.find(".pivot-item").each(function(i, item) {
 						self.getPivotHeaderByIndex(i).attr("name", $(item).attr("name"));
 					});
 
 					/* headers に背景色をもたせる */
-					$(this).children(".headers").addClass("theme-bg");
+					metroPivot.children(".headers").addClass("theme-bg");
 
 					default_pivot = '<?php print $pivot; ?>';
 					switch (default_pivot) {
@@ -211,31 +214,39 @@ $(function(){
 							break;
 					}
 
-					$(this).on("click", ".headers .header", function() {
-						var $header = $(this);
-						var index = $header.attr("index");
-
-						if ($header.hasClass("current")) {
-							$(".channel_list").toggleClass("invisible");
-						}
-						else {
-							switch (index) {
-							case '0': //channel list
-								self.myPushState( 'channel list','/' );
-								$('div.headers span.header[name=list]').removeClass('new');
-								self.onListInvisible();
-								break;
-							case '1':
-								self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
-								break;
-							case '2': //search
-								self.myPushState('search','/search/' );
-								break;
-							}
-						}
-					});
-				},
+					// FIXME: 本来のクリック処理を外して別のイベントを挟んでから戻す */
+					var newOnClick = $.proxy(self.onClickPivotHeader, self);
+					var oldOnClick = $.proxy(self.getPivotController().pivotHeader_Click, self.getPivotController());
+					headers
+						.off("click")
+						.on("click", function() { newOnClick($(this)); })
+						.on("click", function() { oldOnClick($(this)); })
+						;
+				}
 			});
+		},
+		onClickPivotHeader: function(header) {
+			var self = this;
+			var index = header.attr("index");
+
+			if (header.attr("name") == "list" && header.hasClass("current")) {
+				$("ul.channel_list").toggleClass("invisible");
+			}
+			else {
+				switch (index) {
+				case '0': //channel list
+					self.myPushState( 'channel list','/' );
+					$('div.headers span.header[name=list]').removeClass('new');
+					self.onListInvisible();
+					break;
+				case '1':
+					self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
+					break;
+				case '2': //search
+					self.myPushState('search','/search/' );
+					break;
+				}
+			}
 		},
 		reload: function(){
 			var self = this;
