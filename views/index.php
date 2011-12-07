@@ -1,6 +1,6 @@
 <div class="metro-pivot">
-<div class='pivot-item'>
-	<h3 name="list"><?php print isset($options->channel_list_label)?$options->channel_list_label:'channels'; ?></h3>
+<div class='pivot-item' name="list">
+	<h3><?php print isset($options->channel_list_label)?$options->channel_list_label:'channels'; ?></h3>
 	<ul class="channel_list">
 	<?php foreach( $channels as $ch ){ ?>
 	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>&nbsp;
@@ -31,8 +31,8 @@
 		<input type="button" id="logout" value="logout" />
 	</div>
 </div>
-<div class='pivot-item'>
-	<h3 id="ch_name" name="channel" ></h3>
+<div class='pivot-item' name="channel">
+	<h3></h3>
 	<form method="POST" id="post_form" class="theme-bg">
 		<input type="text" name="post" id="message" />
 		<input type="submit" value="post" />
@@ -44,8 +44,8 @@
 	</table>
 	<div id="ch_foot"></div>
 </div>
-<div class='pivot-item'>
-	<h3 name="search"></h3>
+<div class='pivot-item' name="search">
+	<h3></h3>
 	<span id="search_result_message">search result</span>
 	<table id="search-list" class="list">
 		<tbody></tbody>
@@ -78,12 +78,11 @@ $(function(){
 		},
 		htmlInitialize: function(){
 			var self = this;
-			$('ul.channel_list li').click(function(){
+
+			$("ul.channel_list").on("click", "li", function() {
 				channel_id = this.id.substring(3);
 				channel_name = self.getChannelName(channel_id);
-
-				self.selectChannel( channel_id, channel_name );
-
+				self.selectChannel(channel_id, channel_name);
 				self.myPushState(channel_name,'/channel/'+channel_id);
 			});
 
@@ -124,8 +123,8 @@ $(function(){
 				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..." /></div>' );
 
 				$('div.headers span.header[name=search]').text( 'search' );
-				if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'search' ) ){
-					$("div.metro-pivot").data("controller").goToItemByName('search');
+				if (!self.isCurrentPivotByName("search")) {
+					self.goToPivotByName("search");
 				}
 
 				d = { keyword:kw };
@@ -168,10 +167,10 @@ $(function(){
 			$(window).bind('popstate', function(event) {
 				switch( event.originalEvent.state ){
 					case '/':
-						$("div.metro-pivot").data("controller").goToItemByName( 'list' );
+						self.goToPivotByName("list");
 						break;
 					case '/search/':
-						$("div.metro-pivot").data("controller").goToItemByName( 'search');
+						self.goToPivotByName("search");
 						break;
 					case null:
 						break;
@@ -190,41 +189,52 @@ $(function(){
 				wipeRight: function() { self.goToPreviousPivot(); }
 			});
 
-			$("div.metro-pivot").metroPivot({
-				headersTemplate: function () { return $("<div class='headers theme-bg' />"); },
-				clickedItemHeader:function(i){
-					switch( i ){
-						case '0': //channel list
-							self.myPushState( 'channel list','/' );
-							$('div.headers span.header[name=list]').removeClass('new');
-							self.onListInvisible();
-							break;
-						case '1':
-							self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
-							break;
-						case '2': //search
-							self.myPushState('search','/search/' );
-							break;
-					}
-				},
-				controlInitialized:function(){
+			$(".metro-pivot").metroPivot({
+				controlInitialized: function() {
+					/* ホビロン */
+					$(this).find(".pivot-item").each(function(i, item) {
+						self.getPivotHeaderByIndex(i).attr("name", $(item).attr("name"));
+					});
+
+					/* headers に背景色をもたせる */
+					$(this).children(".headers").addClass("theme-bg");
+
 					default_pivot = '<?php print $pivot; ?>';
-					switch( default_pivot ){
+					switch (default_pivot) {
 						case 'channel':
-							self.loadChannel( <?php print $default_channel['id']; ?>,'<?php print $default_channel['name'];  ?>');
+							self.loadChannel(<?php print $default_channel['id']; ?>,'<?php print $default_channel['name'];  ?>');
 						default:
-							$("div.metro-pivot").data("controller").goToItemByName( default_pivot);
+							self.goToPivotByName(default_pivot);
 							break;
 						case 'list':
 						case 'default':
 							break;
 					}
+
+					$(this).on("click", ".headers .header", function() {
+						var $header = $(this);
+						var index = $header.attr("index");
+
+						if ($header.hasClass("current")) {
+							$(".channel_list").toggleClass("invisible");
+						}
+						else {
+							switch (index) {
+							case '0': //channel list
+								self.myPushState( 'channel list','/' );
+								$('div.headers span.header[name=list]').removeClass('new');
+								self.onListInvisible();
+								break;
+							case '1':
+								self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
+								break;
+							case '2': //search
+								self.myPushState('search','/search/' );
+								break;
+							}
+						}
+					});
 				},
-				clickedCurrentItemHeader:function(i){
-					if( i == 0 ){	//list
-						$('ul.channel_list').toggleClass('invisible');
-					}
-				}
 			});
 		},
 		reload: function(){
@@ -237,11 +247,11 @@ $(function(){
 				type:'POST',
 				data:{
 					max_id:self.max_id,
-					current: ($("div.metro-pivot").data("controller").isCurrentByName( 'list' )?'':self.currentChannel )
+					current: self.isCurrentPivotByName("list") ? "" : self.currentChannel
 				},
 				success:function(json){
 					if( json['update'] ){
-						now_list = $("div.metro-pivot").data("controller").isCurrentByName( 'list' );
+						now_list = self.isCurrentPivotByName("list");
 						listHeader = $('div.headers span.header[name=list]');
 						$.each( json['logs'], function(channel_id, logs){
 							logs = $.map( logs, function( log,i){
@@ -396,12 +406,12 @@ $(function(){
 		selectChannel : function( channel_id, channel_name ){
 			this.currentChannel = channel_id;
 
-			$('#list tbody tr').each(function( i,e ){ $(e).remove(); });
-			$('div#ch_foot').html('');
-			
-			this.loadChannel( channel_id, channel_name);
-		
-			$("div.metro-pivot").data("controller").goToItemByName('channel');
+			$("#list tbody").empty();
+			$("#ch_foot").empty();
+
+			this.loadChannel(channel_id, channel_name);
+			this.goToPivotByName("channel");
+			//scrollTo(0,0);
 		},
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
@@ -451,20 +461,12 @@ $(function(){
 			button = $('<input type="button" value="close" />');
 			button.click(function(){
 				$('div.headers span.header[name=search]').html( '' );
-				if( ! $("div.metro-pivot").data("controller").isCurrentByName( 'list' ) ){
-					$("div.metro-pivot").data("controller").goToItemByName('list');
+				if (!self.isCurrentPivotByName("list")) {
+					self.goToPivotByName("list");
 					self.onListInvisible();
 				}
 			});
 			$('div#search_foot').html(button);
-		},
-		goToNextPivot: function(){
-			var next = $(".metro-pivot .headers .header:gt(0):not(:empty):first");
-			if (next) $("div.metro-pivot").data("controller").goToItemByName(next.attr("name"));
-		},
-		goToPreviousPivot: function(){
-			var prev = $(".metro-pivot .headers .header:not(:empty):last");
-			if (prev) $("div.metro-pivot").data("controller").goToItemByName(prev.attr("name"));
 		},
 		onListInvisible: function(){
 			if( $('ul.channel_list li.new').length || $('ul.channel_list li.hit').length ){
@@ -476,6 +478,40 @@ $(function(){
 		offListInvisible: function(){
 			$('ul.channel_list').removeClass('invisible');
 		},
+
+		/* Pivot helpers */
+		getPivotController: function() {
+			return $(".metro-pivot").data("controller");
+		},
+		getPivotHeaders: function() {
+			return this.getPivotController().headers;
+		},
+		getPivotHeaderByName: function(name) {
+			return this.getPivotHeaders().children(".header[name="+name+"]");
+		},
+		getPivotHeaderByIndex: function(index) {
+			return this.getPivotHeaders().children(".header[index="+index+"]");
+		},
+		isCurrentPivotByName: function(name) {
+			return this.getPivotHeaderByName(name).hasClass("current");
+		},
+		isCurrentPivotByIndex: function(index) {
+			return this.getPivotHeaderByIndex(index).hasClass("current");
+		},
+		goToPivotByName: function(name) {
+			this.getPivotHeaderByName(name).click();
+		},
+		goToPivotByIndex: function(index) {
+			this.getPivotHeaderByIndex(index).click();
+		},
+		goToNextPivot: function(){
+			var next = $(".metro-pivot .headers .header:gt(0):not(:empty):first");
+			if (next) this.goToPivotByName(next.attr("name"));
+		},
+		goToPreviousPivot: function(){
+			var prev = $(".metro-pivot .headers .header:not(:empty):last");
+			if (prev) this.goToPivotByName(prev.attr("name"));
+		}
 	};
 
 	tiarraMetro = new TiarraMetroClass({
