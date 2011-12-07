@@ -202,6 +202,9 @@ input[type=text],input[type=password]{
 	background-color: #606060;
 	border: 2px solid #808080;
 }
+input[type=text].error{
+	background-color: #f05050;
+}
 input[type=submit] {
 	height: 2.1em;
 	border: 2px solid #808080;

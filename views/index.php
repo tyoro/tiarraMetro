@@ -108,7 +108,7 @@ $(function(){
 						$('input#notice').removeAttr('checked');
 					},
 					error:function(){
-						$('input#message').removeAttr('disabled');
+						$('input#message').removeAttr('disabled').addClass('error');
 						$('form#post_form submit').removeAttr('disabled');
 					},
 				});
