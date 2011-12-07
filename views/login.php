@@ -7,6 +7,7 @@ no login!<br/><hr/>
 <form method="POST">
 <input type="password" name="pass" /> 
 <input type="submit" value="login" />
+<label>cookie<input type="checkbox" value="true" name="cookie"></label>
 </form>
 </div>
 </div>

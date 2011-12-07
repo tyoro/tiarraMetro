@@ -6,6 +6,7 @@
 	include_once 'myFitzgerald.php';
 	include_once 'lib/adodb5/adodb.inc.php';
 	include_once 'lib/adodb5/adodb-pear.inc.php';
+	include_once 'lib/util.php';
 
 	include_once 'Net/Socket/Tiarra.php';
 
@@ -164,6 +165,7 @@
 		//login処理
 		public function login(){
 			global $password_md5;
+			global $my_name;
 			if( $this->isLoggedIn() ){
 				return  $this->redirect('/');
 			}
@@ -171,6 +173,11 @@
 			if( strlen($this->request->pass) ){
 				if( md5($this->request->pass) == $password_md5 ){
 					$this->session->login = 'true';
+
+					//set cookie
+					if( $this->request->cookie == 'true' )
+					Cookie::set('UniqueId',$my_name,$password_md5,time()+$this->options->cookie_save_time, $this->options->mountPoint.'/' );
+
 					//セッションにログイン前ページが記憶されてるかどうかを判定
 					if( isset($this->session->befor) && strlen($this->session->befor) ){
 						$this->redirect( $this->session->befor );
@@ -189,12 +196,15 @@
 		public function logout(){
 			if( !$this->isLoggedIn() ){ return  $this->redirect('/'); }
 			$this->session->login = null;
+			Cookie::delete('UniqueId',$this->options->mountPoint.'/' );
 			$this->redirect('/');
 		}
 			
         private function isLoggedIn() {
 			global $password_md5;
+			global $my_name;
 			if( empty($password_md5) ){ return true; }
+			if( Cookie::get('UniqueId', $password_md5 ) == $my_name ){ return true; }
 			return !is_null($this->session->login);
 		}
 
