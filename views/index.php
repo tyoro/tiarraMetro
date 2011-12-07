@@ -67,6 +67,7 @@ $(function(){
 			var self = this;
 			this.max_id = param.max_id;
 			this.currentChannel = param.currentChannel;
+			this.currentMenu = null;
 			this.chLogs = param.chLogs;
 			this.updating = param.updating;
 			this.jsConf = param.jsConf;
@@ -215,9 +216,6 @@ $(function(){
 							$("div.metro-pivot").data("controller").goToItemByName( default_pivot);
 							break;
 						case 'list':
-/**
- *  
- */
 						case 'default':
 							break;
 					}
@@ -329,13 +327,14 @@ $(function(){
 			$('#search-list tbody').prepend(this.createRow(log,true));
 		},
 		createRow : function( log,searchFlag ){
+			var self = this;
 			var result = '<tr id="'+log.id+'">';
 			searchFlag = (searchFlag==undefined?false:searchFlag);
 			
-			if( this.jsConf['on_icon'] ){ nick = this.getIconString(log)+log.nick; }
+			if( self.jsConf['on_icon'] ){ nick = self.getIconString(log)+log.nick; }
 			else{ nick = log.nick; }
 
-			log = this.logFilter(log);
+			log = self.logFilter(log);
 
 			if( searchFlag ){
 				result += '<td class="channel">'+log.channel_name+'</td>';
@@ -344,7 +343,43 @@ $(function(){
 				time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
 			}
 
-			result += '<td class="name'+(log.nick==this.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
+			result += '<td class="name'+(log.nick==self.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
+
+			result = $(result);
+			if( self.currentMenu != null ){
+				logElement = $('td.log',result);
+				if( logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
+					var matchStr = RegExp.$1;
+					logElement.on( "click", function(event){
+						var ul = $('<ui/>');
+						$.each( self.currentMenu['menu'], function(label,menu){
+							var li = $('<li/>').text(menu['label']?menu['label']:label);
+							switch( menu['type'] ){
+								case 'typablemap':
+									li.on('click',function(event){
+										$('input#message').val(label+' '+matchStr);
+									});
+									break;
+								case 'typablemap_comment':
+									li.on('click',function(event){
+										$('input#message').val(label+' '+matchStr+' ' );
+									});
+									break;
+							}
+							ul.append( li );
+						});
+						var popup = $('#popup_menu');
+						if( popup.length ){
+							popup.empty();
+						}else{
+							popup = $('<div id="popup_menu"/>');
+						}
+						console.log(event);
+						popup.append(ul);
+						popup.appendTo('body');
+					} );
+				}
+			}
 			return result;
 		},
 		getIconString : function ( log ){
@@ -363,11 +398,10 @@ $(function(){
 
 			$('#list tbody tr').each(function( i,e ){ $(e).remove(); });
 			$('div#ch_foot').html('');
-
+			
 			this.loadChannel( channel_id, channel_name);
 		
 			$("div.metro-pivot").data("controller").goToItemByName('channel');
-			//scrollTo(0,0);
 		},
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
@@ -375,6 +409,9 @@ $(function(){
 			$('div.headers span.header[name=channel]').html( channel_name );
 			$('#ch_'+channel_id).attr('class','');
 			$('#ch_'+channel_id+' span.ch_num').html('');
+			
+			sufix = channel_name.match(/@\w+/i);
+			this.currentMenu = this.jsConf['click_menu'][ sufix ]?this.jsConf['click_menu'][ sufix ]:null;
 			
 			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
