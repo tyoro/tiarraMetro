@@ -241,6 +241,7 @@ $(function(){
 				$("ul.channel_list").toggleClass("invisible");
 			}
 			else {
+				$('#popup_menu').remove();
 				switch (index) {
 				case '0': //channel list
 					self.myPushState( 'channel list','/' );
@@ -389,34 +390,40 @@ $(function(){
 				if( logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
 					var matchStr = RegExp.$1;
 					logElement.on( "click", function(event){
+						var popup = $('#popup_menu');
+						if( popup.length ){
+							popup.remove();
+							return;
+						}
 						var ul = $('<ui/>');
 						$.each( self.currentMenu['menu'], function(label,menu){
 							var li = $('<li/>').text(menu['label']?menu['label']:label);
 							switch( menu['type'] ){
 								case 'typablemap':
 									li.on('click',function(event){
-										$('input#message').val(label+' '+matchStr).focus();
 										$('#popup_menu').remove();
+										$.ajax({
+											url:self.mountPoint+'/api/post/',
+											data:{
+												channel_id:self.currentChannel,
+												post:label+' '+matchStr,
+												notice:false,
+											},
+											dataType:'json',
+											type:'POST',
+										});
 									});
 									break;
 								case 'typablemap_comment':
 									li.on('click',function(event){
-										$('input#message').val(label+' '+matchStr+' ' ).focus();
 										$('#popup_menu').remove();
+										$('input#message').val(label+' '+matchStr+' ' ).focus();
 									});
 									break;
 							}
 							ul.append( li );
 						});
-						var popup = $('#popup_menu');
-						if( popup.length ){
-							popup.empty();
-						}else{
-							popup = $('<div id="popup_menu"/>');
-						}
-						popup.css('top', event.pageY);
-						popup.append(ul);
-						popup.appendTo('body');
+						$('<div id="popup_menu"/>').css('top', event.pageY).append(ul).appendTo('body');
 					} );
 				}
 			}
@@ -442,7 +449,6 @@ $(function(){
 
 			this.loadChannel(channel_id, channel_name);
 			this.goToPivotByName("channel");
-			//scrollTo(0,0);
 		},
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
