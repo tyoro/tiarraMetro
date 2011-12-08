@@ -102,6 +102,7 @@ class dao_channel extends dao_base{
 		}
 
 		//$sql .= " ORDER BY cnt DESC";
+		$sql .= " ORDER BY name ASC";
 
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
