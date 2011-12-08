@@ -46,8 +46,7 @@
                 $paramNames = array();
                 $paramValues = array();
 
-                preg_match_all('@:([a-zA-Z]+)@', $url, $paramNames, PREG_PATTERN_ORDER);                    // get param names
-                
+                preg_match_all('@:([a-zA-Z_]+)@', $url, $paramNames, PREG_PATTERN_ORDER);                    // get param names
                 $paramNames = $paramNames[1];                                                               // we want the set of matches
                 $regexedUrl = preg_replace_callback('@:[a-zA-Z_\-]+@', array($this, 'regexValue'), $url);     // replace param with regex capture
                 if (preg_match('@^' . $regexedUrl . '$@', $requestUri, $paramValues)){                      // determine match and get param values
@@ -85,7 +84,6 @@
             return $value;
         }
 
-		//custmize:2010/12/20 by tyoro
 		public function __isset($key){
 			return isset($this->subject[$key]) && ( is_array($this->subject[$key]) || strlen($this->subject[$key]) > 0  );
 		}
@@ -106,7 +104,6 @@
             return $value;
         }
 		
-		//custmize:2010/12/20 by tyoro
 		public function __isset($key){
 			return isset($_SESSION[$key]);
 		}
@@ -124,7 +121,6 @@
             return $value;
         }
 		
-		//custmize:2010/12/20 by tyoro
 		public function __isset($key){
 			return isset($_REQUEST[$key]);
 		}
@@ -158,7 +154,7 @@
         public function show404() {
             header("HTTP/1.0 404 Not Found");
             echo $this->render('404');
-t            die();
+            die();
         }
 
         public function get($url, $methodName, $conditions = array()) {
