@@ -50,7 +50,7 @@ $jsConf['log_popup_menu'] = Array(
 			'suffix' => '__fig_suffix__',
 			'menu' => Array(
 				're' => Array( 'type' => 'typablemap_comment' ),
-				'fav' => Array( 'type' => 'typablemap' ),
+				'like' => Array( 'type' => 'typablemap' ),
 			)
 		),
 	)
