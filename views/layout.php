@@ -9,7 +9,7 @@
 <!-- link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png" / -->
 <base href="<?php print $uri_base; ?>">
 <title><?php echo TiarraWEB::$page_title; ?></title>
-<link type="text/css" rel="stylesheet" href="css/<?php $options->style; ?>" />
+<link type="text/css" rel="stylesheet" href="css/<?php print $options->style; ?>" />
 <link type="text/css" rel="stylesheet" href="css/jquery.metro.css" />
 <link type="text/css" rel="stylesheet" href="css/jquery.jgrowl.css" />
 <script type="text/javascript" src= "js/jquery.js"></script>
