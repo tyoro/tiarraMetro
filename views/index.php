@@ -36,7 +36,7 @@
 	<form method="POST" id="post_form" class="theme-bg">
 		<input type="text" name="post" id="message" />
 		<input type="submit" value="post" />
-		<input type="checkbox" name="notice" id="notice" value="true" />
+		<label for='notice'>notice</label><input type="checkbox" name="notice" id="notice" value="true" />
 	</form>
 	<hr/>
 	<table id="list" class="list">
@@ -431,7 +431,7 @@ $(function(){
 			return result;
 		},
 		getIconString : function ( log ){
-			return '<img src="http://img.tweetimag.es/i/'+log.nick+'_n" width="64" height="64" alt="'+log.nick+'" />';
+			return '<a href="http://mobile.twitter.com/'+log.nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+log.nick+'_n" width="64" height="64" alt="'+log.nick+'" /></a>';
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
