@@ -1,17 +1,17 @@
 * {
 	font-family: sans-serif;
 }
+div {display:block;}
 body,div,span,font,input,select {
-        font-size: 16px;
+        font-size: 13px;
 }
-
 
 a {
 	text-decoration:none;
 }
 
 #container {
-	width: 95%;
+	width: 100%;
 	margin: auto;
 	overflow: hidden;
 }
@@ -20,38 +20,42 @@ a {
 	position: fixed;
 	z-index: 1000;
 	width: 100%;
-	height: 60px;
+	height: 3.5em;
 	top: 0;
 	left: 0;
-	padding: .5em 1.0em;
+	padding-bottom: 0.5em;
 }
 
 .metro-pivot .items {
-	margin-top: 60px;
-	padding-top: 1.0em;
+	margin-top: 2.5em;
+	padding-top: 1em;
 }
 
 h3 {
 	font-size: 2.4em;
-	margin-top: .4em;
-	margin-bottom: 1em;
+	margin-top: .25em;
+	marggin-bottom: .25em;
 }
 
 span[name="list"].header.new {
-	color: #a0a0f0;
+	color: #404cd0;
 }
 
 ul.channel_list {
 	margin: 0;
 	padding: 0;
+	margin-top: .25em;
 }
 
 ul.channel_list li {
-	font-size:xx-large;
 	padding: .4em .8em;
 	color: #808080;
 	list-style-type: none;
 	cursor: pointer;
+}
+
+ul.channel_list li span {
+        font-size: 1.6em;
 }
 
 ul.invisible li {
@@ -74,15 +78,11 @@ body[accent="tiarra"] ul.channel_list li:hover {
     */
 }
 
-ul.channel_list li span {
-	font-size: xx-large;
-}
-
 /* 新着マーカー */
 ul.channel_list li span.ch_num small {
 	font-size: .8em;
 	font-weight: bold;
-	border: 3px solid #a0a0a0;
+	border: 2px solid #a0a0a0;
 	color: #c0c0c0;
 	background-color: #202c64;
 	background: -moz-linear-gradient(top, #404cd0, #202c64);
@@ -96,7 +96,7 @@ ul.channel_list li span.ch_num small {
 
 }
 ul.channel_list li.hit span.ch_num small {
-	border: 3px solid #c0c0c0;
+	border: 2px solid #c0c0c0;
 	color: #e0e0e0;
 	background-color: #64202c;
 	background: -moz-linear-gradient(top, #d0404c, #64202c);
@@ -119,12 +119,12 @@ table.list td {
 table.list td.channel {
 	word-break: break-all;
 	vertical-align: top;
-	width: 100px;
+	width: 64px;
 	font-size: .8em;
 	vertical-align: top;
 }
 table.list td.name {
-	width: 80px;
+	width: 48px;
 	font-size: .8em;
 	color: #9f9;
 	align: center;
@@ -133,14 +133,14 @@ table.list td.name {
 	word-break: break-all;
 }
 table.list td.icon {
-	width: 80px;
+	width: 48px;
 	align: center;
 	vertical-align: top;
 }
 table.list td.name img, table.list td.icon img {
 	display: block;
-	width: 48px;
-	height: 48px;
+	width: 32px;
+	height: 32px;
 	border: 0;
 	margin: 0 auto;
 	background-color: #404040;
@@ -155,7 +155,7 @@ table.list td.log {
 	vertical-align: top;
 }
 table.list td.time {
-	width: 48px;
+	width: 32px;
 	font-size: .8em;
 	word-break: nowrap;
 	text-align: right;
@@ -191,11 +191,11 @@ dl {margin:0;}
 dd {margin:0 0 0 1em;}
 form {
 	margin:0;
-	margin-top: 1em;
-	margin-bottom: 1em;
+	margin-top: .5em;
+	margin-bottom: .5em;
 }
 input[type=text],input[type=password]{
-	width: 320px;
+	width: 288px;
 	height: 1.8em;
 	/* padding-top: 20px; */
 	padding: 0 .2em;
@@ -217,9 +217,9 @@ input[type=submit] {
 }
 input[type=button] {
 	margin-top: 1em;
-	width:100%;
+	width: 100%;
 	height: 2.4em;
-	border: 3px solid white;
+	border: 2px solid white;
 	color: #ffffff;
 	background: #000000;
 	-moz-border-radius: .5em;
@@ -227,25 +227,27 @@ input[type=button] {
 	border-radius: .5em,.5em,.5em,.5em;
 }
 select {
-	height: 1.6em;
-	width: 320px;
+	height: 1.8em;
+	width: 288px;
 	margin-right: 2px;
+	margin-top: .25em;
+	margin-bottom: .25em;
 	/* padding-top: 20px; */
 	color: white;
 	background-color: black;
 }
 
 #spinner {
-	margin-top: 20px;
+	margin-top: 12px;
 	width: 100%;
-	height: 48px;
+	height: 32px;
 	border: 2px solid black;
 	text-align: center;
 }
 img#spinner {
 	display: block;
-	width: 32px;
-	height: 32px;
+	width: 20px;
+	height: 20px;
 	border: none;
 	margin: 0 auto;
 	margin-top: .4em;
@@ -258,7 +260,7 @@ span.pickup{ color:#fbb; }
 div#log_popup_menu {
 	border: 1px solid #808080;
 	position: absolute;
-	background-color: black;
+	background-color: #121212;
 	width: 95%;
 	margin-left: 1em;
 	left: auto;
