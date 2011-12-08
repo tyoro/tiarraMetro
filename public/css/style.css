@@ -23,7 +23,8 @@ a {
 	height: 3.5em;
 	top: 0;
 	left: 0;
-	padding-bottom: 0.5em;
+	padding-top: .25em;
+	padding-bottom: .25em;
 }
 
 .metro-pivot .items {
