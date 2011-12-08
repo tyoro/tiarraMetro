@@ -42,6 +42,9 @@ $tiarra_socket_name = 'tiarrametro';
 // tiarra network separator ( default '@'
 //$jsConf[ 'log_popup_menu' ][ 'separator' ] = '@';
 
+// popup menu element reset sample
+//$jsConf[ 'log_popup_menu' ][ 'server' ][ 'tig' ][ 'menu' ] = Array();
+
 // menu added sample
 //$jsConf[ 'log_popup_menu' ][ 'server' ][ 'tig' ][ 'menu' ][ 'block' ][ 'type' ] = 'typablemap';
 //$jsConf[ 'log_popup_menu' ][ 'server' ][ 'tig' ][ 'menu' ][ 'mrt' ][ 'type' ] = 'typablemap_comment';
