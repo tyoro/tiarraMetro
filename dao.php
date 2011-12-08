@@ -1,5 +1,4 @@
 <?php
-//setlocale(LC_ALL, "ja_JP.UTF-8");
 
 class dao_base{
 	var $_conn = null;

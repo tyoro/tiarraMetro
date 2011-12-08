@@ -1,11 +1,9 @@
 <?php
-	ini_set("date.timezone", "Asia/Tokyo");
-
+	include_once 'conf/baseConf.php';
 	include_once 'conf.php';
+
 	include_once 'dao.php';
 	include_once 'myFitzgerald.php';
-	include_once 'lib/adodb5/adodb.inc.php';
-	include_once 'lib/adodb5/adodb-pear.inc.php';
 	include_once 'lib/util.php';
 
 	include_once 'Net/Socket/Tiarra.php';

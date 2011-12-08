@@ -1,35 +1,57 @@
 <?php
 
+/**** user setting ****/
+
+// youer name
 $my_name = 'your name';
+
+//$password_md5 = "";
 $password_md5 = "4a7d1ed414474e4033ac29ccb8653d9b";	//default pass '0000'
+
+//発言用のソケット名
 $tiarra_socket_name = 'tiarrametro';
 
-//twitter icon
-define("TWITTER_ICON_DRAW",false);
-//link image  0:off  1:Embedded  2:button
-define("LINK_IMAGE_DRAW",0);
+//アプリケーションのマウントポイント
+//$conf[ 'mountPoint' ] = '/hoge/public';
 
-$conf = Array(
-	'mountPoint' => ''
-	,'layout' => 'layout'
-	,'dao' => array('channel','nick','log')
-	//applicaiton
-	,'style' => 'style.css'
-	,'channel_list_label' => 'channels'
-	,'cookie_save_time' => 7*86400
-);
+//スタイルシート
+//$conf[ 'style' ] = 'style_arawas.css';
 
-$jsConf = Array(
-	'update_time' => 3
-	,'pickup_word' => array('hogehoge','ほげほげ')
-	,'pickup_channel'=> '.*'
-	,'my_name'=> $my_name
-	,'on_icon' => TWITTER_ICON_DRAW
-	,'on_image' => LINK_IMAGE_DRAW
-);
+//チャンネル一覧のヘッダー表記
+//$conf[ 'channel_list_label' ] = 'channels';
+
+//ログイン クッキーの保持期間
+//$conf[ 'cookie_save_time' ] = 86400;
+
+//twitter iconの利用
+//$jsConf[ 'on_icon' ] = true;
+
+//リンク画像の展開
+//$jsConf[ 'on_image' ] = 1;
+
+//update time
+//$jsConf[ 'update_time' ] = 3;
+
+//キーワードヒット
+//$jsConf[ 'pickup_word' ] = array('hogehoge','ほげほげ');
+
+// Twitter IRC Gateway server sufix
+define("TWITTER_IRC_GATEWAY_SUFIX",'@TIG');
+// Facebook IRC Gateway server sufix
+define("FACEBOOK_IRC_GATEWAY_SUFIX",'@fig');
+
+// Databaseの設定
+define("DATABASE_HOST","localhost");
+define("DATABASE_ID","tiarra");
+define("DATABASE_PASS","hogehoge");
+define("DATABASE_NAME","tiarra");
+
+/**** system setting ****/
+
+$jsConf[ 'my_name' ] = $my_name;
 
 $jsConf['click_menu'] = Array(
-	'@tig' => Array(
+	TWITTER_IRC_GATEWAY_SUFIX => Array(
 		'match' => '\((\w+)\)',
 		'menu' => Array(
 			're' => Array( 'type' => 'typablemap_comment' ),
@@ -40,27 +62,13 @@ $jsConf['click_menu'] = Array(
 			'res' => Array( 'type' => 'typablemap' ),
 		)
 	),
-	'@fig' => Array(
+	FACEBOOK_IRC_GATEWAY_SUFIX => Array(
 		'match' => '\((\w+)\)',
 		'menu' => Array(
 			're' => Array( 'type' => 'typablemap_comment' ),
-			'like' => Array( 'type' => 'typablemap' ),
 			'fav' => Array( 'type' => 'typablemap' ),
-			'arr' => Array( 'type' => 'typablemap' ),
 		)
 	),
 );
-
-// Databaseの設定
-define("DATABASE_HOST","localhost");
-define("DATABASE_ID","tiarra");
-define("DATABASE_PASS","hogehoge");
-define("DATABASE_NAME","tiarra");
-
-// utf8, ujis, sjis
-define("DATABASE_CHARSET","utf8");
-
-define("SYSTEM_DEBUG",false);
-define("DATABASE_DEBUG",false);
 
 ?>
