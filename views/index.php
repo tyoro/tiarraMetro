@@ -422,6 +422,10 @@ $(function(){
 						});
 						$('<div id="popup_menu"/>').css('top', event.pageY).append(ul).appendTo('body');
 					} );
+					//リンククリック時にメニューが出るのを阻止する。
+					logElement.on( "click", 'a', function( event ){
+						event.stopPropagation();
+					});
 				}
 			}
 			return result;
