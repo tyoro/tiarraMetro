@@ -1,6 +1,6 @@
 <div class="metro-pivot">
 <div class='pivot-item' name="list">
-	<h3><?php print isset($options->channel_list_label)?$options->channel_list_label:'channels'; ?></h3>
+	<h3><?php print $options->channel_list_label; ?></h3>
 	<ul class="channel_list">
 	<?php foreach( $channels as $ch ){ ?>
 	<li id="ch_<?php print $ch['id']; ?>" class="<?php if($ch['cnt']>0){ print "new"; } ?>"><span class="ch_name"><?php print $ch['name']; ?></span>&nbsp;
