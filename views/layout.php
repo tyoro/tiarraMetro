@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <html lang="ja">
 <head>
+ <meta name=" robots" content="noindex,nofollow,nocache,noarchive">
 <meta charset="UTF-8" /> 
 <meta name="viewport" content="width=320px,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
