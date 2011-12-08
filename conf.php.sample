@@ -35,19 +35,19 @@ $tiarra_socket_name = 'tiarrametro';
 //キーワードヒット
 //$jsConf[ 'pickup_word' ] = array('hogehoge','ほげほげ');
 
-// Twitter IRC Gateway server suffix ( #xxx@TIG -> TIG setting
-//$jsConf[ 'log_popup_menu' ][ 'server' ][ 'tig' ][ 'suffix' ] = 'TIG';
-// Facebook IRC Gateway server suffix
-//$jsConf[ 'log_popup_menu' ][ 'server' ][ 'fig' ][ 'suffix' ] = 'fig';
+// Twitter IRC Gateway network suffix ( #xxx@TIG -> TIG setting
+//$jsConf[ 'log_popup_menu' ][ 'network' ][ 'tig' ][ 'suffix' ] = 'TIG';
+// Facebook IRC Gateway network suffix
+//$jsConf[ 'log_popup_menu' ][ 'network' ][ 'fig' ][ 'suffix' ] = 'fig';
 // tiarra network separator ( default '@'
 //$jsConf[ 'log_popup_menu' ][ 'separator' ] = '@';
 
 // popup menu element reset sample
-//$jsConf[ 'log_popup_menu' ][ 'server' ][ 'tig' ][ 'menu' ] = Array();
+//$jsConf[ 'log_popup_menu' ][ 'network' ][ 'tig' ][ 'menu' ] = Array();
 
 // menu added sample
-//$jsConf[ 'log_popup_menu' ][ 'server' ][ 'tig' ][ 'menu' ][ 'block' ][ 'type' ] = 'typablemap';
-//$jsConf[ 'log_popup_menu' ][ 'server' ][ 'tig' ][ 'menu' ][ 'mrt' ][ 'type' ] = 'typablemap_comment';
+//$jsConf[ 'log_popup_menu' ][ 'network' ][ 'tig' ][ 'menu' ][ 'block' ][ 'type' ] = 'typablemap';
+//$jsConf[ 'log_popup_menu' ][ 'network' ][ 'tig' ][ 'menu' ][ 'mrt' ][ 'type' ] = 'typablemap_comment';
 
 // Databaseの設定
 define("DATABASE_HOST","localhost");

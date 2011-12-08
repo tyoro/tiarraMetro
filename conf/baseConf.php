@@ -34,7 +34,7 @@ $jsConf = Array(
 
 $jsConf['log_popup_menu'] = Array(
 	'separator' => '@',
-	'server' => Array(
+	'network' => Array(
 		'tig' => Array(
 			'match' => '\((\w+)\)',
 			'suffix' => '__tig_suffix__',

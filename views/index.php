@@ -459,7 +459,7 @@ $(function(){
 			$('#ch_'+channel_id+' span.ch_num').html('');
 			
 			channel_name.match( new RegExp( this.jsConf['log_popup_menu']['separator']+'(\\w+)' ) );
-			$.each( this.jsConf['log_popup_menu'][ 'server' ], function( i, menu ){
+			$.each( this.jsConf['log_popup_menu'][ 'network' ], function( i, menu ){
 				if( RegExp.$1 == menu['suffix'] ){
 					self.currentMenu = menu;
 					return false;
