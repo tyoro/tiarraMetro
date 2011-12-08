@@ -1,8 +1,12 @@
-*{
+* {
 	font-family: sans-serif;
 }
+body,div,span,font,input,select {
+        font-size: 16px;
+}
 
-a{
+
+a {
 	text-decoration:none;
 }
 
@@ -174,15 +178,12 @@ span.pickup {
 	color: #fbb;
 }
 
-body,div,span,font,input,select {
-	font-size: 20px;
-}
-
 div {display:block;}
 hr {
 	border: 2px solid #c0c0c0;
 }
 h4 {
+	padding-top: .6em;
 	font-size: .9em;
 	border-bottom: 2px solid #808080;
 }
@@ -255,20 +256,29 @@ span.pickup{ color:#fbb; }
 #pad {padding:.25em 0;}
 
 div#log_popup_menu {
-	position:absolute;
-	background-color:black;
-	width: 100%;
+	border: 1px solid #808080;
+	position: absolute;
+	background-color: black;
+	width: 95%;
+	margin-left: 1em;
+	left: auto;
+	right: auto;
 }
 div#log_popup_menu ui {
 	margin: 0;
 	padding: 0;
 }
 
-div#log_popup_menu ui li{
-	font-size:xx-large;
+div#log_popup_menu ui li {
+	border: 1px solid #808080;
+	font-size: 1.6em;
+	margin: 0;
 	padding: .4em .8em;
 	list-style-type: none;
 	cursor: pointer;
+}
+div#log_popup_menu ui li:hover {
+        background-color: #404040;
 }
 
 /* hack */
