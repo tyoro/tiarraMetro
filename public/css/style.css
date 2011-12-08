@@ -254,17 +254,17 @@ span.pickup{ color:#fbb; }
 
 #pad {padding:.25em 0;}
 
-div#popup_menu {
+div#log_popup_menu {
 	position:absolute;
 	background-color:black;
 	width: 100%;
 }
-div#popup_menu ui {
+div#log_popup_menu ui {
 	margin: 0;
 	padding: 0;
 }
 
-div#popup_menu ui li{
+div#log_popup_menu ui li{
 	font-size:xx-large;
 	padding: .4em .8em;
 	list-style-type: none;

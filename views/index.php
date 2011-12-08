@@ -241,7 +241,7 @@ $(function(){
 				$("ul.channel_list").toggleClass("invisible");
 			}
 			else {
-				$('#popup_menu').remove();
+				$('#log_popup_menu').remove();
 				switch (index) {
 				case '0': //channel list
 					self.myPushState( 'channel list','/' );
@@ -381,13 +381,13 @@ $(function(){
 			result += '<td class="name'+(log.nick==self.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
 			result = $(result);
 
-			/* popup menuの処理 */
+			/* log popup menuの処理 */
 			if( self.currentMenu != null ){
 				logElement = $('td.log',result);
 				if( logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
 					var matchStr = RegExp.$1;
 					logElement.on( "click", function(event){
-						var popup = $('#popup_menu');
+						var popup = $('#log_popup_menu');
 						if( popup.length ){
 							popup.remove();
 							return;
@@ -398,7 +398,7 @@ $(function(){
 							switch( menu['type'] ){
 								case 'typablemap':
 									li.on('click',function(event){
-										$('#popup_menu').remove();
+										$('#log_popup_menu').remove();
 										$.ajax({
 											url:self.mountPoint+'/api/post/',
 											data:{
@@ -413,14 +413,14 @@ $(function(){
 									break;
 								case 'typablemap_comment':
 									li.on('click',function(event){
-										$('#popup_menu').remove();
+										$('#log_popup_menu').remove();
 										$('input#message').val(label+' '+matchStr+' ' ).focus();
 									});
 									break;
 							}
 							ul.append( li );
 						});
-						$('<div id="popup_menu"/>').css('top', event.pageY).append(ul).appendTo('body');
+						$('<div id="log_popup_menu"/>').css('top', event.pageY).append(ul).appendTo('body');
 					} );
 					//リンククリック時にメニューが出るのを阻止する。
 					logElement.on( "click", 'a', function( event ){
@@ -458,8 +458,13 @@ $(function(){
 			$('#ch_'+channel_id).attr('class','');
 			$('#ch_'+channel_id+' span.ch_num').html('');
 			
-			sufix = channel_name.match(/@\w+/i);
-			this.currentMenu = this.jsConf['click_menu'][ sufix ]?this.jsConf['click_menu'][ sufix ]:null;
+			channel_name.match( new RegExp( this.jsConf['log_popup_menu']['separator']+'(\\w+)' ) );
+			$.each( this.jsConf['log_popup_menu'][ 'server' ], function( i, menu ){
+				if( RegExp.$1 == menu['suffix'] ){
+					self.currentMenu = menu;
+					return false;
+				}
+			});
 			
 			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 

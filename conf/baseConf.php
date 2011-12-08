@@ -32,4 +32,27 @@ $jsConf = Array(
 	,'click_menu' => array()
 );
 
+$jsConf['log_popup_menu'] = Array(
+	'separator' => '@',
+	'server' => Array(
+		'tig' => Array(
+			'match' => '\((\w+)\)',
+			'suffix' => '__tig_suffix__',
+			'menu' => Array(
+				're' => Array( 'type' => 'typablemap_comment' ),
+				'fav' => Array( 'type' => 'typablemap' ),
+				'rt' => Array( 'type' => 'typablemap' ),
+				'res' => Array( 'type' => 'typablemap' ),
+			)
+		),
+		'fig' => Array(
+			'match' => '\((\w+)\)',
+			'suffix' => '__fig_suffix__',
+			'menu' => Array(
+				're' => Array( 'type' => 'typablemap_comment' ),
+				'fav' => Array( 'type' => 'typablemap' ),
+			)
+		),
+	)
+);
 
