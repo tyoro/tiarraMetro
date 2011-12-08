@@ -15,7 +15,7 @@ $tiarra_socket_name = 'tiarrametro';
 //$conf[ 'mountPoint' ] = '/hoge/public';
 
 //スタイルシート
-//$conf[ 'style' ] = 'style_arawas.css';
+//$conf[ 'style' ] = 'style.wp.css';
 
 //チャンネル一覧のヘッダー表記
 //$conf[ 'channel_list_label' ] = 'channels';
