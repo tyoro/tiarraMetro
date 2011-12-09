@@ -81,7 +81,7 @@ body[accent="tiarra"] ul.channel_list li:hover {
 
 /* 新着マーカー */
 ul.channel_list li span.ch_num small {
-	font-size: .8em;
+	font-size: .75em;
 	font-weight: bold;
 	border: 2px solid #a0a0a0;
 	color: #c0c0c0;
@@ -267,12 +267,12 @@ div#log_popup_menu {
 	left: auto;
 	right: auto;
 }
-div#log_popup_menu ui {
+div#log_popup_menu ul {
 	margin: 0;
 	padding: 0;
 }
 
-div#log_popup_menu ui li {
+div#log_popup_menu ul li {
 	border: 1px solid #808080;
 	font-size: 1.6em;
 	margin: 0;
@@ -280,7 +280,7 @@ div#log_popup_menu ui li {
 	list-style-type: none;
 	cursor: pointer;
 }
-div#log_popup_menu ui li:hover {
+div#log_popup_menu ul li:hover {
         background-color: #404040;
 }
 

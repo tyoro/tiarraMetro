@@ -26,8 +26,8 @@
 		</form>
 	</div>
 	<div class="util">
-		<h4>util</h4>
-		<input type="button" id="unread_reset" value="unread reset" />
+		<h4>utilities</h4>
+		<input type="button" id="unread_reset" value="reset unread count" />
 		<input type="button" id="logout" value="logout" />
 	</div>
 </div>
@@ -392,9 +392,9 @@ $(function(){
 							popup.remove();
 							return;
 						}
-						var ul = $('<ui/>');
+						var ul = $('<ul />');
 						$.each( self.currentMenu['menu'], function(label,menu){
-							var li = $('<li/>').text(menu['label']?menu['label']:label);
+							var li = $('<li />').text(menu['label']?menu['label']:label);
 							switch( menu['type'] ){
 								case 'typablemap':
 									li.on('click',function(event){
