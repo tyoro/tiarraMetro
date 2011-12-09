@@ -258,6 +258,7 @@ span.pickup{ color:#fbb; }
 
 #pad {padding:.25em 0;}
 
+/*
 div#log_popup_menu {
 	border: 1px solid #808080;
 	position: absolute;
@@ -279,6 +280,51 @@ div#log_popup_menu ul li {
 	padding: .4em .8em;
 	list-style-type: none;
 	cursor: pointer;
+}
+div#log_popup_menu ul li:hover {
+        background-color: #404040;
+}
+*/
+div#log_popup_menu {
+        position: absolute;
+        width: 95%;
+        margin-left: 1em;
+        left: auto;
+        right: auto;
+}
+div#log_popup_menu ul {
+        margin: 0;
+        padding: 2px;
+	background-color: #808080;
+        -moz-border-radius: .6em;
+        -webkit-border-radius: .6em;
+        border-radius: .6em,.6em,.6em,.6em;
+}
+
+div#log_popup_menu ul li {
+        font-size: 1.6em;
+        padding: .4em .8em;
+	margin-bottom: 2px;
+        list-style-type: none;
+        cursor: pointer;
+	background-color: #202020;
+}
+div#log_popup_menu ul li:first-child {
+	border-top-left-radius: .3em;
+	border-top-right-radius: .3em;
+	-webkit-border-top-left-radius: .3em;
+	-webkit-border-top-right-radius: .3em;
+	-moz-border-radius-topleft: .3em;
+	-moz-border-radius-topright: .3em;
+}
+div#log_popup_menu ul li:last-child {
+	margin-bottom: 0;
+        border-bottom-left-radius: .3em;
+        border-bottom-right-radius: .3em;
+        -webkit-border-bottom-left-radius: .3em;
+        -webkit-border-bottom-right-radius: .3em;
+        -moz-border-radius-bottomleft: .3em;
+        -moz-border-radius-bottomright: .3em;
 }
 div#log_popup_menu ul li:hover {
         background-color: #404040;
