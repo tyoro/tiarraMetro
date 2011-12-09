@@ -258,47 +258,30 @@ span.pickup{ color:#fbb; }
 
 #pad {padding:.25em 0;}
 
-/*
-div#log_popup_menu {
-	border: 1px solid #808080;
-	position: absolute;
-	background-color: #121212;
-	width: 95%;
-	margin-left: 1em;
-	left: auto;
-	right: auto;
-}
-div#log_popup_menu ul {
-	margin: 0;
-	padding: 0;
-}
-
-div#log_popup_menu ul li {
-	border: 1px solid #808080;
-	font-size: 1.6em;
-	margin: 0;
-	padding: .4em .8em;
-	list-style-type: none;
-	cursor: pointer;
-}
-div#log_popup_menu ul li:hover {
-        background-color: #404040;
-}
-*/
 div#log_popup_menu {
         position: absolute;
         width: 95%;
         margin-left: 1em;
         left: auto;
         right: auto;
-}
-div#log_popup_menu ul {
-        margin: 0;
-        padding: 2px;
 	background-color: #808080;
         -moz-border-radius: .6em;
         -webkit-border-radius: .6em;
         border-radius: .6em,.6em,.6em,.6em;
+}
+div#log_popup_menu form {
+	padding: .4em .8em;
+}
+div#log_popup_menu input[type=text] {
+        width: 192px;
+        border: 2px solid #202020;
+}
+div#log_popup_menu input[type=submit] {
+        border: 2px solid #202020;
+}
+div#log_popup_menu ul {
+        margin: 0;
+	padding: 2px;
 }
 
 div#log_popup_menu ul li {

@@ -420,7 +420,7 @@ $(function(){
 							}
 							ul.append( li );
 						});
-						$('<div id="log_popup_menu"/>').css('top', event.pageY).append(ul).appendTo('body');
+						$('<div id="log_popup_menu"/>').css('top', event.pageY).append("<form method='post' id='quick_form' disabled='disabled'><input type='text' name='post' id='message'><input type='submit' value='post' /><input type='hidden' name='notice' id='notice' value='' /></form>").append(ul).appendTo('body');
 					} );
 					//リンククリック時にメニューが出るのを阻止する。
 					logElement.on( "click", 'a', function( event ){
