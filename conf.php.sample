@@ -55,6 +55,11 @@ define("DATABASE_ID","tiarra");
 define("DATABASE_PASS","hogehoge");
 define("DATABASE_NAME","tiarra");
 
+
+/**** alias setting *****/
+
+// $jsConf['alias']['mumu'] = 'mu_mu_';
+
 /**** system setting ****/
 
 $jsConf[ 'my_name' ] = $my_name;

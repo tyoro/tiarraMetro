@@ -30,6 +30,7 @@ $jsConf = Array(
 	,'on_icon' => false
 	,'on_image' => 0
 	,'click_menu' => array()
+	,'alias' => array()
 );
 
 $jsConf['log_popup_menu'] = Array(
