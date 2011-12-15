@@ -52,6 +52,15 @@
 	</table>
 	<div id="search_foot"></div>
 </div>
+<div id="log_popup_menu" style="display:none;">
+	<form method="post" id="quick_form" >
+		<input type="text" name="post" id="quick_message">
+		<input type="submit" value="post">
+		<input type="hidden" name="notice" id="notice" value="">
+	</form>
+	<ul id='click_menu'>
+	</ul>
+</div>
 <script>
 $(function(){
 
@@ -73,6 +82,7 @@ $(function(){
 			this.jsConf = param.jsConf;
 			this.mountPoint = param.mountPoint;
 
+			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
 			this.htmlInitialize();
 		},
@@ -112,6 +122,37 @@ $(function(){
 					error:function(){
 						$('input#message').removeAttr('disabled').addClass('error');
 						$('form#post_form input[type=submit]').removeAttr('disabled');
+					},
+				});
+				return false;
+			});
+			
+			/* クイック投稿 */
+			$('form#quick_form').submit(function(){
+				var form = this;
+				var post = $('input[name="post"]',form);
+				message = post.val();
+				if( message.length == 0 ){ return false; }
+
+				post.attr('disabled','disabled');
+				$('input[type=submit]',form).attr('disabled','disabled');
+				$.ajax({
+					url:self.mountPoint+'/api/post/',
+					data:{
+						channel_id:self.currentChannel,
+						post:message,
+						notice:false,
+					},
+					dataType:'json',
+					type:'POST',
+					success:function(){
+						post.removeAttr('disabled').removeClass('error').val('');
+						$('input[type=submit]',forn).removeAttr('disabled');
+						self.popup.css('display','none');
+					},
+					error:function(){
+						post.removeAttr('disabled').removeClass('error');
+						$('input[type=submit]',forn).removeAttr('disabled');
 					},
 				});
 				return false;
@@ -241,7 +282,7 @@ $(function(){
 				$("ul.channel_list").toggleClass("invisible");
 			}
 			else {
-				$('#log_popup_menu').remove();
+				self.popup.css('display','none');
 				switch (index) {
 				case '0': //channel list
 					self.myPushState( 'channel list','/' );
@@ -384,43 +425,50 @@ $(function(){
 			/* log popup menuの処理 */
 			if( self.currentMenu != null ){
 				logElement = $('td.log',result);
-				if( logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
-					var matchStr = RegExp.$1;
+				if( !( 'match' in self.currentMenu) ||  logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
+					if( 'match' in self.currentMenu){
+						var matchStr = RegExp.$1;
+					}
 					logElement.on( "click", function(event){
-						var popup = $('#log_popup_menu');
-						if( popup.length ){
-							popup.remove();
+						if( self.popup.css('display') == 'block' ){
+							self.popup.css('display','none');
 							return;
 						}
-						var ul = $('<ul />');
-						$.each( self.currentMenu['menu'], function(label,menu){
-							var li = $('<li />').text(menu['label']?menu['label']:label);
-							switch( menu['type'] ){
-								case 'typablemap':
-									li.on('click',function(event){
-										$('#log_popup_menu').remove();
-										$.ajax({
-											url:self.mountPoint+'/api/post/',
-											data:{
-												channel_id:self.currentChannel,
-												post:label+' '+matchStr,
-												notice:false,
-											},
-											dataType:'json',
-											type:'POST',
+						var ul = $('ul',self.popup);
+						if( ul.children().length ){
+							ul.empty();
+						}
+						$('form#quick_form input[name="post"]').val('' );
+						if( 'menu' in self.currentMenu ){
+							$.each( self.currentMenu['menu'], function(label,menu){
+								var li = $('<li />').text(menu['label']?menu['label']:label);
+								switch( menu['type'] ){
+									case 'typablemap':
+										li.on('click',function(event){
+											self.popup.css('display','none');
+											$.ajax({
+												url:self.mountPoint+'/api/post/',
+												data:{
+													channel_id:self.currentChannel,
+													post:label+' '+matchStr,
+													notice:false,
+												},
+												dataType:'json',
+												type:'POST',
+											});
 										});
-									});
-									break;
-								case 'typablemap_comment':
-									li.on('click',function(event){
-										$('#log_popup_menu').remove();
-										$('input#message').val(label+' '+matchStr+' ' ).focus();
-									});
-									break;
-							}
-							ul.append( li );
-						});
-						$('<div id="log_popup_menu"/>').css('top', event.pageY).append("<form method='post' id='quick_form' disabled='disabled'><input type='text' name='post' id='message'><input type='submit' value='post' /><input type='hidden' name='notice' id='notice' value='' /></form>").append(ul).appendTo('body');
+										break;
+									case 'typablemap_comment':
+										li.on('click',function(event){
+											ul.empty();
+											$('form#quick_form input[name="post"]').val(label+' '+matchStr+' ' ).focus();
+										});
+										break;
+								}
+								ul.append( li );
+							});
+						}	
+						self.popup.css('top', event.pageY).append(ul).css('display','block');
 					} );
 					//リンククリック時にメニューが出るのを阻止する。
 					logElement.on( "click", 'a', function( event ){

@@ -268,6 +268,7 @@ div#log_popup_menu {
         -moz-border-radius: .6em;
         -webkit-border-radius: .6em;
         border-radius: .6em,.6em,.6em,.6em;
+		z-index:1;
 }
 div#log_popup_menu form {
 	padding: .4em .8em;
