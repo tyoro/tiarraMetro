@@ -22,6 +22,7 @@ class  yaml2conf
 	var $errorMessages = array();
 	public function __construct( $yaml_file, $conf, $jsConf )
 	{
+		if( !is_file( $yaml_file ) ){ $this->addError( 'conf.yml not found.' ); }
 		$this->yaml = Spyc::YAMLLoad( $yaml_file );
 		$this->conf = $conf;
 		$this->jsConf = $jsConf;
@@ -121,7 +122,7 @@ class  yaml2conf
 	protected function addError( $message )
 	{
 		array_push( $this->errorMessages, $message );
-		$error = true;
+		$this->error = true;
 	}
 
 }
