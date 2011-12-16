@@ -4,8 +4,7 @@
 	include_once 'dao.php';
 	include_once 'myFitzgerald.php';
 	include_once 'lib/util.php';
-
-	include_once 'Net/Socket/Tiarra.php';
+	include_once 'lib/Net/Socket/Tiarra.php';
 
 	class TiarraWEB extends MyFitzgerald {
 		public static $page_title = "tiarraMetro";
