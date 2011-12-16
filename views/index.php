@@ -147,7 +147,7 @@ $(function(){
 					type:'POST',
 					success:function(){
 						post.removeAttr('disabled').removeClass('error').val('');
-						$('input[type=submit]',forn).removeAttr('disabled');
+						$('input[type=submit]',form).removeAttr('disabled');
 						self.popup.css('display','none');
 					},
 					error:function(){
@@ -201,6 +201,9 @@ $(function(){
 					type:'POST',
 				});
 				self.offListInvisible();
+/**
+ *  
+ */
 				$('.channel_list li').attr('class','');
 				$('.channel_list li span.ch_num').html('');
 			});
