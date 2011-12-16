@@ -31,7 +31,7 @@ class  yaml2conf
 	public function check()
 	{	
 		//必須
-		foreach( Array( 'my_name','password_md5','tiarra_socket_name','DATABASE_HOST','DATABASE_ID','DATABASE_PASS','DATABASE_NAME' ) as $required )
+		foreach( Array( 'my_name' ) as $required )
 		{
 			$this->nullCheck( $required, "$required not found." );
 		}
