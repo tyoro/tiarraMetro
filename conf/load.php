@@ -67,8 +67,6 @@ class  yaml2conf
 								break;
 							case 'tig_default':
 								global $tig_default_popup_menu;
-								print 'hoge';
-								print $key;
 								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $tig_default_popup_menu;
 								break;
 							default:
