@@ -47,18 +47,18 @@ $jsConf = Array(
 $tig_default_popup_menu = Array(
 			'match' => '\((\w+)\)',
 			'menu' => Array(
-				're' => Array( 'type' => 'typablemap_comment' ),
-				'fav' => Array( 'type' => 'typablemap' ),
-				'rt' => Array( 'type' => 'typablemap' ),
-				'res' => Array( 'type' => 'typablemap' ),
+				're' => Array( 'type' => 'typablemap_comment', 'label' => 'reply' ),
+				'fav' => Array( 'type' => 'typablemap', 'label' => 'favorites' ),
+				'rt' => Array( 'type' => 'typablemap', 'label' => 're tweet' ),
+				'res' => Array( 'type' => 'typablemap', 'label' => 'reply to view' ),
 			)
 		);
 
 $fig_default_popup_menu = Array(
 			'match' => '\((\w+)\)',
 			'menu' => Array(
-				're' => Array( 'type' => 'typablemap_comment' ),
-				'like' => Array( 'type' => 'typablemap' ),
+				're' => Array( 'type' => 'typablemap_comment', 'label' => 'comment' ),
+				'like' => Array( 'type' => 'typablemap', 'label' => 'like!' ),
 			)
 		);
 
