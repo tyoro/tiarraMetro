@@ -100,7 +100,10 @@ $(function(){
 			/* 投稿 */
 			$('form#post_form').submit(function(){
 				message = $('input#message').val();
-				if( message.length == 0 ){ return false; }
+				if( message.length == 0 ){
+					self.updating = false;
+					return false;
+				}
 
 				$('input#message').attr('disabled','disabled');
 				$('form#post_form input[type=submit]').attr('disabled','disabled');
