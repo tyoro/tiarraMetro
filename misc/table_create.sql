@@ -10,7 +10,7 @@ create table channel (
 
   unique key (name),
   primary key (id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table nick (
   id INTEGER NOT NULL auto_increment,
@@ -22,7 +22,7 @@ create table nick (
 
   unique key (name),
   primary key (id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table log (
   id INTEGER auto_increment,
@@ -40,7 +40,7 @@ create table log (
   primary key (id),
   KEY `nick_id` (`nick_id`),
   KEY `channel_id_and_created_on` (`channel_id`,`created_on`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE priv (
   id INTEGER  NOT NULL AUTO_INCREMENT,
@@ -51,4 +51,4 @@ CREATE TABLE priv (
   created_on datetime DEFAULT NULL,
   updated_on datetime DEFAULT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
