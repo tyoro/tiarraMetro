@@ -1,6 +1,5 @@
 <?php
-	include_once 'conf/baseConf.php';
-	include_once 'conf.php';
+	include_once 'conf/load.php';
 
 	include_once 'dao.php';
 	include_once 'myFitzgerald.php';
@@ -86,8 +85,6 @@
 			return json_encode($return);
 		}
 		public function api_post(){
-			global $tiarra_socket_name;
-			global $my_name;
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
 			else
 			{
@@ -99,7 +96,7 @@
 						$return = array( 'error' => true, 'msg' => 'channel not found.' );
 					}else{
 						try{
-							$tiarra = new Net_Socket_Tiarra($tiarra_socket_name);
+							$tiarra = new Net_Socket_Tiarra($this->options->tiarra_socket_name);
 							if( $this->request->notice != 'true' ){
 								$tiarra->message($name, $this->request->post);
 							}else{
@@ -107,7 +104,7 @@
 							}
 							$return = array( 'error' => false );
 
-							$this->db->log->postLog( $this->request->post, $this->request->channel_id, $this->db->nick->getID( $my_name ), $this->request->notice );
+							$this->db->log->postLog( $this->request->post, $this->request->channel_id, $this->db->nick->getID( $this->options->my_name ), $this->request->notice );
 
 						} catch (Net_Socket_Tiarra_Exception $e) {
 							$return = array( 'error' => true, 'msg' => $e->getMessage() );
@@ -162,19 +159,17 @@
 
 		//login処理
 		public function login(){
-			global $password_md5;
-			global $my_name;
 			if( $this->isLoggedIn() ){
 				return  $this->redirect('/');
 			}
 			$error_msg = "";
 			if( strlen($this->request->pass) ){
-				if( md5($this->request->pass) == $password_md5 ){
+				if( md5($this->request->pass) == $this->options->password_md5 ){
 					$this->session->login = 'true';
 
 					//set cookie
 					if( $this->request->cookie == 'true' )
-					Cookie::set('UniqueId',$my_name,$password_md5,time()+$this->options->cookie_save_time, $this->options->mountPoint.'/' );
+					Cookie::set('UniqueId',$this->options->my_name,$this->options->password_md5,time()+$this->options->cookie_save_time, $this->options->mountPoint.'/' );
 
 					//セッションにログイン前ページが記憶されてるかどうかを判定
 					if( isset($this->session->befor) && strlen($this->session->befor) ){
@@ -199,10 +194,8 @@
 		}
 			
         private function isLoggedIn() {
-			global $password_md5;
-			global $my_name;
-			if( empty($password_md5) ){ return true; }
-			if( Cookie::get('UniqueId', $password_md5 ) == $my_name ){ return true; }
+			if( empty($this->options->password_md5) ){ return true; }
+			if( Cookie::get('UniqueId', $this->options->password_md5 ) == $this->options->my_name ){ return true; }
 			return !is_null($this->session->login);
 		}
 

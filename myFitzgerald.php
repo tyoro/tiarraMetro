@@ -12,7 +12,7 @@
 			if( isset($options['dao']) && count($options['dao']) ){
 				$db_list = array();
 				$conn = ADONewConnection('mysqli');
-				$conn->PConnect(DATABASE_HOST, DATABASE_ID, DATABASE_PASS, DATABASE_NAME);
+				$conn->PConnect($options[ 'DATABASE_HOST'] , $options['DATABASE_ID'], $options['DATABASE_PASS'], $options['DATABASE_NAME']);
 				$conn->SetCharSet( DATABASE_CHARSET );
 				if( DATABASE_DEBUG ){
 					$conn->debug = 1;

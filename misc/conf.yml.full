@@ -1,0 +1,41 @@
+# user setting
+
+my_name: 'hoge'
+#default pass 0000
+password_md5: "4a7d1ed414474e4033ac29ccb8653d9b"
+
+# 発言用のソケット名
+tiarra_socket_name: 'tiarrametro'
+
+#mountPoint: '/hoge/public'
+#style: 'style.wp.css'
+#channel_list_label: 'channnels'
+#cookie_save_time: 86400
+
+#on_icon: false
+#on_image: 0
+#update_time: 3
+#pickup_word: [ 'hoge', 'ほげ' ]
+
+log_popup_menu:
+#    separator: '@'
+    network:
+        @tig:
+            menu:
+                rt: 
+                    type: 'typablemap'
+                    label: 're tweet'
+        @fig: 'fig_default'
+
+# Databaseの設定
+
+DATABASE_HOST: 'localhost'
+DATABASE_ID: 'tiarra'
+DATABASE_PASS: 'xxxxxx'
+DATABASE_NAME: 'tiarra'
+
+
+# alias setting
+alias:
+#    mumu: 'mu_mu_'
+

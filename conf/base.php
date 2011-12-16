@@ -15,7 +15,15 @@ $conf = Array(
 	'mountPoint' => ''
 	,'layout' => 'layout'
 	,'dao' => array('channel','nick','log')
+	//database
+	,'DATABASE_HOST' => 'localhost'
+	,'DATABASE_ID' =>  'tiarra'
+	,'DATABASE_PASS' => ''
+	,'DATABASE_NAME' => 'tiarra'
 	//applicaiton
+	,'my_name'=> 'noname'
+	,'password_md5' => '4a7d1ed414474e4033ac29ccb8653d9b'
+	,'tiarra_socket_name' => 'tiarrametro'
 	,'style' => 'style.css'
 	,'channel_list_label' => 'channels'
 	,'cookie_save_time' => 7*86400
@@ -23,37 +31,34 @@ $conf = Array(
 
 // javascript setting
 $jsConf = Array(
-	'update_time' => 3
-	,'pickup_word' => array()
+	'my_name'=> 'noname'
+	,'update_time' => 3
+	,'pickup_word' => false
 	,'pickup_channel'=> '.*'
-	,'my_name'=> 'noname'
 	,'on_icon' => false
 	,'on_image' => 0
-	,'click_menu' => array()
-	,'alias' => array()
+	,'alias' => false
+	,'log_popup_menu' => array(
+		'separator' => '@'
+		,'network' =>  array()
+	)
 );
 
-$jsConf['log_popup_menu'] = Array(
-	'separator' => '@',
-	'network' => Array(
-		'tig' => Array(
+$tig_default_popup_menu = Array(
 			'match' => '\((\w+)\)',
-			'suffix' => '__tig_suffix__',
 			'menu' => Array(
 				're' => Array( 'type' => 'typablemap_comment' ),
 				'fav' => Array( 'type' => 'typablemap' ),
 				'rt' => Array( 'type' => 'typablemap' ),
 				'res' => Array( 'type' => 'typablemap' ),
 			)
-		),
-		'fig' => Array(
+		);
+
+$fig_default_popup_menu = Array(
 			'match' => '\((\w+)\)',
-			'suffix' => '__fig_suffix__',
 			'menu' => Array(
 				're' => Array( 'type' => 'typablemap_comment' ),
 				'like' => Array( 'type' => 'typablemap' ),
 			)
-		),
-	)
-);
+		);
 

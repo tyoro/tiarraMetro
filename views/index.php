@@ -430,6 +430,7 @@ $(function(){
 						var matchStr = RegExp.$1;
 					}
 					logElement.on( "click", function(event){
+						event.stopPropagation();
 						if( self.popup.css('display') == 'block' ){
 							self.popup.css('display','none');
 							return;
@@ -507,14 +508,9 @@ $(function(){
 			$('div.headers span.header[name=channel]').html( channel_name );
 			$('#ch_'+channel_id).attr('class','');
 			$('#ch_'+channel_id+' span.ch_num').html('');
-			
-			channel_name.match( new RegExp( this.jsConf['log_popup_menu']['separator']+'(\\w+)' ) );
-			$.each( this.jsConf['log_popup_menu'][ 'network' ], function( i, menu ){
-				if( RegExp.$1 == menu['suffix'] ){
-					self.currentMenu = menu;
-					return false;
-				}
-			});
+
+			channel_name.match( new RegExp( '(' + this.jsConf['log_popup_menu']['separator']+'\\w+)' ) );
+			this.currentMenu = this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]?this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]:null;
 			
 			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 

@@ -1,0 +1,18 @@
+# ------ user setting --------
+
+my_name: 'no name'
+
+#default pass 0000
+#password_md5: "4a7d1ed414474e4033ac29ccb8653d9b"
+
+#tiarra_socket_name: 'tiarrametro'
+
+#mountPoint: '/hoge/public'
+
+# ------ Databaseの設定 -------
+
+#DATABASE_HOST: 'localhost'
+#DATABASE_ID: 'tiarra'
+#DATABASE_PASS: ''
+#DATABASE_NAME: 'tiarra'
+
