@@ -152,7 +152,7 @@ $(function(){
 					},
 					error:function(){
 						post.removeAttr('disabled').removeClass('error');
-						$('input[type=submit]',forn).removeAttr('disabled');
+						$('input[type=submit]',form).removeAttr('disabled');
 					},
 				});
 				return false;
