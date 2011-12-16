@@ -147,6 +147,8 @@
 
         public function handleError($number, $message, $file, $line) {
             header("HTTP/1.0 500 Server Error");
+			//TODO:
+			var_dump( "$file:$line:$message" );
             echo $this->render('500', compact('number', 'message', 'file', 'line'));
             die();
         }
