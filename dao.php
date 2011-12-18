@@ -102,14 +102,12 @@ class dao_channel extends dao_base{
 		}
 
 		switch( $sort ){
-			case 1:
-			case '1':
-			case 'read':
+			case 2: case '2': case 'read':
 				$sql .= " ORDER BY channel.readed_on DESC";
 				break;
-			case 0:
-			case '0':
-			case 'name':
+			case 0: case '0': case 'no':
+				break;
+			case 1: case '1': case 'name':
 			default:
 				$sql .= " ORDER BY name ASC";
 				break;
