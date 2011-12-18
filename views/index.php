@@ -81,6 +81,7 @@ $(function(){
 			this.updating = param.updating;
 			this.jsConf = param.jsConf;
 			this.mountPoint = param.mountPoint;
+			this.variable = {};
 
 			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
@@ -377,23 +378,44 @@ $(function(){
 
 			log.log = $.escapeHTML( log.log );
 
-			/* pickupタグの適用 */
-			if( log.pickup ){
-				$.each( self.jsConf.pickup_word,function(j,w){
-					log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
-				});
-			}
+			if( self.jsConf.template == 'limechat' ){
+					if( log.pickup ){
+						$.each( self.jsConf.pickup_word,function(j,w){
+							log.log = log.log.replace( w, '<strong class="highlight">'+w+'</strong>' );
+						});
+					}
 
-			/* URLと画像の展開 */
-			if( ! this.jsConf.on_image ){
-				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
-			}else if( this.jsConf.on_image == 1 ){
-				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
-				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50%"/>'  );
-/*			}else if( this.jsConf.on_image == 2 ){
-				log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
-				log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<input type="button" value="img" onclick="createImg(this,\'$1\')" />'  );
-*/			}
+					if( ! self.jsConf.on_image ){
+						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" class="url" >$1</a>'  );
+					}else if( self.jsConf.on_image == 1 ){
+						img_urls = log.log.match( /((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif))/g );
+
+						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" class="url" >$1</a>'  );
+						if( img_urls ){
+							$.each( img_urls, function(j,w){
+								log.log += "<br/>\n"+'<a href="'+w+'" imageindex="'+j+'"><img src="'+w+'" class="inlineimage"></a>';
+							});
+						}
+					}
+			}else{
+					/* pickupタグの適用 */
+					if( log.pickup ){
+						$.each( self.jsConf.pickup_word,function(j,w){
+							log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
+						});
+					}
+
+					/* URLと画像の展開 */
+					if( ! self.jsConf.on_image ){
+						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
+					}else if( self.jsConf.on_image == 1 ){
+						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
+						log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50%"/>'  );
+		/*			}else if( this.jsConf.on_image == 2 ){
+						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
+						log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<input type="button" value="img" onclick="createImg(this,\'$1\')" />'  );
+		*/			}
+			}
 			
 			log.filtered = true;
 			return log;
@@ -409,24 +431,58 @@ $(function(){
 		},
 		createRow : function( log,searchFlag ){
 			var self = this;
-			var result = '<tr id="'+log.id+'">';
-			searchFlag = (searchFlag==undefined?false:searchFlag);
-			
-			/* twitterアイコンの適用 */
-			if( self.jsConf['on_icon'] ){ nick = self.getIconString(log)+log.nick; }
-			else{ nick = log.nick; }
 
-			log = self.logFilter(log);
+			if( self.jsConf.template == 'limechat' ){
+				log = self.logFilter(log);
 
-			/* 検索の場合はチャンネルも記述する */
-			if( searchFlag ){
-				result += '<td class="channel">'+log.channel_name+'</td>';
-				time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
+				self.variable.alternate = !self.variable.alternate;
+				var result =  '<div id="'+log.id+'" type="'+(log.is_notice == 1?'notice':'privmsg')+'" class="line text" nick="'+log.nick+'" alternate="'+(self.variable.alternate?'odd':'even')+'" highlight="'+(log.pickup?'true':'false')+'" >';
+				searchFlag = (searchFlag==undefined?false:searchFlag);
+				/* 検索の場合はチャンネルも記述する */
+				if( searchFlag ){
+					result += '<span class="channel">'+log.channel_name+'</span>';
+					time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
+				}else{
+					time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
+				}
+
+				//time
+				result += '<span class="time">'+time+' </span>';
+
+				//icon
+				if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log)+log.nick; }
+
+				//sender
+				result += '<span class="sender" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+': </span>';
+
+				//log
+				result += '<span class="message" type="'+(log.is_notice == 1?'notice':'privmsg')+'">'+log.log+'</span>';
+				//TODO: ここのtypeいんのか？
+
+				//end
+				result += '</div>';
+
+				
 			}else{
-				time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
-			}
+				var result = '<tr id="'+log.id+'">';
+				searchFlag = (searchFlag==undefined?false:searchFlag);
+			
+				/* twitterアイコンの適用 */
+				if( self.jsConf['on_icon'] ){ nick = self.getIconString(log)+log.nick; }
+				else{ nick = log.nick; }
 
-			result += '<td class="name'+(log.nick==self.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
+				log = self.logFilter(log);
+
+				/* 検索の場合はチャンネルも記述する */
+				if( searchFlag ){
+					result += '<td class="channel">'+log.channel_name+'</td>';
+					time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
+				}else{
+					time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
+				}
+
+				result += '<td class="name'+(log.nick==self.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
+			}
 			result = $(result);
 
 			/* log popup menuの処理 */
@@ -489,7 +545,7 @@ $(function(){
 		getIconString : function ( log ){
 			nick = log.nick;
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
-			return '<a href="http://mobile.twitter.com/'+nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'" /></a>';
+			return '<a href="http://mobile.twitter.com/'+nick+'" target="_blank"><img class="avatar" src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'" /></a>';
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
