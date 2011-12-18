@@ -101,6 +101,7 @@ $(function(){
 			$('form#post_form').submit(function(){
 				message = $('input#message').val();
 				if( message.length == 0 ){
+					//空postで 更新取得中フラグを強制リセットさせてみる
 					self.updating = false;
 					return false;
 				}
@@ -429,7 +430,7 @@ $(function(){
 			result = $(result);
 
 			/* log popup menuの処理 */
-			if( self.currentMenu != null ){
+			if( !searchFlag && self.currentMenu != null ){
 				logElement = $('td.log',result);
 				if( !( 'match' in self.currentMenu) ||  logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
 					if( 'match' in self.currentMenu){
@@ -488,7 +489,7 @@ $(function(){
 		getIconString : function ( log ){
 			nick = log.nick;
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
-			return '<a href="http://mobile.twitter.com/'+nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+nick+'_n" width="64" height="64" alt="'+nick+'" /></a>';
+			return '<a href="http://mobile.twitter.com/'+nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'" /></a>';
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
