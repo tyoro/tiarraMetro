@@ -11,6 +11,7 @@ tiarra_socket_name: 'tiarrametro'
 #theme: 'light'
 #style: 'style.wp.css'
 #channel_list_label: 'channnels'
+#channel_list_sort: 'read'
 #cookie_save_time: 86400
 
 #on_icon: false
