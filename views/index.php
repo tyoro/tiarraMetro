@@ -56,7 +56,6 @@
 	<form method="post" id="quick_form" >
 		<input type="text" name="post" id="quick_message">
 		<input type="submit" value="post">
-		<input type="hidden" name="notice" id="notice" value="">
 	</form>
 	<ul id='click_menu'>
 	</ul>
