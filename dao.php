@@ -78,7 +78,7 @@ class dao_channel extends dao_base{
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
 
-	function getUnreadList( $server = "" ){
+	function getUnreadList( $server = "", $sort = 0 ){
 		$sql = "SELECT 
 					channel.id, 
 					channel.name, 
@@ -101,8 +101,19 @@ class dao_channel extends dao_base{
 			$values[] = "%@".$server;
 		}
 
-		//$sql .= " ORDER BY cnt DESC";
-		$sql .= " ORDER BY name ASC";
+		switch( $sort ){
+			case 1:
+			case '1':
+			case 'read':
+				$sql .= " ORDER BY channel.readed_on DESC";
+				break;
+			case 0:
+			case '0':
+			case 'name':
+			default:
+				$sql .= " ORDER BY name ASC";
+				break;
+		}
 
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}

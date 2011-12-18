@@ -27,6 +27,7 @@ $conf = Array(
 	,'theme' => 'dark'
 	,'style' => 'style.css'
 	,'channel_list_label' => 'channels'
+	,'channel_list_sort' => 'name'
 	,'cookie_save_time' => 7*86400
 );
 
