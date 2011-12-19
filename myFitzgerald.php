@@ -98,3 +98,32 @@
 			return !is_null($this->session->user);
 		}
 	}
+
+	class ArrayUtil {
+		static public function isHash( $target ){
+			if (is_array($target)) return false;
+
+			$result = true;
+
+			foreach ($target as $key => $value){
+				if(is_numeric($key)) {
+					$result = false;
+					break;
+				}
+			}
+
+			return $result;
+		}
+
+		static public function getWithKey($from, $key = 0){
+			$result = array();
+
+			foreach ((array)$from as $value){
+				if (is_array($value) && !empty($value[$key])) {
+					$result[] = $value[$key];
+				}
+			}
+
+			return $result;
+		}
+	}
