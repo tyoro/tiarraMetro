@@ -216,6 +216,7 @@ span.pickup {
 	margin: 0 auto;
 	width: 32px;
 	height: 32px;
+	border: none;
 }
 .line .sender .nick {
 	font-size: .8em;
