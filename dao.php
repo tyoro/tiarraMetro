@@ -115,21 +115,73 @@ class dao_channel extends dao_base{
 			$values[] = "%@".$server;
 		}
 
-		switch( $sort ){
-			case '2': case 'read':
-				$sql .= " ORDER BY channel.readed_on DESC";
-				break;
-			case '0': case 'no':
-				break;
-			case '1': case 'name':
-			default:
-				$sql .= " ORDER BY name ASC";
-				break;
+		$order = $this->detectOrder($sort);
+		if (!empty($order)) {
+			$sql .= $order;
 		}
+
 
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
-	
+
+	function detectOrder($sort) {
+		$order = '';
+
+		if (is_array($sort)) {
+			$order = $this->getMultipleSortOrder($sort);
+		} else {
+			switch( $sort ){
+				case '2': case 'read':
+					$order = " ORDER BY channel.readed_on DESC";
+					break;
+				case '0': case 'no':
+					break;
+				case '1': case 'name':
+				default:
+					$order = " ORDER BY name ASC";
+					break;
+			}
+		}
+
+		return $order;
+	}
+
+	function getMultipleSortOrder(array $sort){
+		$data = array();
+
+		if(ArrayUtil::isHash($sort)){
+			foreach ($sort as $key => $value) {
+				if (strpos($key, '.') > 0) {
+					list($table, $column) = explode('.', $key);
+				} else {
+					$table = 'channel';
+					$column = $key;
+				}
+
+				$direction = preg_match('/^D(ESC)$/i', $value) ? 'DESC' : 'ASC';
+
+				if (($table === 'channel' || $table === 'log') && in_array($column, $this->_settings[$this->_name])) {
+					$data[] = sprintf('%s.%s %s', $table, $column, $direction);
+				}
+			}
+		} else {
+			foreach (array_values($sort) as $key) {
+				if (strpos($key, '.') > 0) {
+					list($table, $column) = explode('.', $key);
+				} else {
+					$table = 'channel';
+					$column = $key;
+				}
+
+				if (($table === 'channel' || $table === 'log') && in_array($column, $setting[$this->_name])) {
+					$data[] = sprintf('%s.%s ASC', $table, $column);
+				}
+			}
+		}
+
+		return (count($data) > 0) ? ' ORDER BY ' . implode(', ', $data) : false ;
+	}
+
 	function updateReaded( $id = null ){
 		$sql = "UPDATE channel SET readed_on = NOW()";
 		$values = array();
