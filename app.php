@@ -1,8 +1,8 @@
 <?php
 	include_once 'conf/load.php';
 
-	include_once 'dao.php';
 	include_once 'myFitzgerald.php';
+	include_once 'dao.php';
 	include_once 'lib/util.php';
 	include_once 'lib/Net/Socket/Tiarra.php';
 
