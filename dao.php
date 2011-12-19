@@ -177,7 +177,7 @@ class dao_channel extends dao_base{
 					$column = $key;
 				}
 
-				if (($table === 'channel' || $table === 'log') && in_array($column, $setting[$this->_name])) {
+				if (($table === 'channel' || $table === 'log') && in_array($column, $this->_settings[$this->_name])) {
 					$data[] = sprintf('%s.%s ASC', $table, $column);
 				}
 			}
