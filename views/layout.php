@@ -20,7 +20,7 @@
 <script type="text/javascript" src= "js/jquery.touchwipe.min.js"></script>
 <script type="text/javascript" src= "js/jquery.jgrowl_minimized.js"></script>
 </head>
-<body theme="<?php print $options->theme; ?>" accent="tiarra">
+<body theme="<?php print $options->theme; ?>" accent="<?php print $options->accent; ?>">
 	<div id='container'>
       <?php echo $content; ?>
 	</div>

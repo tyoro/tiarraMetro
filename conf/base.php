@@ -25,6 +25,7 @@ $conf = Array(
 	,'password_md5' => '4a7d1ed414474e4033ac29ccb8653d9b'
 	,'tiarra_socket_name' => 'tiarrametro'
 	,'theme' => 'dark'
+	,'accent' => 'tiarra'
 	,'style' => 'style.css'
 	,'channel_list_label' => 'channels'
 	,'channel_list_sort' => 'name'
@@ -65,3 +66,8 @@ $fig_default_popup_menu = Array(
 			)
 		);
 
+$quickpost_only_popup_menu = Array(
+			'match' => '.*',
+			'menu' => Array(
+			)
+		);
