@@ -104,82 +104,7 @@ ul.channel_list li.hit span.ch_num small {
 	background: -webkit-gradient(linear, left top, left bottom, from(#d0404c), to(#64202c));
 }
 
-
-table.list{
-	width: 100%;
-}
-
-table.list td.self.name {
-	color:#bbb !important;
-}
-
-table.list td {
-	border-top: 4px solid black;
-	border-bottom: 1px solid #404040;
-}
-table.list td.channel {
-	word-break: break-all;
-	vertical-align: top;
-	width: 64px;
-	font-size: .8em;
-	vertical-align: top;
-}
-table.list td.name {
-	width: 48px;
-	font-size: .8em;
-	color: #9f9;
-	align: center;
-	vertical-align: top;
-	text-align: center;
-	word-break: break-all;
-}
-table.list td.icon {
-	width: 48px;
-	align: center;
-	vertical-align: top;
-}
-table.list td.name img, table.list td.icon img {
-	display: block;
-	width: 32px;
-	height: 32px;
-	border: 0;
-	margin: 0 auto;
-	background-color: #404040;
-}
-table.list td.notice {
-	color: #aaa;
-}
-table.list td.log {
-	width: auto;
-	line-height: 120%;
-	word-break: break-all;
-	vertical-align: top;
-}
-table.list td.time {
-	width: 32px;
-	font-size: .8em;
-	word-break: nowrap;
-	text-align: right;
-	vertical-align: top;
-	color:#bbb;
-}
-table.list td.log a{
-	padding-right: 18px;
-	background: transparent url("../images/icon_external.gif") no-repeat center right;
-	color:#bbf;	
-}
-
-/*
-table.list tr {
-border-top: 4px solid black;
-border-bottom: 1px solid #1a1a1a;
-}
- */
-span.pickup {
-	color: #fbb;
-}
-
-/* log limechat */
+/* log  */
 .line {
 	border-top: 4px solid black;
 	border-bottom: 1px solid #404040;
@@ -223,7 +148,7 @@ span.pickup {
 	color: #9f9;
 }
 .line .sender .nick[type=myself]{
-	color:#bbb !important;
+	color:#bbb;
 }
 .line .message {
 	padding-left: 10px;

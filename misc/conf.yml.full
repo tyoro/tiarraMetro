@@ -9,6 +9,7 @@ tiarra_socket_name: 'tiarrametro'
 
 #mountPoint: '/hoge/public'
 #theme: 'light'
+#template: 'simple'
 #style: 'style.wp.css'
 #channel_list_label: 'channnels'
 #channel_list_sort: 'read'
@@ -18,7 +19,6 @@ tiarra_socket_name: 'tiarrametro'
 
 #on_icon: false
 #on_image: 0
-#template: 'limechat'
 #update_time: 3
 #pickup_word: [ 'hoge', 'ほげ' ]
 

@@ -104,7 +104,7 @@ $(function(){
 				kw = $('input#keyword').val();
 				if( kw.length == 0 ){ return false; }
 
-				$('#search-list tbody tr').each(function( i,e ){ $(e).remove(); });
+				$('#search-list').empty();
 				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..." /></div>' );
 
 				$('div.headers span.header[name=search]').text( 'search' );
@@ -323,83 +323,44 @@ $(function(){
 
 			var link_class = self.jsConf.on_image === 2 ? 'boxviewimage' : 'inlineimage' ;
 
-			if( self.jsConf.template == 'limechat' ){
-					if( log.pickup ){
-						$.each( self.jsConf.pickup_word,function(j,w){
-							log.log = log.log.replace( w, '<strong class="highlight">'+w+'</strong>' );
-						});
-					}
-
-					if( ! self.jsConf.on_image ){
-						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" class="url" >$1</a>'  );
-					}else if( self.jsConf.on_image == 1 ){
-						img_urls = log.log.match( /((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif))/g );
-
-
-						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" class="url" >$1</a>'  );
-						if( img_urls ){
-							$.each( img_urls, function(j,w){
-								log.log += "<br/>\n"+'<a href="'+w+'" imageindex="'+j+'"><img src="'+w+'"></a>';
-							});
-						}
-					}
-			}else{
 				/* pickupタグの適用 */
 				if( log.pickup ){
 					$.each( self.jsConf.pickup_word,function(j,w){
-						log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
+						log.log = log.log.replace( w, '<strong class="highlight">'+w+'</strong>' );
 					});
 				}
 				var after = '';
 
-				/* URLと画像の展開 */
-				log.log = log.log.replace(/((?:https?|ftp):\/\/[^\s　]+)/g, function ($$, $1) {
-					if ($1.match(/(?:png|jpe?g|gif)$/)) {
-						var on_image = Number(self.jsConf.on_image);
-						switch (on_image) {
-							case 1:
-								after = '<br /><a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50%" /></a>';
-								break;
-							case 2:
-								return '<a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50" /></a>';
-							default:
-								break;
-						}
+			/* URLと画像の展開 */
+			log.log = log.log.replace(/((?:https?|ftp):\/\/[^\s　]+)/g, function ($$, $1) {
+				if ($1.match(/(?:png|jpe?g|gif)$/)) {
+					var on_image = Number(self.jsConf.on_image);
+					switch (on_image) {
+						case 1:
+							after = '<br /><a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50%" /></a>';
+							break;
+						case 2:
+							return '<a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50" /></a>';
+						default:
+							break;
 					}
+				}
 
-					return '<a href="'+$1+'" target="_blank" class="url">'+$1+'</a>';
-				});
-			}
-
+				return '<a href="'+$1+'" target="_blank" class="url">'+$1+'</a>';
+			});
 			log.log += after;
 			
 			log.filtered = true;
 			return log;
 		},
 		add_log:function( i, log ){
-			var self = this;
-			if( self.jsConf.template == 'limechat' ){
-
 			$('#list').prepend(this.createRow(log));
-			}else{
-			$('#list tbody').prepend(this.createRow(log));
-			}
 		},
 		more_log : function( i,log ){
-			var self = this;
-			if( self.jsConf.template == 'limechat' ){
 			$('#list').append(this.createRow(log));
-			}else{
-			$('#list tbody').append(this.createRow(log));
-			}
 		},
 		add_result : function( i, log ){
-			var self = this;
-			if( self.jsConf.template == 'limechat' ){
 			$('#search-list').prepend(this.createRow(log,true));
-			}else{
-			$('#search-list tbody').prepend(this.createRow(log,true));
-			}
 		},
 		afterAdded : function(){
 			if(this.jsConf.on_image === 2 ) {
@@ -409,65 +370,43 @@ $(function(){
 		createRow : function( log,searchFlag ){
 			var self = this;
 
-			if( self.jsConf.template == 'limechat' ){
-				log = self.logFilter(log);
+			log = self.logFilter(log);
 
-				self.variable.alternate = !self.variable.alternate;
-				var result =  '<div id="'+log.id+'" type="'+(log.is_notice == 1?'notice':'privmsg')+'" class="line text" nick="'+log.nick+'" alternate="'+(self.variable.alternate?'odd':'even')+'" highlight="'+(log.pickup?'true':'false')+'" >';
-				searchFlag = (searchFlag==undefined?false:searchFlag);
-				/* 検索の場合はチャンネルも記述する */
-				if( searchFlag ){
-					result += '<span class="channel">'+log.channel_name+'</span>';
-					time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
-				}else{
-					time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
-				}
-
-				//time
-				result += '<span class="time">'+time+' </span>';
-
-				//sender
-				result += '<div class="sender">'
-
-				//sender > icon
-				if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log); }
-
-				//sender > nick
-				result += '<span class="nick" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+' </span></div>';
-
-				//log
-				result += '<span class="message" type="'+(log.is_notice == 1?'notice':'privmsg')+'">'+log.log+'</span>';
-				//TODO: ここのtypeいんのか？
-
-				//end
-				result += '</div>';
-
-				
+			self.variable.alternate = !self.variable.alternate;
+			var result =  '<div id="'+log.id+'" type="'+(log.is_notice == 1?'notice':'privmsg')+'" class="line text" nick="'+log.nick+'" alternate="'+(self.variable.alternate?'odd':'even')+'" highlight="'+(log.pickup?'true':'false')+'" >';
+			searchFlag = (searchFlag==undefined?false:searchFlag);
+			/* 検索の場合はチャンネルも記述する */
+			if( searchFlag ){
+				result += '<span class="channel">'+log.channel_name+'</span>';
+				time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
 			}else{
-				var result = '<tr id="'+log.id+'">';
-				searchFlag = (searchFlag==undefined?false:searchFlag);
-			
-				/* twitterアイコンの適用 */
-				if( self.jsConf['on_icon'] ){ nick = self.getIconString(log)+log.nick; }
-				else{ nick = log.nick; }
-
-				log = self.logFilter(log);
-
-				/* 検索の場合はチャンネルも記述する */
-				if( searchFlag ){
-					result += '<td class="channel">'+log.channel_name+'</td>';
-					time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
-				}else{
-					time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
-				}
-
-				result += '<td class="name'+(log.nick==self.jsConf['my_name']?' self':'')+'">'+nick+'</td><td class="log '+((log.is_notice == 1)?'notice':'')+'">'+log.log+'</td><td class="time">'+time+'</td></tr>';
+				time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
 			}
+
+			//time
+			result += '<span class="time">'+time+' </span>';
+
+			//sender
+			result += '<div class="sender">'
+
+			//sender > icon
+			if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log); }
+
+			//sender > nick
+			result += '<span class="nick" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+' </span></div>';
+
+			//log
+			result += '<span class="message" type="'+(log.is_notice == 1?'notice':'privmsg')+'">'+log.log+'</span>';
+			//TODO: ここのtypeいんのか？
+
+			//end
+			result += '</div>';
+			
 			result = $(result);
 
 			/* log popup menuの処理 */
 			if( !searchFlag && self.currentMenu != null ){
-				logElement = $('td.log',result);
+				logElement = result;//$('span.message',result);
 				if( !( 'match' in self.currentMenu) ||  logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
 					if( 'match' in self.currentMenu){
 						var matchStr = RegExp.$1;
@@ -540,7 +479,7 @@ $(function(){
 		selectChannel : function( channel_id, channel_name ){
 			this.currentChannel = channel_id;
 
-			$("#list tbody").empty();
+			$("#list").empty();
 			$("#ch_foot").empty();
 
 			this.loadChannel(channel_id, channel_name);
@@ -558,7 +497,7 @@ $(function(){
 			
 			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
-			this.afterAdded();
+			self.afterAdded();
 
 			$.ajax({
 				url:this.mountPoint+'/api/read/'+channel_id,
@@ -578,7 +517,7 @@ $(function(){
 				$.ajax({
 					url:self.mountPoint+'/api/logs/'+self.currentChannel,
 					data:{
-						prev_id: $('#list tbody tr').last().attr('id'),
+						prev_id: $('#list div.line').last().attr('id'),
 					},
 					dataType:'json',
 					type:'POST',
@@ -587,7 +526,7 @@ $(function(){
 						$.each(json['logs'],function(i,log){ self.more_log(i,log); });
 						self.addMoreButton( );
 
-						this.afterAdded();
+						self.afterAdded();
 					}
 				});
 			});

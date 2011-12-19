@@ -39,17 +39,15 @@
 		<label for='notice'>notice</label><input type="checkbox" name="notice" id="notice" value="true" />
 	</form>
 	<hr/>
-	<table id="list" class="list">
-		<tbody></tbody>
-	</table>
+	<div id="list" class="list">
+	</div>
 	<div id="ch_foot"></div>
 </div>
 <div class='pivot-item' name="search">
 	<h3></h3>
 	<span id="search_result_message">search result</span>
-	<table id="search-list" class="list">
-		<tbody></tbody>
-	</table>
+	<div id="search-list" class="list">
+	</div>
 	<div id="search_foot"></div>
 </div>
 <div id="log_popup_menu" style="display:none;">
