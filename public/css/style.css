@@ -175,6 +175,52 @@ border-top: 4px solid black;
 border-bottom: 1px solid #1a1a1a;
 }
  */
+
+/* log limechat */
+.line {
+	border-top: 4px solid black;
+	border-bottom: 1px solid #404040;
+}
+.line .channel {
+	font-size: .8em;
+}
+.line .time {
+	display: block;
+	float: right;
+	color: #bbb;
+	font-size: .8em;
+}
+.line .sender,
+.line .message {
+	display: table-cell;
+	vertical-align: top;
+}
+.line .sender {
+	width: 48px;
+	max-width: 48px;
+	text-align: center;
+}
+.line .sender .avatar,
+.line .sender .avatar img,
+.line .sender .nick {
+	line-height: 1;
+}
+.line .sender .avatar img {
+	display: block;
+	margin: 0 auto;
+	width: 32px;
+	height: 32px;
+}
+.line .sender .nick {
+	font-size: .8em;
+	color: #9f9;
+}
+.line .message {
+	padding-left: 10px;
+}
+/* */
+
+
 span.pickup {
 	color: #fbb;
 }

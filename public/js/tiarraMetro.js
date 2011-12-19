@@ -402,11 +402,14 @@ $(function(){
 				//time
 				result += '<span class="time">'+time+' </span>';
 
-				//icon
+				//sender
+				result += '<div class="sender">'
+
+				//sender > icon
 				if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log); }
 
-				//sender
-				result += '<span class="sender" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+': </span>';
+				//sender > nick
+				result += '<span class="nick" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+' </span></div>';
 
 				//log
 				result += '<span class="message" type="'+(log.is_notice == 1?'notice':'privmsg')+'">'+log.log+'</span>';
@@ -499,7 +502,7 @@ $(function(){
 			nick = log.nick;
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
 			
-			return '<a href="http://mobile.twitter.com/'+nick+'" target="_blank"><img class="avatar" src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'" /></a>';
+			return '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'" /></a>';
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
