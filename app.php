@@ -27,7 +27,16 @@
 				$log_list[$ch['id']] = $this->db->log->getLog($ch['id']);
 				if( $default_channel_id == $ch['id'] ){ $default_channel[ 'name' ] = $ch['name']; }
 			}
-			return $this->render('index',
+			switch( $jsConf[ 'template' ] ){
+				case 'table':
+				default:
+					$template = 'index';
+					break;
+				case 'limechat':
+					$template = 'index.limechat';
+					break;
+			}
+			return $this->render( $template,
 				array(
 					'max_id' => $max_id,
 					'channels' => $channel_list,

@@ -19,6 +19,8 @@
 <script type="text/javascript" src= "js/jquery.metro.js"></script>
 <script type="text/javascript" src= "js/jquery.touchwipe.min.js"></script>
 <script type="text/javascript" src= "js/jquery.jgrowl_minimized.js"></script>
+<script type="text/javascript" src= "js/jquery.lightbox-0.5.min.js"></script>
+<script type="text/javascript" src= "js/tiarraMetro.js"></script>
 </head>
 <body theme="<?php print $options->theme; ?>" accent="<?php print $options->accent; ?>">
 	<div id='container'>
