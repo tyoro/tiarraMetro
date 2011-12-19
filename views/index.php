@@ -449,7 +449,7 @@ $(function(){
 				result += '<span class="time">'+time+' </span>';
 
 				//icon
-				if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log)+log.nick; }
+				if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log); }
 
 				//sender
 				result += '<span class="sender" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+': </span>';
@@ -544,6 +544,7 @@ $(function(){
 		getIconString : function ( log ){
 			nick = log.nick;
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
+			
 			return '<a href="http://mobile.twitter.com/'+nick+'" target="_blank"><img class="avatar" src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'" /></a>';
 		},
 		getChannelName : function( i ){
