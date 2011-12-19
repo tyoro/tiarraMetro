@@ -14,7 +14,7 @@
 <title><?php echo TiarraWEB::$page_title; ?></title>
 <link type="text/css" rel="stylesheet" href="css/jquery.metro.css" />
 <link type="text/css" rel="stylesheet" href="css/jquery.jgrowl.css" />
-<link type="text/css" rel="stylesheet" href="css/<?php print $options->style; ?>" />
+<link type="text/css" rel="stylesheet" href="<?php print ((strpos( $options->style, 'http' )!==false)?'':'css/').$options->style; ?>" />
 <script type="text/javascript" src= "js/jquery.js"></script>
 <script type="text/javascript" src= "js/jquery.metro.js"></script>
 <script type="text/javascript" src= "js/jquery.touchwipe.min.js"></script>
