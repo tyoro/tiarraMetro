@@ -6,6 +6,8 @@
 
 	class MyFitzgerald extends fitzgerald{
 		var $db = null;
+
+		var $settings = null;
 	
 		public function __construct( $options=array() ){
 			$this->options = new ArrayWrapper($options);
@@ -20,7 +22,27 @@
 				if( DATABASE_DEBUG ){
 					$conn->debug = 1;
 				}
-			
+
+				$settings = array('database' => array());
+
+				// DAO でやるべき？
+				$tables = $conn->getArray($conn->Prepare('SHOW TABLES;'));
+
+				foreach ($tables as $table) {
+					if (!is_array($settings['database'][$table[0]])) {
+						$settings['database'][$table[0]] = array();
+					}
+
+					$columns = $conn->getArray($conn->Prepare(sprintf('DESCRIBE %s;', $table[0])));
+
+					foreach ($columns as $column) {
+						$settings['database'][$table[0]][] = $column[0];
+					}
+				}
+
+
+				$this->settings = ArrayWrapper($settings);
+
 				foreach( $options['dao'] as $table ){
 					$class_name = 'dao_'.$table;
 					$db_objects[$table] = new $class_name( $conn );
