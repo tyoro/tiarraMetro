@@ -175,11 +175,17 @@ border-top: 4px solid black;
 border-bottom: 1px solid #1a1a1a;
 }
  */
+span.pickup {
+	color: #fbb;
+}
 
 /* log limechat */
 .line {
 	border-top: 4px solid black;
 	border-bottom: 1px solid #404040;
+}
+.line[type="notice"] {
+	color: #aaa;
 }
 .line .channel {
 	font-size: .8em;
@@ -218,12 +224,11 @@ border-bottom: 1px solid #1a1a1a;
 .line .message {
 	padding-left: 10px;
 }
-/* */
-
-
-span.pickup {
+.line .message strong.highlight {
 	color: #fbb;
 }
+/* */
+
 
 div {display:block;}
 hr {
