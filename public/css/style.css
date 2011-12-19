@@ -228,6 +228,11 @@ span.pickup {
 .line .message strong.highlight {
 	color: #fbb;
 }
+.line .message a{
+	padding-right: 18px;
+	background: transparent url("../images/icon_external.gif") no-repeat center right;
+	color:#bbf;	
+}
 /* */
 
 
