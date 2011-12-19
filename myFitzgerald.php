@@ -45,7 +45,7 @@
 
 				foreach( $options['dao'] as $table ){
 					$class_name = 'dao_'.$table;
-					$db_objects[$table] = new $class_name( $conn );
+					$db_objects[$table] = new $class_name( $conn, $this->settings->database );
 				}
 
 				unset($options['dao']);

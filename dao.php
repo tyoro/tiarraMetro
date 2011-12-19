@@ -1,10 +1,19 @@
 <?php
 
 class dao_base{
+	var $_settings = array();
 	var $_conn = null;
+	var $_name = null;
 
-	public function __construct( $conn ){
+	public function __construct( $conn, $settings = array() ){
 		$this->_conn = $conn;
+		$this->_settings = $settings;
+
+		$className = get_class($this);
+
+		if (empty($this->_name) && strtolower($className) !== 'dao_base') {
+			$this->_name = str_replace('dao_', '', $className);
+		}
 	}
 
 	public function qs( $str ){
@@ -17,6 +26,8 @@ class dao_base{
 }
 
 class dao_nick extends dao_base{
+
+	var $_name = 'nick';
 
 	function getID( $name ){
 		$sql = "SELECT id FROM nick WHERE name = ?";
@@ -43,6 +54,9 @@ class dao_nick extends dao_base{
 }
 
 class dao_channel extends dao_base{
+
+	var $_name = 'channel';
+
 	function getID( $name ){
 		$sql = "SELECT id FROM channel WHERE name = ?";
 
@@ -130,6 +144,9 @@ class dao_channel extends dao_base{
 }
 
 class dao_log extends dao_base{
+
+	var $_name = 'log';
+
 	function getLog( $channel_id, $log_id = null,  $num = 30, $type = "new"  ){
 		$sql = "SELECT 
 					log.id as id, 
