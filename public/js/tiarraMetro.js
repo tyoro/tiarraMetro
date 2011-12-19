@@ -384,16 +384,13 @@ $(function(){
 			}
 
 			//time
-			result += '<span class="time">'+time+' </span>';
+			result += '<span class="time">'+time+'</span>';
 
-			//sender
-			result += '<div class="sender">'
-
-			//sender > icon
+			//icon
 			if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log); }
 
-			//sender > nick
-			result += '<span class="nick" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+' </span></div>';
+			//sender
+			result += '<span class="sender" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+'</span>';
 
 			//log
 			result += '<span class="message" type="'+(log.is_notice == 1?'notice':'privmsg')+'">'+log.log+'</span>';

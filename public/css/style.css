@@ -105,61 +105,65 @@ ul.channel_list li.hit span.ch_num small {
 }
 
 /* log  */
-.line {
-	border-top: 4px solid black;
+.line.text {
+	position: relative;
+	margin: 1px 0;
+	padding: 2px 6px 5px;
 	border-bottom: 1px solid #404040;
+}
+#search-list .line.text {
+	padding-top: 12px;
 }
 .line[type="notice"] {
 	color: #aaa;
 }
 .line .channel {
-	font-size: .8em;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 1px 2px;
+	color: #404cd0;
+	font-size: 9px;
 }
 .line .time {
-	display: block;
-	float: right;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding: 1px 2px;
 	color: #bbb;
-	font-size: .8em;
+	font-size: 9px;
 }
-.line .sender,
-.line .message {
-	display: table-cell;
-	vertical-align: top;
-}
-.line .sender {
-	width: 48px;
-	max-width: 48px;
-	text-align: center;
-}
-.line .sender .avatar,
-.line .sender .avatar img,
-.line .sender .nick {
-	line-height: 1;
-}
-.line .sender .avatar img {
-	display: block;
-	margin: 0 auto;
+.line .avatar {
+	float: left;
 	width: 32px;
 	height: 32px;
+	margin-top: 3px;
+	margin-right: 3px;
+}
+.line .avatar img {
+	max-width: 32px;
+	max-height: 32px;
 	border: none;
 }
-.line .sender .nick {
-	font-size: .8em;
+.line .sender {
+	font-size: 11px;
 	color: #9f9;
 }
-.line .sender .nick[type=myself]{
+.line .sender[type=myself]{
 	color:#bbb;
 }
+.line .sender:after {
+	content: ": ";
+}
 .line .message {
-	padding-left: 10px;
 }
 .line .message strong.highlight {
 	color: #fbb;
 }
-.line .message a{
+.line .message a {
 	padding-right: 18px;
 	background: transparent url("../images/icon_external.gif") no-repeat center right;
-	color:#bbf;	
+	color: #bbf;
 }
 /* */
 
@@ -301,23 +305,9 @@ div#log_popup_menu ul li:hover {
 
 /* hack */
 
+.line.text:after,
 .clearfix:after {
-	content: ".";  /* 新しい要素を作る */
+	content: "";  /* 新しい要素を作る */
 	display: block;  /* ブロックレベル要素に */
 	clear: both;
-	height: 0;
-	visibility: hidden;
 }
-
-.clearfix {
-	min-height: 1px;
-}
-
-* html .clearfix {
-	height: 1px;
-	/*\*//*/
-	height: auto;
-	overflow: hidden;
-	/**/
-}
-
