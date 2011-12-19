@@ -222,6 +222,9 @@ span.pickup {
 	font-size: .8em;
 	color: #9f9;
 }
+.line .sender .nick[type=myself]{
+	color:#bbb !important;
+}
 .line .message {
 	padding-left: 10px;
 }
