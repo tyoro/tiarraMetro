@@ -129,6 +129,8 @@ $(function(){
 							$.each( json, function(i,log){ self.add_result(i,log); } ); 
 						}
 						self.addCloseButton();
+
+						self.afterAdded();
 					}
 				})
 				return false;
@@ -220,7 +222,6 @@ $(function(){
 			if(this.jsConf.on_image === 2 ) {
 				$('#list .boxviewimage').lightBox();
 			}
-
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
@@ -300,6 +301,8 @@ $(function(){
 							}else{
 								$('#ch_'+channel_id).removeClass('hit').removeClass('new');
 							}
+
+							self.afterAdded();
 						});
 						self.max_id = json['max_id'];
 					}
@@ -347,6 +350,7 @@ $(function(){
 						log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
 					});
 				}
+				var after = '';
 
 				/* URLと画像の展開 */
 				log.log = log.log.replace(/((?:https?|ftp):\/\/[^\s　]+)/g, function ($$, $1) {
@@ -354,7 +358,8 @@ $(function(){
 						var on_image = Number(self.jsConf.on_image);
 						switch (on_image) {
 							case 1:
-								return $1+'<br /><a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50%" /></a><br />';
+								after = '<br /><a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50%" /></a>';
+								break;
 							case 2:
 								return '<a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50" /></a>';
 							default:
@@ -365,6 +370,8 @@ $(function(){
 					return '<a href="'+$1+'" target="_blank" class="url">'+$1+'</a>';
 				});
 			}
+
+			log.log += after;
 			
 			log.filtered = true;
 			return log;
@@ -392,6 +399,11 @@ $(function(){
 			$('#search-list').prepend(this.createRow(log,true));
 			}else{
 			$('#search-list tbody').prepend(this.createRow(log,true));
+			}
+		},
+		afterAdded : function(){
+			if(this.jsConf.on_image === 2 ) {
+				$('#list .boxviewimage').lightBox();
 			}
 		},
 		createRow : function( log,searchFlag ){
@@ -546,6 +558,8 @@ $(function(){
 			
 			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
+			this.afterAdded();
+
 			$.ajax({
 				url:this.mountPoint+'/api/read/'+channel_id,
 				dataType:'json',
@@ -572,6 +586,8 @@ $(function(){
 						if( json['error'] ){ return; }
 						$.each(json['logs'],function(i,log){ self.more_log(i,log); });
 						self.addMoreButton( );
+
+						this.afterAdded();
 					}
 				});
 			});
