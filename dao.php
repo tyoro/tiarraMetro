@@ -1,10 +1,19 @@
 <?php
 
 class dao_base{
+	var $_settings = array();
 	var $_conn = null;
+	var $_name = null;
 
-	public function __construct( $conn ){
+	public function __construct( $conn, $settings = array() ){
 		$this->_conn = $conn;
+		$this->_settings = $settings;
+
+		$className = get_class($this);
+
+		if (empty($this->_name) && strtolower($className) !== 'dao_base') {
+			$this->_name = str_replace('dao_', '', $className);
+		}
 	}
 
 	public function qs( $str ){
@@ -17,6 +26,8 @@ class dao_base{
 }
 
 class dao_nick extends dao_base{
+
+	var $_name = 'nick';
 
 	function getID( $name ){
 		$sql = "SELECT id FROM nick WHERE name = ?";
@@ -43,6 +54,9 @@ class dao_nick extends dao_base{
 }
 
 class dao_channel extends dao_base{
+
+	var $_name = 'channel';
+
 	function getID( $name ){
 		$sql = "SELECT id FROM channel WHERE name = ?";
 
@@ -82,6 +96,7 @@ class dao_channel extends dao_base{
 		$sql = "SELECT 
 					channel.id, 
 					channel.name, 
+					substring(channel.name, locate('@', channel.name) + 1) as network,
 					COALESCE(log_count.cnt,0) as cnt 
 				FROM channel 
 					LEFT JOIN (
@@ -101,21 +116,76 @@ class dao_channel extends dao_base{
 			$values[] = "%@".$server;
 		}
 
-		switch( $sort ){
-			case '2': case 'read':
-				$sql .= " ORDER BY channel.readed_on DESC";
-				break;
-			case '0': case 'no':
-				break;
-			case '1': case 'name':
-			default:
-				$sql .= " ORDER BY name ASC";
-				break;
+		$order = $this->detectOrder($sort);
+		if (!empty($order)) {
+			$sql .= $order;
 		}
+
 
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
-	
+
+	function detectOrder($sort) {
+		$order = '';
+
+		if (is_array($sort)) {
+			$order = $this->getMultipleSortOrder($sort);
+		} else {
+			switch( $sort ){
+				case '2': case 'read':
+					$order = " ORDER BY channel.readed_on DESC";
+					break;
+				case '0': case 'no':
+					break;
+				case '1': case 'name':
+				default:
+					$order = " ORDER BY name ASC";
+					break;
+			}
+		}
+
+		return $order;
+	}
+
+	function getMultipleSortOrder(array $sort){
+		$data = array();
+
+		if(ArrayUtil::isHash($sort)){
+			foreach ($sort as $key => $value) {
+				if (strpos($key, '.') > 0) {
+					list($table, $column) = explode('.', $key);
+				} else {
+					$table = 'channel';
+					$column = $key;
+				}
+
+				$direction = preg_match('/^D(ESC)$/i', $value) ? 'DESC' : 'ASC';
+
+				if (($table === 'channel' || $table === 'log') && in_array($column, $this->_settings[$this->_name])) {
+					$data[] = sprintf('%s.%s %s', $table, $column, $direction);
+				} else if (($column === 'network' || $column === 'cnt')) {
+					$data[] = sprintf('%s %s', $column, $direction);
+					
+				}
+			}
+		} else {
+			foreach (array_values($sort) as $key) {
+				if (strpos($key, '.') > 0) {
+					list($table, $column) = explode('.', $key);
+				} else {
+					$table = 'channel';
+					$column = $key;
+				}
+
+				if (($table === 'channel' || $table === 'log') && in_array($column, $setting[$this->_name])) {
+					$data[] = sprintf('%s.%s ASC', $table, $column);
+				}
+			}
+		}
+
+		return (count($data) > 0) ? ' ORDER BY ' . implode(', ', $data) : false ;
+	}
+
 	function updateReaded( $id = null ){
 		$sql = "UPDATE channel SET readed_on = NOW()";
 		$values = array();
@@ -130,6 +200,9 @@ class dao_channel extends dao_base{
 }
 
 class dao_log extends dao_base{
+
+	var $_name = 'log';
+
 	function getLog( $channel_id, $log_id = null,  $num = 30, $type = "new"  ){
 		$sql = "SELECT 
 					log.id as id, 
