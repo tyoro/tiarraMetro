@@ -123,7 +123,7 @@
 
 	class ArrayUtil {
 		static public function isHash( $target ){
-			if (is_array($target)) return false;
+			if (!is_array($target)) return false;
 
 			$result = true;
 

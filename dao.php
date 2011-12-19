@@ -96,6 +96,7 @@ class dao_channel extends dao_base{
 		$sql = "SELECT 
 					channel.id, 
 					channel.name, 
+					substring(channel.name, locate('@', channel.name) + 1) as network,
 					COALESCE(log_count.cnt,0) as cnt 
 				FROM channel 
 					LEFT JOIN (
@@ -162,6 +163,9 @@ class dao_channel extends dao_base{
 
 				if (($table === 'channel' || $table === 'log') && in_array($column, $this->_settings[$this->_name])) {
 					$data[] = sprintf('%s.%s %s', $table, $column, $direction);
+				} else if (($column === 'network' || $column === 'cnt')) {
+					$data[] = sprintf('%s %s', $column, $direction);
+					
 				}
 			}
 		} else {
