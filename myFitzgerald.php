@@ -29,7 +29,7 @@
 				$tables = $conn->getArray($conn->Prepare('SHOW TABLES;'));
 
 				foreach ($tables as $table) {
-					if (!is_array($settings['database'][$table[0]])) {
+					if (empty($settings['database'][$table[0]]) || !is_array($settings['database'][$table[0]])) {
 						$settings['database'][$table[0]] = array();
 					}
 
