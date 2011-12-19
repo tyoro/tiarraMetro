@@ -216,6 +216,11 @@ $(function(){
 						;
 				}
 			});
+
+			if(this.jsConf.on_image === 2 ) {
+				$('#list .boxviewimage').lightBox();
+			}
+
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
@@ -313,6 +318,8 @@ $(function(){
 
 			log.log = $.escapeHTML( log.log );
 
+			var link_class = self.jsConf.on_image === 2 ? 'boxviewimage' : 'inlineimage' ;
+
 			if( self.jsConf.template == 'limechat' ){
 					if( log.pickup ){
 						$.each( self.jsConf.pickup_word,function(j,w){
@@ -325,34 +332,38 @@ $(function(){
 					}else if( self.jsConf.on_image == 1 ){
 						img_urls = log.log.match( /((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif))/g );
 
+
 						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" class="url" >$1</a>'  );
 						if( img_urls ){
 							$.each( img_urls, function(j,w){
-								log.log += "<br/>\n"+'<a href="'+w+'" imageindex="'+j+'"><img src="'+w+'" class="inlineimage"></a>';
+								log.log += "<br/>\n"+'<a href="'+w+'" imageindex="'+j+'"><img src="'+w+'"></a>';
 							});
 						}
 					}
 			}else{
-					/* pickupタグの適用 */
-					if( log.pickup ){
-						$.each( self.jsConf.pickup_word,function(j,w){
-							log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
-						});
+				/* pickupタグの適用 */
+				if( log.pickup ){
+					$.each( self.jsConf.pickup_word,function(j,w){
+						log.log = log.log.replace( w, '<span class="pickup">'+w+'</span>' );
+					});
+				}
+
+				/* URLと画像の展開 */
+				log.log = log.log.replace(/((?:https?|ftp):\/\/[^\s　]+)/g, function ($$, $1) {
+					if ($1.match(/(?:png|jpe?g|gif)$/)) {
+						var on_image = Number(self.jsConf.on_image);
+						switch (on_image) {
+							case 1:
+								return $1+'<br /><a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50%" /></a><br />';
+							case 2:
+								return '<a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50" /></a>';
+							default:
+								break;
+						}
 					}
 
-					/* URLと画像の展開 */
-					if( ! self.jsConf.on_image ){
-						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
-					}else if( self.jsConf.on_image == 1 ){
-						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
-						log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50%"/>'  );
-					}else if( self.jsConf.on_image == 2 ){
-						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" target="_blank" >$1</a>'  );
-						log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<img src="$2" width="50px"/>'  );
-		/*			}else if( seif.jsConf.on_image == 3 ){
-						log.log = log.log.replace( /((?:https?|ftp):\/\/[^\s　]+)/g, '<a href="$1" >$1</a>'  );
-						log.log = log.log.replace( /([^"]|^)((?:https?|ftp):\/\/[^\s]+?\.(png|jpg|jpeg|gif)(?!"))/g, '$1<input type="button" value="img" onclick="createImg(this,\'$1\')" />'  );
-		*/			}
+					return '<a href="'+$1+'" target="_blank" class="url">'+$1+'</a>';
+				});
 			}
 			
 			log.filtered = true;
@@ -361,6 +372,7 @@ $(function(){
 		add_log:function( i, log ){
 			var self = this;
 			if( self.jsConf.template == 'limechat' ){
+
 			$('#list').prepend(this.createRow(log));
 			}else{
 			$('#list tbody').prepend(this.createRow(log));
