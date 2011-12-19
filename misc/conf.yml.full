@@ -29,7 +29,7 @@ log_popup_menu:
                 rt: 
                     type: 'typablemap'
                     label: 're tweet'
-        @fig: 'fig_default'
+        @fig: 'fig_menu'
 
 # Databaseの設定
 

@@ -63,12 +63,18 @@ class  yaml2conf
 						switch( $network_setting )
 						{
 							case 'fig_default':
+							case 'fig_menu':
 								global $fig_default_popup_menu;
 								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $fig_default_popup_menu;
 								break;
 							case 'tig_default':
+							case 'tig_menu':
 								global $tig_default_popup_menu;
 								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $tig_default_popup_menu;
+								break;
+							case 'quickpost':
+								global $quickpost_only_popup_menu;
+								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $quickpost_only_popup_menu;
 								break;
 							default:
 								$this->addError( "network default setting not fodun. [ $network_setting ]");

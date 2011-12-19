@@ -20,8 +20,8 @@ tiarra_socket_name: 'tiarrametro'
 #log_popup_menu:
 #    separator: '@'
 #    network:
-#        @tig: 'tig_default'
-#        @fig: 'fig_default'
+#        @tig: 'tig_menu'
+#        @fig: 'fig_menu'
 
 # Databaseの設定
 
