@@ -41,7 +41,7 @@
 				}
 
 
-				$this->settings = ArrayWrapper($settings);
+				$this->settings = new ArrayWrapper($settings);
 
 				foreach( $options['dao'] as $table ){
 					$class_name = 'dao_'.$table;
