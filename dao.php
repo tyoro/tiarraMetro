@@ -159,7 +159,7 @@ class dao_channel extends dao_base{
 					$column = $key;
 				}
 
-				$direction = preg_match('/^D(ESC)$/i', $value) ? 'DESC' : 'ASC';
+				$direction = preg_match('/^D(?:ESC)?$/i', $value) ? 'DESC' : 'ASC';
 
 				if (($table === 'channel' || $table === 'log') && in_array($column, $this->_settings[$this->_name])) {
 					$data[] = sprintf('%s.%s %s', $table, $column, $direction);
