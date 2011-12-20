@@ -157,6 +157,15 @@ ul.channel_list li.hit span.ch_num small {
 	line-height: 1.4;
 	margin-top: 4px;
 }
+	.line .message .inlineimage {
+		background-image: none;
+	}
+		.line .message .inlineimage img {
+			max-width: 50%;
+			max-height: 150px;
+			margin: 5px 0;
+			border: 1px solid #333;
+		}
 .on_icon .line .message {
 	margin-left: 37px;
 }
@@ -308,11 +317,10 @@ div#log_popup_menu ul li:hover {
 	background-color: #404040;
 }
 
-/* hack */
-
+/* clearfix */
 .line.text:after,
 .clearfix:after {
-	content: "";  /* 新しい要素を作る */
-	display: block;  /* ブロックレベル要素に */
+	content: "";
+	display: block;
 	clear: both;
 }
