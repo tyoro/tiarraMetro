@@ -245,10 +245,12 @@ $(function(){
 			}
 			else {
 				self.popup.css('display','none');
+				$('.status-notifier').toggleClass('new', !!$('.channel_list li.new').length);
+				$('.status-notifier').toggleClass('hit', !!$('.channel_list li.hit').length);
+
 				switch (index) {
 				case '0': //channel list
 					self.myPushState( 'channel list','/' );
-					$('div.headers span.header[name=list]').removeClass('new');
 					self.onListInvisible();
 					break;
 				case '1':
@@ -274,7 +276,6 @@ $(function(){
 				},
 				success:function(json){
 					if( json['update'] ){
-						listHeader = $('div.headers span.header[name=list]');
 						$.each( json['logs'], function(channel_id, logs){
 							logs = $.map( logs, function( log,i){
 								if( $("#"+log.id ).length ){ return null; }
@@ -289,6 +290,7 @@ $(function(){
 										if( log.log.indexOf(w) >= 0 ){
 											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
 											$('#ch_'+channel_id).addClass('hit');
+											$('.status-notifier').addClass('hit');
 											logs[i].pickup = true;
 										}
 									});
@@ -304,15 +306,15 @@ $(function(){
 							}
 							
 							if( channel_id != self.currentChannel || self.isCurrentPivotByName("list") ){
+								$('.status-notifier').addClass('new');
 								$('#ch_'+channel_id).addClass('new');
 								num = $('#ch_'+channel_id+' span.ch_num');
 								currentNum = $('small',num).text()-0+logs.length;
 								if( currentNum > 0 ){
 									num.html( '<small>'+currentNum+'</small>' );
 								}
-								listHeader.addClass('new');
 							}else{
-								$('#ch_'+channel_id).removeClass('hit').removeClass('new');
+								$('#ch_'+channel_id).removeClass('hit new');
 							}
 
 							self.afterAdded();

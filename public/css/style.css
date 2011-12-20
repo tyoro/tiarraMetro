@@ -42,10 +42,6 @@ h3 {
 	marggin-bottom: .25em;
 }
 
-span[name="list"].header.new {
-	color: #404cd0;
-}
-
 ul.channel_list {
 	margin: 0;
 	padding: 0;
@@ -174,11 +170,11 @@ ul.channel_list li.hit span.ch_num small {
 }
 /* */
 
+div { display:block; }
+hr { border: 2px solid #c0c0c0; }
+hr.status-notifier.new { border: 2px solid #404cd0; }
+hr.status-notifier.hit { border: 2px solid #f0b0b0; }
 
-div {display:block;}
-hr {
-	border: 2px solid #c0c0c0;
-}
 h4 {
 	padding-top: .6em;
 	font-size: .9em;

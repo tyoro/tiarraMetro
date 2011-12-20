@@ -38,7 +38,7 @@
 		<input type="submit" value="post" />
 		<label for='notice'>notice</label><input type="checkbox" name="notice" id="notice" value="true" />
 	</form>
-	<hr/>
+	<hr class="status-notifier" />
 	<div id="list" class="list">
 	</div>
 	<div id="ch_foot"></div>
@@ -71,4 +71,4 @@ $(function(){
 	});
 });
 </script>
-</div>
+
