@@ -12,19 +12,21 @@
 		public function __construct( $options=array() ){
 			$this->options = new ArrayWrapper($options);
 
+			$db_settings = $this->prepareDatabase($options);
+
 			$settings = array(
 				'is_ssl'   => (empty($_SERVER['HTTPS']) === false && ($_SERVER['HTTPS'] !== 'off')),
-				'database' => array()
+				'database' => $db_settings
 			);
-
-			$this->prepareDatabase($options);
 
 			$this->settings = new ArrayWrapper($settings);
 
 			parent::__construct( $options );
 		}
 
-		protected function prepareDatabase( $options=array() ){
+		protected function prepareDatabase(&$options){
+			$settings = array();
+
 			if( isset($options['dao']) && count($options['dao']) ){
 				$db_objects = array();
 
@@ -40,26 +42,28 @@
 				$tables = $conn->getArray($conn->Prepare('SHOW TABLES;'));
 
 				foreach ($tables as $table) {
-					if (empty($settings['database'][$table[0]]) || !is_array($settings['database'][$table[0]])) {
-						$settings['database'][$table[0]] = array();
+					if (empty($settings[$table[0]]) || !is_array($settings[$table[0]])) {
+						$settings[$table[0]] = array();
 					}
 
 					$columns = $conn->getArray($conn->Prepare(sprintf('DESCRIBE %s;', $table[0])));
 
 					foreach ($columns as $column) {
-						$settings['database'][$table[0]][] = $column[0];
+						$settings[$table[0]][] = $column[0];
 					}
 				}
 
 				foreach( $options['dao'] as $table ){
 					$class_name = 'dao_'.$table;
-					$db_objects[$table] = new $class_name( $conn, $settings['database'] );
+					$db_objects[$table] = new $class_name( $conn, $settings );
 				}
 
 				unset($options['dao']);
 
 				$this->db = new ArrayWrapper( $db_objects );
 			}
+
+			return $settings;
 		}
 
 		protected function render($fileName, $variableArray=array(), $useHeplers=array() ) {
