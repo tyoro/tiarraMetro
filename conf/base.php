@@ -46,6 +46,7 @@ $jsConf = Array(
 		'separator' => '@'
 		,'network' =>  array()
 	)
+	,'quickpost_auto_close' => true
 );
 
 $tig_default_popup_menu = Array(
@@ -71,3 +72,11 @@ $quickpost_only_popup_menu = Array(
 			'menu' => Array(
 			)
 		);
+
+$quickpost_only_popup_menu_no_close = Array(
+			'match' => '.*',
+			'auto_close' => false,
+			'menu' => Array(
+			)
+		);
+

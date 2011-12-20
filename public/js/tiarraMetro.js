@@ -89,7 +89,9 @@ $(function(){
 					success:function(){
 						post.removeAttr('disabled').removeClass('error').val('');
 						$('input[type=submit]',form).removeAttr('disabled');
-						self.popup.css('display','none');
+						if( !('auto_close' in self.currentMenu) || self.currentMenu[ 'auto_close' ] ){
+							self.popup.css('display','none');
+						}
 					},
 					error:function(){
 						post.removeAttr('disabled').removeClass('error');

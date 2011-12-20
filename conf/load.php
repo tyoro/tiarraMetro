@@ -76,6 +76,10 @@ class  yaml2conf
 								global $quickpost_only_popup_menu;
 								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $quickpost_only_popup_menu;
 								break;
+							case 'quickpost_no_close':
+								global $quickpost_only_popup_menu_no_close;
+								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $quickpost_only_popup_menu_no_close;
+								break;
 							default:
 								$this->addError( "network default setting not fodun. [ $network_setting ]");
 								continue;
