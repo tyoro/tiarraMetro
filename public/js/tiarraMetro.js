@@ -144,9 +144,7 @@ $(function(){
 					type:'POST',
 				});
 				self.offListInvisible();
-/**
- *  
- */
+
 				$('.channel_list li').attr('class','');
 				$('.channel_list li span.ch_num').html('');
 			});
@@ -227,8 +225,21 @@ $(function(){
 			var self = this;
 			var index = header.attr("index");
 
-			if (header.attr("name") == "list" && header.hasClass("current")) {
-				$("ul.channel_list").toggleClass("invisible");
+			if (header.hasClass("current")) {
+				switch( header.attr("name") ){
+					case "list":
+						$("ul.channel_list").toggleClass("invisible");
+						break;
+					case 'channel':
+						on_icon = $('#list').hasClass( 'on_icon' );
+						if( on_icon ){ 
+							$('#list').removeClass( 'on_icon' );
+						}else{
+							$('#list').addClass( 'on_icon' );
+						}
+						self.setChannelSetting( self.currentChannel, 'on_icon', !on_icon );
+						break;
+				}
 			}
 			else {
 				self.popup.css('display','none');
@@ -387,7 +398,7 @@ $(function(){
 			result += '<span class="time">'+time+'</span>';
 
 			//icon
-			if( self.jsConf['on_icon'] ){ result += self.getIconString(log); }
+			result += self.getIconString(log);
 
 			//sender
 			result += '<span class="sender" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+'</span>';
@@ -491,7 +502,14 @@ $(function(){
 
 			channel_name.match( new RegExp( '(' + this.jsConf['log_popup_menu']['separator']+'\\w+)' ) );
 			this.currentMenu = this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]?this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]:null;
-			
+
+			on_icon = self.getChannelSetting( channel_id, 'on_icon' );
+			if( ( on_icon == null )?self.jsConf['on_icon']:on_icon ){ 
+				$('#list').addClass( 'on_icon' );
+			}else{
+				$('#list').removeClass( 'on_icon' );
+			}
+
 			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
 			self.afterAdded();
@@ -550,6 +568,30 @@ $(function(){
 		},
 		offListInvisible: function(){
 			$('ul.channel_list').removeClass('invisible');
+		},
+		/* local strage */
+		getChannelSettings: function( channel_id ){
+			channels = localStorage.getItem( 'channels' );
+			if( channels == null ){ channels = {}; }
+			else{ channels = JSON.parse( channels ); }
+			if( !channels.hasOwnProperty(channel_id) ) { channels[ channel_id ] = {}; }
+
+			localStorage.setItem( 'channels', JSON.stringify(channels) );
+			return channels[ channel_id ];
+		},
+		getChannelSetting: function( channel_id, key ){
+			channel = this.getChannelSettings( channel_id );
+			if( channel == null ){ return null; }
+			if( channel.hasOwnProperty(key) ) { return channel[ key ]; }
+			return null;
+		},
+		setChannelSetting: function( channel_id, key, value ){
+			channels = localStorage.getItem( 'channels' );
+			if( channels == null ){ channels = {}; }
+			else{ channels = JSON.parse( channels ); }
+			if( !channels.hasOwnProperty(channel_id) ) { channels[ channel_id ] = {}; }
+			channels[ channel_id ][ key ] = value;
+			localStorage.setItem( 'channels', JSON.stringify(channels) );
 		},
 
 		/* Pivot helpers */
