@@ -173,35 +173,26 @@
 			if( $this->isLoggedIn() ){
 				return  $this->redirect('/');
 			}
+			$error_msg = "";
+			if( strlen($this->request->pass) ){
+				if( md5($this->request->pass) == $this->options->password_md5 ){
+					$this->session->login = 'true';
 
-			$error_msg = null;
+					//set cookie
+					if( $this->request->cookie == 'true' )
+					Cookie::set('UniqueId',$this->options->my_name,$this->options->password_md5,time()+$this->options->cookie_save_time, $this->options->mountPoint.'/' );
 
-			if (strtolower($_SERVER['REQUEST_METHOD']) === 'post') {
-				if( strlen($this->request->pass) ){
-					if( md5($this->request->pass) == $this->options->password_md5 ){
-						$this->session->login = 'true';
-
-						//set cookie
-						if( $this->request->cookie == 'true' )
-						Cookie::set('UniqueId',$this->options->my_name,$this->options->password_md5,time()+$this->options->cookie_save_time, $this->options->mountPoint.'/' );
-
-						//セッションにログイン前ページが記憶されてるかどうかを判定
-						if( isset($this->session->befor) && strlen($this->session->befor) ){
-							$this->redirect( $this->session->befor );
-							unset( $this->session->befor );
-						}else{
-							$this->redirect('/');
-						}
+					//セッションにログイン前ページが記憶されてるかどうかを判定
+					if( isset($this->session->befor) && strlen($this->session->befor) ){
+						$this->redirect( $this->session->befor );
+						unset( $this->session->befor );
 					}else{
-						$error_msg = "no match password!!";
+						$this->redirect('/');
 					}
-				} else {
-					$error_msg = "Input your password for logging in.";
+				}else{
+					$error_msg = "no match password!!";
 				}
 			}
-
-			$this->session->authMessage = $error_msg;
-
 			return $this->render('login',array( 'error_msg' => $error_msg ));
 		}
 
