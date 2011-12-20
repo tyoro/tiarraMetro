@@ -197,6 +197,12 @@ class dao_channel extends dao_base{
 
 		return $this->_conn->Execute($this->_conn->Prepare($sql), $values);
 	}
+
+	function setView( $id, $value ){
+		$sql = "UPDATE channel SET view = ". ( $value? '1':'0');
+		$sql .=  " WHERE id = $id";
+		return $this->_conn->Execute($sql);
+	}
 }
 
 class dao_log extends dao_base{

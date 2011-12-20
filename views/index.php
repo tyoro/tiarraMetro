@@ -57,22 +57,41 @@
 	<h4>channels setting</h4>
 	<div class="setting_entry" >
 		<form id="setting_form" >
-			<select name="channel" id="channel_setting_select">
+			<select name="channel" id="channel_setting_select" >
 				<option value="" >----</option>
 				<?php foreach( $all_channels as $ch ){ ?>
 					<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
 				<?php } ?>
 			</select>
 			<div id="channel_setting_elements" style="display:none;" >
-			アイコンの表示:kitei,on,off<br/>
-			チャンネル一覧への表示:<br/>
-			新着のチェック<br/>
-			ピックアップのチェック<br/>
+			アイコンの表示:
+			<select name="on_icon">
+				<option value="default">既定値</option>
+				<option value="on">オン</option>
+				<option value="off">オフ</option>
+			</select><br/>
+			チャンネル一覧への表示:
+			<select name="view">
+				<option value="on">オン</option>
+				<option value="off">オフ</option>
+			</select><br/>
+			新着のチェック:
+			<select name="new_check">
+				<option value="on">オン</option>
+				<option value="off">オフ</option>
+			</select><br/>
+			ピックアップのチェック:
+			<select name="pickup_check">
+				<option value="on">オン</option>
+				<option value="off">オフ</option>
+			</select><br/>
 			<br/>
+			<input type="submit" value='submit' />
 			</div>
 		</form>
 	</div>
-	<h4>setting2</h4>
+	<h4>setting menu</h4>
+	<input type="button" value="setting reset" id="setting_reset" />
 	<div id="setting_foot">
 	<input type="button" value="close" id="setting_close" />
 	</div>

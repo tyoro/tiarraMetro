@@ -154,6 +154,58 @@ $(function(){
 					self.onListInvisible();
 				}
 			});
+			/* 設定のチャンネルリストの変更 */
+			$('select#channel_setting_select').change( function(){
+				channel_id = $('select#channel_setting_select option:selected').val();
+				if( channel_id == '' ){ $('#channel_setting_elements').css('display','none'); }
+				else{ $('#channel_setting_elements').css('display','block'); }
+
+				setting = self.getChannelSettings( channel_id );
+				
+				if( setting.hasOwnProperty( 'on_icon' ) ){
+					on_icon = setting['on_icon'];
+				}else{
+					on_icon = self.jsConf['on_icon'];
+				}
+				$('form#setting_form select[name=on_icon]').val( on_icon?'on':'off' );
+				if( $('ul.channel_list li#ch_'+channel_id ).length ){
+					view = true;
+				}else{
+					view = false;
+				}
+				$('form#setting_form select[name=view]').val( view?'on':'off' );
+
+				$('form#setting_form select[name=new_check]').val( (setting.hasOwnProperty( 'new_check' )?setting['new_check']:true)?'on':'off'  );
+				$('form#setting_form select[name=pickup_check]').val( (setting.hasOwnProperty( 'pickup_check' )?setting['new_check']:true)?'on':'off'  );
+			});
+			/* チャンネル設定の適用 */
+			$('form#setting_form').submit( function(){
+				channel_id = $('select#channel_setting_select option:selected').val();
+				on_icon = $('form#setting_form select[name=on_icon] option:selected').val();
+				if( on_icon == 'default' ){
+					self.deleteChannelSetting( channel_id, 'on_icon' );
+				}else{
+					self.setChannelSetting( channel_id, 'on_icon', on_icon == 'on' );
+				}
+				self.setChannelSetting( channel_id, 'new_check', $('form#setting_form select[name=new_check] option:selected').val()=='on' );
+				self.setChannelSetting( channel_id, 'pickup_check', $('form#setting_form select[name=pickup_check] option:selected').val()=='on' );
+
+				$.ajax({
+					url:self.mountPoint+'/api/setting/view/'+channel_id,
+					dataType:'json',
+					type:'POST',
+					data:{
+						value: $('form#setting_form select[name=view] option:selected').val()
+					},
+				});
+
+				return false;
+			});
+			/* localStrageのリセット*/
+			$('input#setting_reset').click(function(){
+				console.log(localStorage);
+				//localStorage.clear();
+			});
 
 			/* 未読のリセット */
 			$('input#unread_reset').click(function(){
@@ -306,6 +358,7 @@ $(function(){
 				success:function(json){
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
+							setting = self.getChannelSettings( channel_id );
 							logs = $.map( logs, function( log,i){
 								if( self.currentLog.hasOwnProperty( log.id ) ){ return null; }
 								self.currentLog[ log.id ] = log;
@@ -314,18 +367,20 @@ $(function(){
 							if( !logs.length ){ return; }
 
 							/* pickup word の検出とフラグの追加 */
-							$.each( logs, function( i,log){
-								if( self.jsConf.pickup_word && self.jsConf.pickup_word.length && log.nick != self.jsConf.my_name ){
-									$.each( self.jsConf.pickup_word,function(j,w){
-										if( log.log.indexOf(w) >= 0 ){
-											$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
-											$('#ch_'+channel_id).addClass('hit');
-											$('.status-notifier').addClass('hit');
-											logs[i].pickup = true;
-										}
-									});
-								}
-							});
+							if( !('pickup_check' in setting) || setting['pickup_check'] ){
+								$.each( logs, function( i,log){
+									if( self.jsConf.pickup_word && self.jsConf.pickup_word.length && log.nick != self.jsConf.my_name ){
+										$.each( self.jsConf.pickup_word,function(j,w){
+											if( log.log.indexOf(w) >= 0 ){
+												$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
+												$('#ch_'+channel_id).addClass('hit');
+												$('.status-notifier').addClass('hit');
+												logs[i].pickup = true;
+											}
+										});
+									}
+								});
+							}
 							
 							/* 内部的に保持するログを各チャンネル30に制限 */
 							self.chLogs[channel_id] = logs.concat(self.chLogs[channel_id]).slice(0,30);
@@ -335,16 +390,18 @@ $(function(){
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
 							}
 							
-							if( channel_id != self.currentChannel || self.isCurrentPivotByName("list") ){
-								$('.status-notifier').addClass('new');
-								$('#ch_'+channel_id).addClass('new');
-								num = $('#ch_'+channel_id+' span.ch_num');
-								currentNum = $('small',num).text()-0+logs.length;
-								if( currentNum > 0 ){
-									num.html( '<small>'+currentNum+'</small>' );
+							if( !('new_check' in setting) || setting['new_check'] ){
+								if( channel_id != self.currentChannel || self.isCurrentPivotByName("list") ){
+									$('.status-notifier').addClass('new');
+									$('#ch_'+channel_id).addClass('new');
+									num = $('#ch_'+channel_id+' span.ch_num');
+									currentNum = $('small',num).text()-0+logs.length;
+									if( currentNum > 0 ){
+										num.html( '<small>'+currentNum+'</small>' );
+									}
+								}else{
+									$('#ch_'+channel_id).removeClass('hit new');
 								}
-							}else{
-								$('#ch_'+channel_id).removeClass('hit new');
 							}
 
 							self.afterAdded();
@@ -538,8 +595,8 @@ $(function(){
 			channel_name.match( new RegExp( '(' + this.jsConf['log_popup_menu']['separator']+'\\w+)' ) );
 			this.currentMenu = this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]?this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]:null;
 
-			on_icon = self.getChannelSetting( channel_id, 'on_icon' );
-			if( ( on_icon == null )?self.jsConf['on_icon']:on_icon ){ 
+			self.channel_setting = self.getChannelSettings( channel_id );
+			if( ( ! ( 'on_icon' in self.channel_setting ) )?self.jsConf['on_icon']:self.channel_setting['on_icon'] ){ 
 				$('#list').addClass( 'on_icon' );
 			}else{
 				$('#list').removeClass( 'on_icon' );

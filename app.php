@@ -162,6 +162,18 @@
 			}
 			return json_encode($return);
 		}
+		public function api_set_view($channel_id){
+			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
+			else{
+				if( !strlen($this->request->value) ){
+					$return = array( 'error' => true, 'msg' => 'parameter not found.' );
+				}else{
+					$this->db->channel->setView($channel_id,$this->request->value=='on');	
+					$return = array( 'error' => false  );
+				}
+			}
+			return json_encode($return);
+		}
 		
 		//api template
 		public function api_template(){
@@ -261,6 +273,7 @@
 	$app->post('/api/search/','api_search');
 	$app->post('/api/read/:channel_id','api_read',array('channel_id'=>'\d+'));
 	$app->post('/api/reset/unread','api_reset_unread');
+	$app->post('/api/setting/view/:channel_id','api_set_view',array('channel_id'=>'\d+'));
 	
 	$app->run();
 
