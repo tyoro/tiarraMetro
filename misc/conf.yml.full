@@ -12,8 +12,6 @@ tiarra_socket_name: 'tiarrametro'
 #template: 'simple'
 #style: 'style.wp.css'
 #channel_list_label: 'channnels'
-#channel_list_sort: 'read'
-#channel_list_sort: [ 'network', 'name' ]
 #channel_list_sort: { network: 'DESC', name: 'ASC' }
 #cookie_save_time: 86400
 
@@ -32,6 +30,7 @@ log_popup_menu:
                     type: 'typablemap'
                     label: 're tweet'
         @fig: 'fig_menu'
+        @w: 'quickpost'
 
 # Databaseの設定
 
