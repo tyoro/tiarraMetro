@@ -1,7 +1,7 @@
 $(function(){
 
 	$.escapeHTML = function(val) {
-		return $("<div/>").text(val).html();
+		return $("<div />").text(val).html();
 	};
 
     var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
@@ -108,7 +108,7 @@ $(function(){
 				if( kw.length == 0 ){ return false; }
 
 				$('#search-list').empty();
-				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..." /></div>' );
+				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..."></div>' );
 
 				$('div.headers span.header[name=search]').text( 'search' );
 				if (!self.isCurrentPivotByName("search")) {
@@ -382,10 +382,10 @@ $(function(){
 					var on_image = Number(self.jsConf.on_image);
 					switch (on_image) {
 						case 1:
-							after = '<br /><a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50%" /></a>';
+							after = '<br><a href="'+$1+'" target="_blank" class="'+link_class+'"><img src="'+$1+'"></a>';
 							break;
 						case 2:
-							return '<a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50" /></a>';
+							return '<a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50"></a>';
 						default:
 							break;
 					}
@@ -507,7 +507,7 @@ $(function(){
 			nick = log.nick;
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
 			
-			return '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'" /></a>';
+			return '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'"></a>';
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
@@ -561,9 +561,9 @@ $(function(){
 		},
 		addMoreButton : function(){
 			var self = this;
-			button = $('<input type="button" value="more" />');
+			button = $('<input type="button" value="more">');
 			button.click(function(){
-				$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..." /></div>' );
+				$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..."></div>' );
 				$.ajax({
 					url:self.mountPoint+'/api/logs/'+self.currentChannel,
 					data:{
@@ -584,7 +584,7 @@ $(function(){
 		},
 		addCloseButton : function(){
 			var self = this;
-			button = $('<input type="button" value="close" />');
+			button = $('<input type="button" value="close">');
 			button.click(function(){
 				$('div.headers span.header[name=search]').html( '' );
 				if (!self.isCurrentPivotByName("list")) {
