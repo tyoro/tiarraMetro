@@ -12,6 +12,8 @@
 		public function __construct( $options=array() ){
 			$this->options = new ArrayWrapper($options);
 
+			$settings = array('database' => array());
+
 			if( isset($options['dao']) && count($options['dao']) ){
 				$db_objects = array();
 
@@ -22,8 +24,6 @@
 				if( DATABASE_DEBUG ){
 					$conn->debug = 1;
 				}
-
-				$settings = array('database' => array());
 
 				// DAO でやるべき？
 				$tables = $conn->getArray($conn->Prepare('SHOW TABLES;'));
@@ -40,18 +40,17 @@
 					}
 				}
 
-
-				$this->settings = new ArrayWrapper($settings);
-
 				foreach( $options['dao'] as $table ){
 					$class_name = 'dao_'.$table;
-					$db_objects[$table] = new $class_name( $conn, $this->settings->database );
+					$db_objects[$table] = new $class_name( $conn, $settings['database'] );
 				}
 
 				unset($options['dao']);
 
 				$this->db = new ArrayWrapper( $db_objects );
 			}
+
+			$this->settings = new ArrayWrapper($settings);
 
 			parent::__construct( $options );
 		}
@@ -70,6 +69,7 @@
 
 			$variableArray['uri_base'] = 'http://'.$_SERVER['SERVER_NAME'].$this->options->mountPoint.'/';
 			$variableArray['mount_point'] = $this->options->mountPoint;
+			$variableArray['settings'] = $this->settings;
 
 			return parent::render($fileName,$variableArray);
 		}
