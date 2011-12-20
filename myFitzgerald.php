@@ -12,8 +12,19 @@
 		public function __construct( $options=array() ){
 			$this->options = new ArrayWrapper($options);
 
-			$settings = array('database' => array());
+			$settings = array(
+				'is_ssl'   => (empty($_SERVER['HTTPS']) === false && ($_SERVER['HTTPS'] !== 'off')),
+				'database' => array()
+			);
 
+			$this->prepareDatabase($options);
+
+			$this->settings = new ArrayWrapper($settings);
+
+			parent::__construct( $options );
+		}
+
+		protected function prepareDatabase( $options=array() ){
 			if( isset($options['dao']) && count($options['dao']) ){
 				$db_objects = array();
 
@@ -49,10 +60,6 @@
 
 				$this->db = new ArrayWrapper( $db_objects );
 			}
-
-			$this->settings = new ArrayWrapper($settings);
-
-			parent::__construct( $options );
 		}
 
 		protected function render($fileName, $variableArray=array(), $useHeplers=array() ) {
@@ -63,15 +70,22 @@
 			foreach( $useHeplers as $useHepler ){
 				if( !isset( $variableArray[$useHepler] ) && isset($heplerList[$useHepler]) ){
 					$class = $heplerList[ $useHepler ];
-					$variableArray[ $useHepler ] = new $class();
+					$variableArray[ $useHepler ] = new $class($this->options);
 				}
 			}
 
-			$variableArray['uri_base'] = 'http://'.$_SERVER['SERVER_NAME'].$this->options->mountPoint.'/';
+			$variableArray['uri_base'] = $this->getURIBase();
 			$variableArray['mount_point'] = $this->options->mountPoint;
 			$variableArray['settings'] = $this->settings;
 
 			return parent::render($fileName,$variableArray);
+		}
+
+		protected function getURIBase() {
+			$protocol = $this->settings->is_ssl ? 'https:' : 'http:' ;
+			$host = $_SERVER['HTTP_HOST'];
+
+			return sprintf('%s//%s%s/', $protocol, $host, $this->options->mountPoint);
 		}
 
 		protected function sendJson($object=array(),$status=true){
