@@ -47,7 +47,6 @@ class Cookie
 		if (isset($_COOKIE['iv_' . $name]) && isset($_COOKIE[$name])) {
 			setcookie( $name, null, Cookie::$endExpire, $path, $_SERVER['SERVER_NAME'] );
 			setcookie( 'iv_'.$name, null, Cookie::$endExpire, $path, $_SERVER['SERVER_NAME'] );
-			setcookie( Cookie::$sessionName, null, Cookie::$endExpire, $path, $_SERVER['SERVER_NAME'] );
 		}
 	}
 
