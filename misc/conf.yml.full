@@ -24,7 +24,7 @@ log_popup_menu:
 #    separator: '@'
     network:
         @tig:
-			match: '\((\w+)\)'
+            match: '\((\w+)\)'
             menu:
                 rt: 
                     type: 'typablemap'
