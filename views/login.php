@@ -1,6 +1,9 @@
-<?php if( !empty($_GET['redirect']) ){ ?>
+<?php if(!empty($_GET['redirect'])): ?>
 no login!<br/><hr/>
-<?php } ?>
+<?php endif ?>
+<?php if($user->flashEnabled('authMessage')): ?>
+<p class="error auth-message"><?php echo $user->flashMessage('authMessage'); ?></p>
+<?php endif; ?>
 <div class="metro-pivot">
 <div class='pivot-item'>
 <h3 name="list">login</h3>

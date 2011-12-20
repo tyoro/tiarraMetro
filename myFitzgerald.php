@@ -29,7 +29,7 @@
 				$tables = $conn->getArray($conn->Prepare('SHOW TABLES;'));
 
 				foreach ($tables as $table) {
-					if (!is_array($settings['database'][$table[0]])) {
+					if (empty($settings['database'][$table[0]]) || !is_array($settings['database'][$table[0]])) {
 						$settings['database'][$table[0]] = array();
 					}
 
@@ -57,8 +57,9 @@
 		}
 
 		protected function render($fileName, $variableArray=array(), $useHeplers=array() ) {
-			$heplerList = array( 'search' => 'SearchHelper', 'html' => 'HtmlHelper', 'util' => 'myUtilHelper' );
+			$heplerList = array( 'search' => 'SearchHelper', 'html' => 'HtmlHelper', 'util' => 'myUtilHelper', 'user' => 'UserHelper');
 			$useHeplers[] = 'util';
+			$useHeplers[] = 'user';
 
 			foreach( $useHeplers as $useHepler ){
 				if( !isset( $variableArray[$useHepler] ) && isset($heplerList[$useHepler]) ){
@@ -115,9 +116,33 @@
 		}
 	}
 
-	class USerHelper{
+	class UserHelper{
 		public function isLogin() {
 			return !is_null($this->session->user);
+		}
+
+		public function flashMessage ($key) {
+			global $_SESSION;
+
+			$message = '';
+
+			if (isset($_SESSION[$key])) {
+				$result = $_SESSION[$key];
+			}
+
+			unset($_SESSION[$key]);
+
+			return $result;
+		}
+
+		public function flashEnabled ($key) {
+			global $_SESSION;
+
+			if (!empty($_SESSION[$key]) && is_string($_SESSION[$key])) {
+				return true;
+			}
+
+			return false;
 		}
 	}
 
