@@ -134,6 +134,10 @@ ul.channel_list li.hit span.ch_num small {
 	font-size: 9px;
 }
 .line .avatar {
+	display: none;
+}
+.on_icon .line .avatar {
+	display: block;
 	float: left;
 	width: 32px;
 	height: 32px;
@@ -144,9 +148,6 @@ ul.channel_list li.hit span.ch_num small {
 	max-width: 32px;
 	max-height: 32px;
 	border: none;
-}
-.line .avatar + .sender + .message {
-	margin-left: 37px;
 }
 .line .sender {
 	font-size: 11px;
@@ -162,6 +163,9 @@ ul.channel_list li.hit span.ch_num small {
 	display: block;
 	line-height: 1.4;
 	margin-top: 4px;
+}
+.on_icon .line .message {
+	margin-left: 37px;
 }
 .line .message strong.highlight {
 	color: #fbb;
