@@ -165,7 +165,6 @@ class dao_channel extends dao_base{
 					$data[] = sprintf('%s.%s %s', $table, $column, $direction);
 				} else if (($column === 'network' || $column === 'cnt')) {
 					$data[] = sprintf('%s %s', $column, $direction);
-					
 				}
 			}
 		} else {
@@ -179,6 +178,8 @@ class dao_channel extends dao_base{
 
 				if (($table === 'channel' || $table === 'log') && in_array($column, $this->_settings[$this->_name])) {
 					$data[] = sprintf('%s.%s ASC', $table, $column);
+				} else if (($column === 'network' || $column === 'cnt')) {
+					$data[] = sprintf('%s ASC', $column);
 				}
 			}
 		}

@@ -12,6 +12,21 @@
 		public function __construct( $options=array() ){
 			$this->options = new ArrayWrapper($options);
 
+			$db_settings = $this->prepareDatabase($options);
+
+			$settings = array(
+				'is_ssl'   => (empty($_SERVER['HTTPS']) === false && ($_SERVER['HTTPS'] !== 'off')),
+				'database' => $db_settings
+			);
+
+			$this->settings = new ArrayWrapper($settings);
+
+			parent::__construct( $options );
+		}
+
+		protected function prepareDatabase(&$options){
+			$settings = array();
+
 			if( isset($options['dao']) && count($options['dao']) ){
 				$db_objects = array();
 
@@ -23,29 +38,24 @@
 					$conn->debug = 1;
 				}
 
-				$settings = array('database' => array());
-
 				// DAO でやるべき？
 				$tables = $conn->getArray($conn->Prepare('SHOW TABLES;'));
 
 				foreach ($tables as $table) {
-					if (empty($settings['database'][$table[0]]) || !is_array($settings['database'][$table[0]])) {
-						$settings['database'][$table[0]] = array();
+					if (empty($settings[$table[0]]) || !is_array($settings[$table[0]])) {
+						$settings[$table[0]] = array();
 					}
 
 					$columns = $conn->getArray($conn->Prepare(sprintf('DESCRIBE %s;', $table[0])));
 
 					foreach ($columns as $column) {
-						$settings['database'][$table[0]][] = $column[0];
+						$settings[$table[0]][] = $column[0];
 					}
 				}
 
-
-				$this->settings = new ArrayWrapper($settings);
-
 				foreach( $options['dao'] as $table ){
 					$class_name = 'dao_'.$table;
-					$db_objects[$table] = new $class_name( $conn, $this->settings->database );
+					$db_objects[$table] = new $class_name( $conn, $settings );
 				}
 
 				unset($options['dao']);
@@ -53,7 +63,7 @@
 				$this->db = new ArrayWrapper( $db_objects );
 			}
 
-			parent::__construct( $options );
+			return $settings;
 		}
 
 		protected function render($fileName, $variableArray=array(), $useHeplers=array() ) {
@@ -64,14 +74,22 @@
 			foreach( $useHeplers as $useHepler ){
 				if( !isset( $variableArray[$useHepler] ) && isset($heplerList[$useHepler]) ){
 					$class = $heplerList[ $useHepler ];
-					$variableArray[ $useHepler ] = new $class();
+					$variableArray[ $useHepler ] = new $class($this->options);
 				}
 			}
 
-			$variableArray['uri_base'] = 'http://'.$_SERVER['SERVER_NAME'].$this->options->mountPoint.'/';
+			$variableArray['uri_base'] = $this->getURIBase();
 			$variableArray['mount_point'] = $this->options->mountPoint;
+			$variableArray['settings'] = $this->settings;
 
 			return parent::render($fileName,$variableArray);
+		}
+
+		protected function getURIBase() {
+			$protocol = $this->settings->is_ssl ? 'https:' : 'http:' ;
+			$host = $_SERVER['HTTP_HOST'];
+
+			return sprintf('%s//%s%s/', $protocol, $host, $this->options->mountPoint);
 		}
 
 		protected function sendJson($object=array(),$status=true){

@@ -229,10 +229,14 @@
 
 		//logout
 		public function logout(){
-			if( !$this->isLoggedIn() ){ return  $this->redirect('/'); }
-			$this->session->login = null;
-			Cookie::delete('UniqueId',$this->options->mountPoint.'/' );
+			if($this->isLoggedIn()){
+				$this->session->login = null;
+				Cookie::delete('UniqueId',$this->options->mountPoint.'/' );
+			}
+
 			$this->redirect('/');
+
+			exit;
 		}
 			
         private function isLoggedIn() {
