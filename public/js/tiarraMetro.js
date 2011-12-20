@@ -203,8 +203,7 @@ $(function(){
 			});
 			/* localStrageのリセット*/
 			$('input#setting_reset').click(function(){
-				console.log(localStorage);
-				//localStorage.clear();
+				localStorage.clear();
 			});
 
 			/* 未読のリセット */
