@@ -107,8 +107,9 @@ ul.channel_list li.hit span.ch_num small {
 /* log  */
 .line.text {
 	position: relative;
+	line-height: 1;
 	margin: 1px 0;
-	padding: 3px 3px 5px 40px;
+	padding: 3px 3px 5px;
 	border-bottom: 1px solid #404040;
 }
 .line[type="notice"] {
@@ -126,16 +127,19 @@ ul.channel_list li.hit span.ch_num small {
 	font-size: 9px;
 }
 .line .avatar {
-	position: absolute;
-	top: 5px;
-	left: 3px;
+	float: left;
 	width: 32px;
 	height: 32px;
+	margin-top: 2px;
+	margin-right: 5px;
 }
 .line .avatar img {
 	max-width: 32px;
 	max-height: 32px;
 	border: none;
+}
+.line .avatar + .sender + .message {
+	margin-left: 37px;
 }
 .line .sender {
 	font-size: 11px;
@@ -149,7 +153,8 @@ ul.channel_list li.hit span.ch_num small {
 }
 .line .message {
 	display: block;
-	margin-top: 2px;
+	line-height: 1.4;
+	margin-top: 4px;
 }
 .line .message strong.highlight {
 	color: #fbb;

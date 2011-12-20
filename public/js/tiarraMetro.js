@@ -387,7 +387,7 @@ $(function(){
 			result += '<span class="time">'+time+'</span>';
 
 			//icon
-			if( self.jsConf['on_icon'] && log.is_notice != 1 ){ result += self.getIconString(log); }
+			if( self.jsConf['on_icon'] ){ result += self.getIconString(log); }
 
 			//sender
 			result += '<span class="sender" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+'</span>';
