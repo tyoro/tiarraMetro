@@ -5,13 +5,13 @@ no login!<br/><hr/>
 <p class="error auth-message"><?php echo $user->flashMessage('authMessage'); ?></p>
 <?php endif; ?>
 <div class="metro-pivot">
-<div class='pivot-item'>
-<h3 name="list">login</h3>
-<form method="POST">
-<input type="password" name="pass" /> 
-<input type="submit" value="login" />
-<label for='cookie'>cookie</label><input type="checkbox" value="true" name="cookie" id='cookie' />
-</form>
+	<div class="pivot-item" name="login">
+		<h3>login</h3>
+		<form method="POST">
+			<input type="password" name="pass" placeholder="input your password" /> 
+			<input type="submit" value="login" />
+			<label for="cookie">cookie</label>
+			<input type="checkbox" value="true" name="cookie" id="cookie" />
+		</form>
+	</div>
 </div>
-</div>
-
