@@ -18,6 +18,7 @@ $(function(){
 			this.jsConf = param.jsConf;
 			this.mountPoint = param.mountPoint;
 			this.variable = {};
+			this.currentLog = {};
 
 			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
@@ -137,6 +138,22 @@ $(function(){
 				})
 				return false;
 			});
+			
+			/* 設定画面の表示 */
+			$('input#setting_button').click(function(){
+				$('div.headers span.header[name=setting]').text( 'setting' );
+				if (!self.isCurrentPivotByName("setting")) {
+					self.goToPivotByName("setting");
+				}
+			});
+			/* 設定画面を閉じる */
+			$('input#setting_close').click(function(){
+				$('div.headers span.header[name=setting]').html( '' );
+				if (!self.isCurrentPivotByName("list")) {
+					self.goToPivotByName("list");
+					self.onListInvisible();
+				}
+			});
 
 			/* 未読のリセット */
 			$('input#unread_reset').click(function(){
@@ -164,6 +181,9 @@ $(function(){
 						break;
 					case '/search/':
 						self.goToPivotByName("search");
+						break;
+					case '/setting/':
+						self.goToPivotByName("setting");
 						break;
 					case null:
 						break;
@@ -205,6 +225,12 @@ $(function(){
 							break;
 						case 'list':
 						case 'default':
+							break;
+						case 'search':
+							//TODO: 検索の再現？
+						case 'setting':
+							$('div.headers span.header[name='+param.default_pivot +']').text( param.default_pivot );
+							self.goToPivotByName(param.default_pivot);
 							break;
 					}
 
@@ -259,6 +285,9 @@ $(function(){
 				case '2': //search
 					self.myPushState('search','/search/' );
 					break;
+				case '3': //setting
+					self.myPushState('setting','/setting/' );
+					break;
 				}
 			}
 		},
@@ -278,7 +307,8 @@ $(function(){
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
 							logs = $.map( logs, function( log,i){
-								if( $("#"+log.id ).length ){ return null; }
+								if( self.currentLog.hasOwnProperty( log.id ) ){ return null; }
+								self.currentLog[ log.id ] = log;
 								return log;
 							});
 							if( !logs.length ){ return; }
@@ -493,6 +523,7 @@ $(function(){
 
 			$("#list").empty();
 			$("#ch_foot").empty();
+			self.currentLog = {};
 
 			this.loadChannel(channel_id, channel_name);
 			this.goToPivotByName("channel");

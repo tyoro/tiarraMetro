@@ -43,6 +43,7 @@
 				array(
 					'max_id' => $max_id,
 					'channels' => $channel_list,
+					'all_channels' => $this->db->channel->getList(),
 					'logs' => $log_list,
 					'pivot' => $pivot,
 					'default_channel' => $default_channel,
@@ -56,6 +57,9 @@
 		}
 		public function search_select( ){
 			return $this->index_main( 'search' );
+		}
+		public function setting_select( ){
+			return $this->index_main( 'setting' );
 		}
 		public function channel_select( $channel_id ){
 			return $this->index_main( 'channel', $channel_id );
@@ -243,6 +247,7 @@
 	//routing
 	$app->get('/','index');
 	$app->get('/search/','search_select');
+	$app->get('/setting/','setting_select');
 	$app->get('/channel/:channel_id','channel_select',array('channel_id'=>'\d+'));
 	$app->post_and_get('/login','login' );
 	$app->get('/logout','logout' );
