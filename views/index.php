@@ -64,28 +64,37 @@
 				<?php } ?>
 			</select>
 			<div id="channel_setting_elements" style="display:none;" >
-			アイコンの表示:
-			<select name="on_icon">
-				<option value="default">既定値</option>
-				<option value="on">オン</option>
-				<option value="off">オフ</option>
-			</select><br/>
-			チャンネル一覧への表示:
-			<select name="view">
-				<option value="on">オン</option>
-				<option value="off">オフ</option>
-			</select><br/>
-			新着のチェック:
-			<select name="new_check">
-				<option value="on">オン</option>
-				<option value="off">オフ</option>
-			</select><br/>
-			ピックアップのチェック:
-			<select name="pickup_check">
-				<option value="on">オン</option>
-				<option value="off">オフ</option>
-			</select><br/>
-			<br/>
+			<dl>
+				<dt>アイコンの表示</dt>
+				<dd>
+					<select name="on_icon">
+						<option value="default">既定値</option>
+						<option value="on">オン</option>
+						<option value="off">オフ</option>
+					</select>
+				</dd>
+				<dl>チャンネル一覧への表示</dt>
+				<dd>
+					<select name="view">
+						<option value="on">オン</option>
+						<option value="off">オフ</option>
+					</select>
+				</dd>
+				<dt>新着のチェック</dt>
+				<dd>
+					<select name="new_check">
+						<option value="on">オン</option>
+						<option value="off">オフ</option>
+					</select>
+				</dd>
+				<dt>ピックアップのチェック</dt>
+				<dd>
+					<select name="pickup_check">
+						<option value="on">オン</option>
+						<option value="off">オフ</option>
+					</select>
+				</dd>
+			</dl>
 			<input type="submit" value='submit' />
 			</div>
 		</form>
