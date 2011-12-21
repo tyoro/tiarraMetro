@@ -174,6 +174,13 @@
 			}
 			return json_encode($return);
 		}
+		public function api_get_channel_name( $channel_id ){
+			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
+			else{
+				$return = array( 'error' => false, 'id' => $channel_id , 'name' => $this->db->channel->getName($channel_id) );
+			}
+			return json_encode($return);
+		}
 		
 		//api template
 		public function api_template(){
@@ -278,6 +285,7 @@
 	$app->post('/api/read/:channel_id','api_read',array('channel_id'=>'\d+'));
 	$app->post('/api/reset/unread','api_reset_unread');
 	$app->post('/api/setting/view/:channel_id','api_set_view',array('channel_id'=>'\d+'));
+	$app->post('/api/channel/name/:channel_id','api_get_channel_name',array('channel_id'=>'\d+'));
 	
 	$app->run();
 

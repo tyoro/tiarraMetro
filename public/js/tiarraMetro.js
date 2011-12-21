@@ -357,6 +357,25 @@ $(function(){
 				success:function(json){
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
+							
+							//新しいチャンネルの場合
+							if(! $('#ch_'+channel_id).length ){
+								$('ul.channel_list').prepend(
+								'<li id="ch_'+channel_id+'" ><span class="ch_name">new channel</span>&nbsp;'+
+							    '<span class="ch_num"></span></li>');
+								self.chLogs[ channel_id ] = new Array();
+								$.ajax({
+									url:self.mountPoint+'/api/channel/name/'+channel_id,
+									dataType:'json',
+									type:'POST',
+									success:function(chData){
+										$('#ch_'+chData.id+' span.ch_name').text( chData.name );
+									},
+								});
+
+								//todo: settingのチャンネル一覧に追加
+							}
+
 							setting = self.getChannelSettings( channel_id );
 							logs = $.map( logs, function( log,i){
 								if( self.currentLog.hasOwnProperty( log.id ) ){ return null; }
@@ -591,8 +610,8 @@ $(function(){
 			$('#ch_'+channel_id).attr('class','');
 			$('#ch_'+channel_id+' span.ch_num').html('');
 
-			channel_name.match( new RegExp( '(' + this.jsConf['log_popup_menu']['separator']+'\\w+)' ) );
-			this.currentMenu = this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]?this.jsConf['log_popup_menu']['network'][ RegExp.$1 ]:null;
+			channel_name.match( new RegExp( '(' + self.jsConf['log_popup_menu']['separator']+'\\w+)' ) );
+			self.currentMenu = self.jsConf['log_popup_menu']['network'][ RegExp.$1 ]?self.jsConf['log_popup_menu']['network'][ RegExp.$1 ]:null;
 
 			self.channel_setting = self.getChannelSettings( channel_id );
 			if( ( ! ( 'on_icon' in self.channel_setting ) )?self.jsConf['on_icon']:self.channel_setting['on_icon'] ){ 
@@ -601,18 +620,18 @@ $(function(){
 				$('#list').removeClass( 'on_icon' );
 			}
 
-			$.each( [].concat( this.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
+			$.each( [].concat( self.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
 			self.afterAdded();
 
 			$.ajax({
-				url:this.mountPoint+'/api/read/'+channel_id,
+				url:self.mountPoint+'/api/read/'+channel_id,
 				dataType:'json',
 				type:'POST',
 			});
 
-			if( this.chLogs[channel_id].length >= 30 ){
-				this.addMoreButton( );
+			if( self.chLogs[channel_id].length >= 30 ){
+				self.addMoreButton( );
 			}
 		},
 		addMoreButton : function(){
