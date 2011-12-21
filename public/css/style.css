@@ -156,6 +156,7 @@ ul.channel_list li.hit span.ch_num small {
 	display: block;
 	line-height: 1.4;
 	margin-top: 4px;
+	text-align: left;
 }
 	.line .message .inlineimage {
 		background-image: none;
