@@ -441,8 +441,6 @@ $(function(){
 
 			log.log = $.escapeHTML( log.log );
 
-			var link_class = self.jsConf.on_image === 2 ? 'boxviewimage' : 'inlineimage' ;
-
 			/* pickupタグの適用 */
 			if( log.pickup ){
 				$.each( self.jsConf.pickup_word,function(j,w){
@@ -450,8 +448,18 @@ $(function(){
 				});
 			}
 
+			log.filtered = true;
+
+			return log;
+		},
+
+		replaceLink : function(row, log){
+			var self = this;
+
+			var link_class = self.jsConf.on_image === 2 ? 'boxviewimage' : 'inlineimage' ;
+
 			/* URLと画像の展開 */
-			var sources = log.log.match(/((?:https?|ftp)\:\/\/[^\s　]+)/g);
+			var sources = (log || '').match(/((?:https?|ftp)\:\/\/[^\s　]+)/g);
 			var on_image = Number(self.jsConf.on_image);
 			var after = '';
 
@@ -467,8 +475,9 @@ $(function(){
 						dataType:'json',
 						type:'POST',
 						success: function (data) {
-							log.log = log.log.replace(source, function ($_) {
+							log = log.replace(source, function ($_) {
 								var value = data.source;
+								console.log(value);
 
 								if (value.length > 0) {
 									switch (on_image) {
@@ -494,17 +503,17 @@ $(function(){
 
 								return '<a href="'+$_+'" target="_blank">'+$_+'</a>';
 							});
+
+							log += after;
+
+							row.find('.message').eq(0).html(log);
 						}
 					});
+
 				}
 			}
-
-			log.log += after;
-			
-			log.filtered = true;
-
-			return log;
 		},
+
 		add_log:function( i, log ){
 			$('#list').prepend(this.createRow(log));
 		},
@@ -552,6 +561,9 @@ $(function(){
 			result += '</div>';
 			
 			result = $(result);
+
+			// リンクの置換。
+			self.replaceLink.apply(self, [result, log.log]);
 
 			/* log popup menuの処理 */
 			if( !searchFlag && self.currentMenu != null ){
