@@ -19,12 +19,6 @@ class ImageURLParser {
 		return false;
 	}
 
-	static function hasSuffix ($value, $suffix) {
-		$pattern = '/' . preg_quote($suffix, '/') . '$/';
-
-		return (preg_match($pattern, $value) === 1);
-	}
-
 	static function getServiceImageURL ($url) {
 		$url = trim($url);
 
@@ -34,14 +28,14 @@ class ImageURLParser {
 
 		if (empty($host) || empty($path)) return null;
 
-		if (ImageURLParser::hasSuffix($host, 'twitpic.com') === true) {
+		if (ImageURLParser::hasSuffix($host, 'twitpic.com')) {
 			$path = substr($path, 1);
 
-			if (ImageURLParser::hasSuffix($path, '/full') === true) {
+			if (ImageURLParser::hasSuffix($path, '/full')) {
 				$path = substr($path, 0, -5);
 			}
 
-			if(preg_match("/^[a-zA-Z0-9]/", $path)) {
+			if (ImageURLParser::isAlphaNumericOnly($path)) {
 				return sprintf('http://twitpic.com/show/mini/%s', $path);
 			}
 		} else if (ImageURLParser::hasSuffix($host, 'plixi.com')) {
@@ -51,6 +45,22 @@ class ImageURLParser {
 			$path = substr($path, 1);
 			return sprintf("%s:small", $url);
 		}
+	}
+
+	static function hasPrefix ($value, $prefix) {
+		$pattern = '/^' . preg_quote($prefix, '/') . '/';
+
+		return (preg_match($pattern, $value) === 1);
+	}
+
+	static function hasSuffix ($value, $suffix) {
+		$pattern = '/' . preg_quote($suffix, '/') . '$/';
+
+		return (preg_match($pattern, $value) === 1);
+	}
+
+	static function isAlphaNumericOnly ($value) {
+		return (preg_match('/^[0-9a-zA-Z]+$/', $value) === 1);
 	}
 
 }
