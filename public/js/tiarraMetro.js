@@ -485,11 +485,12 @@ $(function(){
 											after += '<br><a href="'+value+'" target="_blank" class="'+link_class+'"><img src="'+value+'"></a>';
 											break;
 										case 2:
-											return '<a href="'+value+'" class="'+link_class+'"><img src="'+value+'" width="50"></a>';
+											after += '<br><a href="'+value+'" target="_blank" class="'+link_class+'"><img src="'+value+'" width="50"></a>';
+											return '<a href="'+$_+'"  target="_blank">'+$_+'</a>';
 										default:
 											break;
 									}
-								} else if ($_.match(/(gif|jpe?g|gif|svg)$/)) {
+								} else if ($_.match(/\.(gif|jpe?g|gif|svg|png)$/)) {
 									switch (on_image) {
 										case 1:
 											after += '<br><a href="'+$_+'" target="_blank" class="'+link_class+'"><img src="'+$_+'"></a>';
@@ -507,6 +508,10 @@ $(function(){
 							log += after;
 
 							row.find('.message').eq(0).html(log);
+
+							if(self.jsConf.on_image === 2 ) {
+								$('#list .boxviewimage').lightBox();
+							}
 						}
 					});
 
@@ -525,7 +530,7 @@ $(function(){
 		},
 		afterAdded : function(){
 			if(this.jsConf.on_image === 2 ) {
-				$('#list .boxviewimage').lightBox();
+				// $('#list .boxviewimage').lightBox();
 			}
 		},
 		createRow : function( log,searchFlag ){
