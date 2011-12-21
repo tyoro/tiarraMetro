@@ -73,7 +73,7 @@
 						<option value="off">オフ</option>
 					</select>
 				</dd>
-				<dl>チャンネル一覧への表示</dt>
+				<dt>チャンネル一覧への表示</dt>
 				<dd>
 					<select name="view">
 						<option value="on">オン</option>

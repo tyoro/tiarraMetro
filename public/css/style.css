@@ -318,6 +318,20 @@ div#log_popup_menu ul li:hover {
 	background-color: #404040;
 }
 
+form#setting_form dl {
+	margin: 0.5em 0;
+	padding: 0;
+}
+
+form#setting_form dl dt:after {
+	content: " : ";
+}
+
+form#setting_form dl dd {
+	margin: 0.5em 0.8em;
+	padding: 0 0 0 2em;
+}
+
 /* clearfix */
 .line.text:after,
 .clearfix:after {
