@@ -7,6 +7,8 @@
 	include_once 'dao.php';
 	include_once 'myFitzgerald.php';
 	include_once 'lib/util.php';
+	include_once 'lib/imageURLParser.php';
+
 	include_once 'lib/Net/Socket/Tiarra.php';
 
 	class TiarraWEB extends MyFitzgerald {
@@ -181,6 +183,16 @@
 			}
 			return json_encode($return);
 		}
+
+		public function api_get_image_source(){
+			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
+			else{
+				$return = array( 'error' => false  );
+				$source = ImageURLParser::getServiceImageURL($this->request->url);
+				$return['source'] = !empty($source) ? $source : '' ;
+			}
+			return json_encode($return);
+		}
 		
 		//api template
 		public function api_template(){
@@ -246,7 +258,7 @@
 			exit;
 		}
 			
-        private function isLoggedIn() {
+ 		private function isLoggedIn() {
 			if( empty($this->options->password_md5) ){ return true; }
 			if( Cookie::get('UniqueId', $this->options->password_md5 ) == $this->options->my_name ){ return true; }
 			return !is_null($this->session->login);
@@ -286,6 +298,7 @@
 	$app->post('/api/reset/unread','api_reset_unread');
 	$app->post('/api/setting/view/:channel_id','api_set_view',array('channel_id'=>'\d+'));
 	$app->post('/api/channel/name/:channel_id','api_get_channel_name',array('channel_id'=>'\d+'));
+	$app->post('/api/image/source/','api_get_image_source');
 	
 	$app->run();
 

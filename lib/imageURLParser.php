@@ -137,11 +137,11 @@ class ImageURLParser {
 			$parameters = self::getParametersFromQuery($parsed_url['query']);
 
 			if (!empty($parameters['v'])) {
-				return sprintf('http://img.youtube.com/vi/%@/default.jpg', $parameters['v']);
+				return sprintf('http://img.youtube.com/vi/%s/default.jpg', $parameters['v']);
 			}
 		} else if ($host === 'youtu.be') {
 			$path = substr($path, 1);
-			return sprintf('http://img.youtube.com/vi/%@/default.jpg', $path);
+			return sprintf('http://img.youtube.com/vi/%s/default.jpg', $path);
 		}
 /*
 		#

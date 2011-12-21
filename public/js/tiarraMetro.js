@@ -443,34 +443,66 @@ $(function(){
 
 			var link_class = self.jsConf.on_image === 2 ? 'boxviewimage' : 'inlineimage' ;
 
-				/* pickupタグの適用 */
-				if( log.pickup ){
-					$.each( self.jsConf.pickup_word,function(j,w){
-						log.log = log.log.replace( w, '<strong class="highlight">'+w+'</strong>' );
-					});
-				}
-				var after = '';
+			/* pickupタグの適用 */
+			if( log.pickup ){
+				$.each( self.jsConf.pickup_word,function(j,w){
+					log.log = log.log.replace( w, '<strong class="highlight">'+w+'</strong>' );
+				});
+			}
 
 			/* URLと画像の展開 */
-			log.log = log.log.replace(/((?:https?|ftp):\/\/[^\s　]+)/g, function ($$, $1) {
-				if ($1.match(/(?:png|jpe?g|gif)$/)) {
-					var on_image = Number(self.jsConf.on_image);
-					switch (on_image) {
-						case 1:
-							after = '<br><a href="'+$1+'" target="_blank" class="'+link_class+'"><img src="'+$1+'"></a>';
-							break;
-						case 2:
-							return '<a href="'+$1+'" class="'+link_class+'"><img src="'+$1+'" width="50"></a>';
-						default:
-							break;
-					}
-				}
+			var sources = log.log.match(/((?:https?|ftp)\:\/\/[^\s　]+)/g);
+			var on_image = Number(self.jsConf.on_image);
+			var after = '';
 
-				return '<a href="'+$1+'" target="_blank" class="url">'+$1+'</a>';
-			});
+			if (sources) {
+				for (var i = 0, l = sources.length; i < l; i++) {
+					var source = sources[i];
+
+					$.ajax({
+						url:self.mountPoint+'/api/image/source/',
+						data:{
+							url:source
+						},
+						dataType:'json',
+						type:'POST',
+						success: function (data) {
+							log.log = log.log.replace(source, function ($_) {
+								var value = data.source;
+
+								if (value.length > 0) {
+									switch (on_image) {
+										case 1:
+											after += '<br><a href="'+value+'" target="_blank" class="'+link_class+'"><img src="'+value+'"></a>';
+											break;
+										case 2:
+											return '<a href="'+value+'" class="'+link_class+'"><img src="'+value+'" width="50"></a>';
+										default:
+											break;
+									}
+								} else if ($_.match(/(gif|jpe?g|gif|svg)$/)) {
+									switch (on_image) {
+										case 1:
+											after += '<br><a href="'+$_+'" target="_blank" class="'+link_class+'"><img src="'+$_+'"></a>';
+											break;
+										case 2:
+											return '<a href="'+$_+'" class="'+link_class+'"><img src="'+$_+'" width="50"></a>';
+										default:
+											break;
+									}
+								}
+
+								return '<a href="'+$_+'" target="_blank">'+$_+'</a>';
+							});
+						}
+					});
+				}
+			}
+
 			log.log += after;
 			
 			log.filtered = true;
+
 			return log;
 		},
 		add_log:function( i, log ){
