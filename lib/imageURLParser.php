@@ -85,12 +85,14 @@ class ImageURLParser {
 		# flickr
 		else if (self::hasSuffix($host, 'flic.kr')) {
 			$short_id = substr($path, 3);
+			$short_id = preg_replace('/\/?$/', '', $short_id);
 			return sprintf('http://flic.kr/p/img/%@_m.jpg', $short_id);
 		}
 		# instagram
 		else if (self::hasSuffix($host, 'instagr.am')) {
 			$short_id = substr($path, 3);
-			return sprintf('http://instagrnam/p/%s/media/?size=m', $short_id);
+			$short_id = preg_replace('/\/?$/', '', $short_id);
+			return sprintf('http://instagr.am/p/%s/media/?size=m', $short_id);
 		}
 		# movapic
 		else if (self::hasSuffix($host, 'movapic.com')) {
