@@ -29,7 +29,7 @@
 			$max_id = $this->db->log->getMaxID();
 			foreach( $this->db->channel->getUnreadList( '', $this->options->channel_list_sort ) as $ch ){
 				$channel_list[$ch['id']] = $ch;
-				$log_list[$ch['id']] = $this->db->log->getLog($ch['id']);
+				$log_list[$ch['id']] = $this->logFilter( $this->db->log->getLog($ch['id']) );
 				if( $default_channel_id == $ch['id'] ){ $default_channel[ 'name' ] = $ch['name']; }
 			}
 			switch( $jsConf[ 'template' ] ){
@@ -137,7 +137,7 @@
 				$return = array( 'error' => false );
 				$prev_id= null;
 				if( strlen($this->request->prev_id ) ){ $prev_id = $this->request->prev_id; }
-				$return['logs'] = $this->db->log->getLog($channel_id,$prev_id,100,'old'); 
+				$return['logs'] = $this->logFilter($this->db->log->getLog($channel_id,$prev_id,100,'old')); 
 
 			}
 			return json_encode($return);
@@ -184,16 +184,6 @@
 			return json_encode($return);
 		}
 
-		public function api_get_image_source(){
-			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
-			else{
-				$return = array( 'error' => false  );
-				$source = ImageURLParser::getServiceImageURL($this->request->url);
-				$return['source'] = !empty($source) ? $source : '' ;
-			}
-			return json_encode($return);
-		}
-		
 		//api template
 		public function api_template(){
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
@@ -267,13 +257,36 @@
 		//util
 		private function getLog( $channel_id, $max_id= null ){
 			$this->db->channel->updateReaded($channel_id);
-			return $this->db->log->getLog($channel_id, $max_id);
+			return $this->logFilter( $this->db->log->getLog($channel_id, $max_id) );
 		}
 		private function getLogs( $channel_id, $max_id= null ){
 			if( !empty($channel_id) && ctype_digit( $channel_id ) ){
 				$this->db->channel->updateReaded($channel_id);
 			}
-			return $this->db->log->getLogAll($max_id);
+			return $this->logFilter( $this->db->log->getLogAll($max_id) );
+		}
+		private function logFilter($logs){
+			$on_image = $this->options->on_image;
+			$link_class = $on_image === 2 ? 'boxviewimage' : 'inlineimage';
+
+			return array_map( function($log) use ($on_image,$link_class) {
+				$after = "";
+				
+				$log[ 'log' ] = htmlspecialchars( $log[ 'log' ] );
+
+				$log[ 'log' ] = preg_replace_callback( "/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/", function($url) use ($on_image,$link_class,&$after){
+					$url = $url[0];
+					if( ImageURLParser::isImageFileURL( $url ) ){
+						$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'"><img src="'.$url.'"></a>';
+					}else if( $resutlt = ImageURLParser::getServiceImageURL( $url ) ){
+						$after .= '<br><a href="'.$resutlt.'" target="_blank" class="'.$link_class.'"><img src="'.$resutlt.'"></a>';
+					}
+
+					return '<a href="'.$url.'"  target="_blank">'.$url.'</a>';
+				}, $log['log'] ).$after;
+				
+				return $log;
+			}, $logs);
 		}
 	}
 
@@ -298,7 +311,6 @@
 	$app->post('/api/reset/unread','api_reset_unread');
 	$app->post('/api/setting/view/:channel_id','api_set_view',array('channel_id'=>'\d+'));
 	$app->post('/api/channel/name/:channel_id','api_get_channel_name',array('channel_id'=>'\d+'));
-	$app->post('/api/image/source/','api_get_image_source');
 	
 	$app->run();
 

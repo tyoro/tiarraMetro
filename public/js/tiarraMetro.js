@@ -295,10 +295,6 @@ $(function(){
 						;
 				}
 			});
-
-			if(this.jsConf.on_image === 2 ) {
-				$('#list .boxviewimage').lightBox();
-			}
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
@@ -439,7 +435,7 @@ $(function(){
 			var self = this;
 			if( log.filtered ){ return log; }
 
-			log.log = $.escapeHTML( log.log );
+			//log.log = $.escapeHTML( log.log );
 
 			/* pickupタグの適用 */
 			if( log.pickup ){
@@ -453,72 +449,6 @@ $(function(){
 			return log;
 		},
 
-		replaceLink : function(row, log){
-			var self = this;
-
-			var link_class = self.jsConf.on_image === 2 ? 'boxviewimage' : 'inlineimage' ;
-
-			/* URLと画像の展開 */
-			var sources = (log || '').match(/((?:https?|ftp)\:\/\/[^\s　]+)/g);
-			var on_image = Number(self.jsConf.on_image);
-			var after = '';
-
-			if (sources) {
-				for (var i = 0, l = sources.length; i < l; i++) {
-					var source = sources[i];
-
-					$.ajax({
-						url:self.mountPoint+'/api/image/source/',
-						data:{
-							url:source
-						},
-						dataType:'json',
-						type:'POST',
-						success: function (data) {
-							log = log.replace(source, function ($_) {
-								var value = data.source;
-								console.log(value);
-
-								if (value.length > 0) {
-									switch (on_image) {
-										case 1:
-											after += '<br><a href="'+value+'" target="_blank" class="'+link_class+'"><img src="'+value+'"></a>';
-											break;
-										case 2:
-											after += '<br><a href="'+value+'" target="_blank" class="'+link_class+'"><img src="'+value+'" width="50"></a>';
-											return '<a href="'+$_+'"  target="_blank">'+$_+'</a>';
-										default:
-											break;
-									}
-								} else if ($_.match(/\.(gif|jpe?g|gif|svg|png)$/)) {
-									switch (on_image) {
-										case 1:
-											after += '<br><a href="'+$_+'" target="_blank" class="'+link_class+'"><img src="'+$_+'"></a>';
-											break;
-										case 2:
-											return '<a href="'+$_+'" class="'+link_class+'"><img src="'+$_+'" width="50"></a>';
-										default:
-											break;
-									}
-								}
-
-								return '<a href="'+$_+'" target="_blank">'+$_+'</a>';
-							});
-
-							log += after;
-
-							row.find('.message').eq(0).html(log);
-
-							if(self.jsConf.on_image === 2 ) {
-								$('#list .boxviewimage').lightBox();
-							}
-						}
-					});
-
-				}
-			}
-		},
-
 		add_log:function( i, log ){
 			$('#list').prepend(this.createRow(log));
 		},
@@ -530,7 +460,7 @@ $(function(){
 		},
 		afterAdded : function(){
 			if(this.jsConf.on_image === 2 ) {
-				// $('#list .boxviewimage').lightBox();
+				$('#list .boxviewimage').lightBox();
 			}
 		},
 		createRow : function( log,searchFlag ){
@@ -566,9 +496,6 @@ $(function(){
 			result += '</div>';
 			
 			result = $(result);
-
-			// リンクの置換。
-			self.replaceLink.apply(self, [result, log.log]);
 
 			/* log popup menuの処理 */
 			if( !searchFlag && self.currentMenu != null ){
