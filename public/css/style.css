@@ -225,6 +225,9 @@ input[type=submit] {
 	-webkit-border-radius: .5em;
 	border-radius: .5em,.5em,.5em,.5em;
 }
+input[type=submit]:disabled {
+	color: gray;
+}
 input[type=button] {
 	margin-top: 1em;
 	width: 100%;
