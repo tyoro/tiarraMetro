@@ -643,7 +643,7 @@ $(function(){
 				$('#list').removeClass( 'on_icon' );
 			}
 
-			var logs = [].concat(self.chLogs[channel_id].reverse());
+			var logs = [].concat(self.chLogs[channel_id]).reverse();
 
 			$.each( logs , function(i,log){ self.add_log(i,log, logs.length); } );
 
