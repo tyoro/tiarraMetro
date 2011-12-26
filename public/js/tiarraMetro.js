@@ -384,7 +384,10 @@ $(function(){
 								//todo: settingのチャンネル一覧に追加
 							}
 
+							/* 設定のロード */
 							setting = self.getChannelSettings( channel_id );
+
+							/* 重複チェック */
 							logs = $.map( logs, function( log,i){
 								if( self.currentLog.hasOwnProperty( log.id ) ){ return null; }
 								self.currentLog[ log.id ] = log;
@@ -393,9 +396,9 @@ $(function(){
 							if( !logs.length ){ return; }
 
 							/* pickup word の検出とフラグの追加 */
-							if( !('pickup_check' in setting) || setting['pickup_check'] ){
+							if( ( !('pickup_check' in setting) || setting['pickup_check'] ) && self.jsConf.pickup_word && self.jsConf.pickup_word.length ){
 								$.each( logs, function( i,log){
-									if( self.jsConf.pickup_word && self.jsConf.pickup_word.length && log.nick != self.jsConf.my_name ){
+									if( log.is_notice != 1 && log.nick != self.jsConf.my_name ){
 										$.each( self.jsConf.pickup_word,function(j,w){
 											if( log.log.indexOf(w) >= 0 ){
 												$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
