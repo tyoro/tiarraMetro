@@ -37,17 +37,22 @@
 		metroNotifierSendMessage.apply(this, ['fatal'].concat(args));
 	}
 
-	function metroNotifierSendMessage (type, message, show, hide) {
+	function metroNotifierSendMessage (type, message, options) {
 		var notifier = this;
 
 		type = type.replace(/\W+/g, '');
 		message = (message || '').toString().replace(/\n+/g, ' ');
+		options = options ? options : {} ;
+
+		var show = options.show ? options.show : null ;
+		var hide = options.hide ? options.hide : null ;
+		var delay = options.delay ? Number(options.delay) : this.delay ;
 
 		var dl = d.createElement('dl');
 		var dt = d.createElement('dt');
 		var dd = d.createElement('dd');
 
-		dl.className = 'metro_notifier metro_notifier_' + type;
+		dl.className = 'clearfix metro_notifier metro_notifier_' + type;
 		dl.appendChild(dt.appendChild(d.createTextNode(type)));
 		dl.appendChild(dd.appendChild(d.createTextNode(message)));
 
@@ -65,7 +70,7 @@
 			}
 
 			clearTimeout(timer_id);
-		}, notifier.delay);
+		}, delay);
 	}
 
 })(this, document, jQuery);

@@ -15,6 +15,7 @@
 <link type="text/css" rel="stylesheet" href="css/jquery.metro.css" />
 <link type="text/css" rel="stylesheet" href="css/jquery.jgrowl.css" />
 <link type="text/css" rel="stylesheet" href="css/jquery.lightbox-0.5.css" />
+<link type="text/css" rel="stylesheet" href="css/metro.notifier.css" />
 <link type="text/css" rel="stylesheet" href="<?php print ((strpos( $options->style, 'http' )!==false)?'':'css/').$options->style; ?>" />
 <script type="text/javascript" src= "js/jquery.js"></script>
 <script type="text/javascript" src= "js/jquery.metro.js"></script>
