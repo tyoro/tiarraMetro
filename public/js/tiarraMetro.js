@@ -180,6 +180,9 @@ $(function(){
 			});
 			/* チャンネル設定の適用 */
 			$('form#setting_form').submit( function(){
+				var submit = $('input[type=submit]', this );
+				submit.attr('disabled','disabled');
+
 				channel_id = $('select#channel_setting_select option:selected').val();
 				on_icon = $('form#setting_form select[name=on_icon] option:selected').val();
 				if( on_icon == 'default' ){
@@ -197,6 +200,9 @@ $(function(){
 					data:{
 						value: $('form#setting_form select[name=view] option:selected').val()
 					},
+					success: function( data ){
+						submit.removeAttr('disabled');
+					}
 				});
 
 				return false;
