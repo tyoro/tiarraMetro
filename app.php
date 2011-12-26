@@ -279,7 +279,7 @@
 					if( ImageURLParser::isImageFileURL( $url ) ){
 						$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'"><img src="'.$url.'"></a>';
 					}else if( $resutlt = ImageURLParser::getServiceImageURL( $url ) ){
-						$after .= '<br><a href="'.$resutlt.'" target="_blank" class="'.$link_class.'"><img src="'.$resutlt.'"></a>';
+						$after .= '<br><a href="'.$resutlt[0].'" target="_blank" class="'.$link_class.'"><img src="'.$resutlt[1].'"></a>';
 					}
 
 					return '<a href="'.$url.'"  target="_blank">'.$url.'</a>';
