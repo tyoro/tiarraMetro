@@ -664,7 +664,7 @@ $(function(){
 			button = $('<input type="button" value="more">');
 			button.click(function(){
 				$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..."></div>' );
-				self.currentBuffer.current.page++;
+				self.channelBuffer.current.page++;
 
 				$.ajax({
 					url:self.mountPoint+'/api/logs/'+self.currentChannel,
