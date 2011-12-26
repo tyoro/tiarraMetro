@@ -20,6 +20,8 @@ $(function(){
 			this.variable = {};
 			this.currentLog = {};
 
+			this.channelBuffer = { prev: {}, current: {} };
+
 			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
 			this.htmlInitialize( param );
@@ -420,7 +422,7 @@ $(function(){
 
 							/* 選択中のチャンネルの場合、domへの流し込みを行う */
 							if( channel_id == self.currentChannel ){
-								$.each( logs.reverse(), function(i,log){ self.add_log(i,log); } );
+								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, logs.length); } );
 							}
 							
 							if( !('new_check' in setting) || setting['new_check'] ){
@@ -468,11 +470,27 @@ $(function(){
 			return log;
 		},
 
-		add_log:function( i, log ){
-			$('#list').prepend(this.createRow(log));
+		add_log:function( i, log, l ){
+			var self = this;
+			var row = self.createRow(log);
+
+			console.log(self.channelBuffer);
+
+			if (l - i === self.channelBuffer.current.unread) {
+				row.addClass('unread_border');
+			}
+
+			$('#list').prepend(row);
 		},
-		more_log : function( i,log ){
-			$('#list').append(this.createRow(log));
+		more_log : function( i, log, l ){
+			var self = this;
+			var row = self.createRow(log);
+
+			if (self.channelBuffer.current.page * l + i === self.channelBuffer.current.unread) {
+				row.addClass('unread_border');
+			}
+
+			$('#list').append(row);
 		},
 		add_result : function( i, log ){
 			$('#search-list').prepend(this.createRow(log,true));
@@ -593,7 +611,18 @@ $(function(){
 
 			$("#list").empty();
 			$("#ch_foot").empty();
-			self.currentLog = {};
+
+			this.currentLog = {};
+
+			// 念のため
+			this.channelBuffer.prev = this.channelBuffer.current;
+
+			this.channelBuffer.current = {
+				id: channel_id,
+				name: channel_name,
+				page: 0,
+				unread: Number($('#ch_'+channel_id+' span.ch_num').text())
+			};
 
 			this.loadChannel(channel_id, channel_name);
 			this.goToPivotByName("channel");
@@ -615,7 +644,9 @@ $(function(){
 				$('#list').removeClass( 'on_icon' );
 			}
 
-			$.each( [].concat( self.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
+			var logs = [].concat(self.chLogs[channel_id].reverse());
+
+			$.each( logs , function(i,log){ self.add_log(i,log, logs.length); } );
 
 			self.afterAdded();
 
@@ -634,6 +665,8 @@ $(function(){
 			button = $('<input type="button" value="more">');
 			button.click(function(){
 				$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..."></div>' );
+				self.currentBuffer.current.page++;
+
 				$.ajax({
 					url:self.mountPoint+'/api/logs/'+self.currentChannel,
 					data:{
@@ -643,7 +676,7 @@ $(function(){
 					type:'POST',
 					success:function(json){
 						if( json['error'] ){ return; }
-						$.each(json['logs'],function(i,log){ self.more_log(i,log); });
+						$.each(json['logs'],function(i,log){ self.more_log(i,log, json['logs'].length); });
 						self.addMoreButton( );
 
 						self.afterAdded();
