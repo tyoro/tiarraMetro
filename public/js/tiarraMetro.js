@@ -299,14 +299,16 @@ $(function(){
 			$('.status-notifier').on( "click", function(event){		
 				if( ( hits = $('.channel_list li.hit') ).length){
 					hits.eq(0).click();
-					return;
+					$('.status-notifier').toggleClass('hit', !!$('.channel_list li.hit').length);
 				}
 				if( ( news = $('.channel_list li.new') ).length ){
 					news.eq(0).click();
-					return;
+					$('.status-notifier').toggleClass('new', !!$('.channel_list li.new').length);
 				}
-				
+				return;
 			});
+			
+			$('.status-notifier').toggleClass('new', !!$('.channel_list li.new').length);
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
