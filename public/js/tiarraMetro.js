@@ -295,6 +295,18 @@ $(function(){
 						;
 				}
 			});
+
+			$('.status-notifier').on( "click", function(event){		
+				if( ( hits = $('.channel_list li.hit') ).length){
+					hits.eq(0).click();
+					return;
+				}
+				if( ( news = $('.channel_list li.new') ).length ){
+					news.eq(0).click();
+					return;
+				}
+				
+			});
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
