@@ -306,8 +306,7 @@ $(function(){
 				if( ( hits = $('.channel_list li.hit') ).length){
 					hits.eq(0).click();
 					$('.status-notifier').toggleClass('hit', !!$('.channel_list li.hit').length);
-				}
-				if( ( news = $('.channel_list li.new') ).length ){
+				}else if( ( news = $('.channel_list li.new') ).length ){
 					news.eq(0).click();
 					$('.status-notifier').toggleClass('new', !!$('.channel_list li.new').length);
 				}
