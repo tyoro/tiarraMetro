@@ -302,18 +302,17 @@ $(function(){
 				}
 			});
 
-			$('.status-notifier').on( "click", function(event){		
-				if( ( hits = $('.channel_list li.hit') ).length){
-					hits.eq(0).click();
-					$('.status-notifier').toggleClass('hit', !!$('.channel_list li.hit').length);
-				}else if( ( news = $('.channel_list li.new') ).length ){
-					news.eq(0).click();
-					$('.status-notifier').toggleClass('new', !!$('.channel_list li.new').length);
+			$(".status-notifier").on("click", function(event) {
+				var channels = $(".channel_list li");
+				var target = channels.siblings(".hit:first");
+				if (!target.length) {
+					target = channels.siblings(".new:first");
 				}
-				return;
+				target.click();
+				self.updateStatusNotifier();
 			});
 			
-			$('.status-notifier').toggleClass('new', !!$('.channel_list li.new').length);
+			self.updateStatusNotifier();
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
@@ -337,8 +336,7 @@ $(function(){
 			}
 			else {
 				self.popup.css('display','none');
-				$('.status-notifier').toggleClass('new', !!$('.channel_list li.new').length);
-				$('.status-notifier').toggleClass('hit', !!$('.channel_list li.hit').length);
+				self.updateStatusNotifier();
 
 				switch (index) {
 				case '0': //channel list
@@ -410,7 +408,6 @@ $(function(){
 											if( log.log.indexOf(w) >= 0 ){
 												$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
 												$('#ch_'+channel_id).addClass('hit');
-												$('.status-notifier').addClass('hit');
 												logs[i].pickup = true;
 											}
 										});
@@ -428,7 +425,6 @@ $(function(){
 							
 							if( !('new_check' in setting) || setting['new_check'] ){
 								if( channel_id != self.currentChannel || self.isCurrentPivotByName("list") ){
-									$('.status-notifier').addClass('new');
 									$('#ch_'+channel_id).addClass('new');
 									num = $('#ch_'+channel_id+' span.ch_num');
 									currentNum = $('small',num).text()-0+logs.length;
@@ -444,6 +440,7 @@ $(function(){
 						});
 						self.max_id = json['max_id'];
 					}
+					self.updateStatusNotifier();
 					self.updating = false;
 				},
 				error:function(){
@@ -700,6 +697,12 @@ $(function(){
 			if( !channels.hasOwnProperty(channel_id) ) { channels[ channel_id ] = {}; }
 			channels[ channel_id ][ key ] = value;
 			localStorage.setItem( 'channels', JSON.stringify(channels) );
+		},
+		updateStatusNotifier: function() {
+			$(".status-notifier")
+				.toggleClass('new', !!$('.channel_list li.new').length)
+				.toggleClass('hit', !!$('.channel_list li.hit').length)
+				;
 		},
 
 		/* Pivot helpers */
