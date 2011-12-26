@@ -158,15 +158,21 @@ ul.channel_list li.hit span.ch_num small {
 	margin-top: 4px;
 	text-align: left;
 }
-	.line .message .inlineimage {
-		background-image: none;
-	}
-		.line .message .inlineimage img {
-			max-width: 50%;
-			max-height: 150px;
-			margin: 5px 0;
-			border: 1px solid #333;
-		}
+.line .message .inlineimage {
+	background-image: none;
+}
+.line .message .inlineimage img {
+	max-width: 50%;
+	max-height: 150px;
+	margin: 5px 0;
+	border: 1px solid #333;
+}
+.line .message .boxviewimage img {
+	max-width: 50px;
+	max-height: 150px;
+	margin: 5px 0;
+	border: 1px solid #333;
+}
 .on_icon .line .message {
 	margin-left: 37px;
 }
@@ -218,6 +224,9 @@ input[type=submit] {
 	-moz-border-radius: .5em;
 	-webkit-border-radius: .5em;
 	border-radius: .5em,.5em,.5em,.5em;
+}
+input[type=submit]:disabled {
+	color: gray;
 }
 input[type=button] {
 	margin-top: 1em;
