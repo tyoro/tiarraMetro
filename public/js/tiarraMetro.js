@@ -477,9 +477,15 @@ $(function(){
 		add_result : function( i, log ){
 			$('#search-list').prepend(this.createRow(log,true));
 		},
-		afterAdded : function(){
+		afterAdded : function( unread_num ){
 			if(this.jsConf.on_image === 2 ) {
 				$('#list .boxviewimage').lightBox();
+			}
+
+			if (unread_num && unread_num > 0) {
+				$('#list > div').eq(unread_num - 1).addClass('unread_border');
+			} else {
+				$('#list > div').removeClass('unread_border');
 			}
 		},
 		createRow : function( log,searchFlag ){
@@ -601,6 +607,8 @@ $(function(){
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
 
+			var unread_num = Number($('#ch_'+channel_id+' span.ch_num').text());
+
 			$('div.headers span.header[name=channel]').html( channel_name );
 			$('#ch_'+channel_id).attr('class','');
 			$('#ch_'+channel_id+' span.ch_num').html('');
@@ -617,7 +625,7 @@ $(function(){
 
 			$.each( [].concat( self.chLogs[channel_id]).reverse() , function(i,log){ self.add_log(i,log); } );
 
-			self.afterAdded();
+			self.afterAdded(unread_num);
 
 			$.ajax({
 				url:self.mountPoint+'/api/read/'+channel_id,
@@ -626,10 +634,11 @@ $(function(){
 			});
 
 			if( self.chLogs[channel_id].length >= 30 ){
-				self.addMoreButton( );
+				self.addMoreButton( unread_num );
 			}
+
 		},
-		addMoreButton : function(){
+		addMoreButton : function( unread_num ){
 			var self = this;
 			button = $('<input type="button" value="more">');
 			button.click(function(){
@@ -644,9 +653,10 @@ $(function(){
 					success:function(json){
 						if( json['error'] ){ return; }
 						$.each(json['logs'],function(i,log){ self.more_log(i,log); });
-						self.addMoreButton( );
 
-						self.afterAdded();
+						self.afterAdded(unread_num);
+
+						self.addMoreButton( unread_num );
 					}
 				});
 			});
