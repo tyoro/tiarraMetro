@@ -1,8 +1,8 @@
 <?php
 	
-	include_once 'lib/adodb5/adodb.inc.php';
-	include_once 'lib/adodb5/adodb-pear.inc.php';
-	include_once 'lib/fitzgerald.php';
+	include_once 'adodb5/adodb.inc.php';
+	include_once 'adodb5/adodb-pear.inc.php';
+	include_once 'fitzgerald.php';
 
 	class MyFitzgerald extends fitzgerald{
 		var $db = null;
