@@ -4,9 +4,10 @@ $(function(){
 		return $("<div />").text(val).html();
 	};
 
-    var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
+	var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
 
 	var TiarraMetroClass = new Class();
+
 	TiarraMetroClass.prototype = {
 		initialize: function( param ){
 			var self = this;
@@ -473,8 +474,6 @@ $(function(){
 		add_log:function( i, log, l ){
 			var self = this;
 			var row = self.createRow(log);
-
-			console.log(self.channelBuffer);
 
 			if (l - i === self.channelBuffer.current.unread) {
 				row.addClass('unread_border');
