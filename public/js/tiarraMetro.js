@@ -624,7 +624,9 @@ $(function(){
 			};
 
 			this.loadChannel(channel_id, channel_name);
-			this.goToPivotByName("channel");
+			if( !this.isCurrentPivotByName("channel")){
+				this.goToPivotByName("channel");
+			}
 		},
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
