@@ -151,7 +151,7 @@ $(function(){
 						}
 						self.addCloseButton();
 
-						self.afterAdded();
+						self.afterAdded(null);
 					}
 				})
 				return false;
@@ -458,7 +458,7 @@ $(function(){
 
 									num = $('#ch_'+channel_id+' span.ch_num');
 
-									self.channelBuffer[channel_id].unread = currentNum[channel_id] = $('small',num).text()-0+logs.length;
+									self.channelBuffer[channel_id].unread = currentNum[channel_id] = Number($('small',num).text())-0+logs.length;
 									self.channelBuffer[channel_id].page = 0;
 
 									if( currentNum[channel_id] > 0 ){
@@ -475,10 +475,11 @@ $(function(){
 
 							/* 選択中のチャンネルの場合、domへの流し込みを行う */
 							if( channel_id == self.currentChannel ){
+								self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, logs.length); } );
-							}
 
-							self.afterAdded();
+								self.afterAdded(channel_id);
+							}
 						});
 						self.max_id = json['max_id'];
 					}
@@ -526,9 +527,7 @@ $(function(){
 			if (channel_id) {
 				var channel = self.channelBuffer[channel_id];
 
-				$.each(channel.logPool, function (i, e) { $(e).removeClass('unread_border') })
-
-				if (channel.unread > 0 && l > i && l - i === channel.unread) {
+				if (channel.unread > 0 && i + 1 === channel.unread) {
 					row.addClass('unread_border');
 					channel.logPool.push(row.get(0));
 				}
@@ -566,9 +565,13 @@ $(function(){
 		add_result : function( i, log ){
 			$('#search-list').prepend(this.createRow(log,true));
 		},
-		afterAdded : function(){
+		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
 				$('#list .boxviewimage').lightBox();
+			}
+
+			if (channel_id) {
+				this.channelBuffer[channel_id].logPool = [];
 			}
 		},
 		createRow : function( log,searchFlag ){
@@ -685,10 +688,8 @@ $(function(){
 
 			this.currentLog = {};
 
-			var unread_num = $('#ch_'+channel_id+' span.ch_num');
+			var unread_num = $('#ch_'+channel_id+' span.ch_num small');
 			this.channelBuffer[channel_id].unread = unread_num.length > 0 ? Number(unread_num.text()) : 0 ;
-
-			console.log(this.channelBuffer[channel_id]);
 
 			this.loadChannel(channel_id, channel_name);
 
@@ -713,11 +714,12 @@ $(function(){
 				$('#list').removeClass( 'on_icon' );
 			}
 
-			var logs = [].concat(self.chLogs[channel_id]).reverse();
+			self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
 
+			var logs = [].concat(self.chLogs[channel_id]).reverse();
 			$.each( logs , function(i,log){ self.add_log(i,log, logs.length); } );
 
-			self.afterAdded();
+			self.afterAdded(channel_id);
 
 			$.ajax({
 				url:self.mountPoint+'/api/read/'+channel_id,
@@ -748,7 +750,7 @@ $(function(){
 						$.each(json['logs'],function(i,log){ self.more_log(i,log, json['logs'].length); });
 						self.addMoreButton( );
 
-						self.afterAdded();
+						self.afterAdded(self.currentChannel);
 					}
 				});
 			});
