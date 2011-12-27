@@ -686,14 +686,9 @@ $(function(){
 			this.currentLog = {};
 
 			var unread_num = $('#ch_'+channel_id+' span.ch_num');
+			this.channelBuffer[channel_id].unread = unread_num.length > 0 ? Number(unread_num.text()) : 0 ;
 
-			this.channelBuffer[channel_id] = {
-				id: channel_id,
-				name: channel_name,
-				page: 0,
-				unread: unread_num ? Number($('#ch_'+channel_id+' span.ch_num').text()) : 0,
-				logPool: []
-			};
+			console.log(this.channelBuffer[channel_id]);
 
 			this.loadChannel(channel_id, channel_name);
 
