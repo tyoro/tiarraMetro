@@ -524,12 +524,13 @@ $(function(){
 			}
 
 			if (channel_id) {
-				$.each(self.channelBuffer[self.currentChannel].logPool, function (i, e) { $(e).removeClass('unread_border') })
+				var channel = self.channelBuffer[channel_id];
 
-				if (self.channelBuffer[self.currentChannel].unread > 0 && l > i && l - i === self.channelBuffer[self.currentChannel].unread) {
+				$.each(channel.logPool, function (i, e) { $(e).removeClass('unread_border') })
+
+				if (channel.unread > 0 && l > i && l - i === channel.unread) {
 					row.addClass('unread_border');
-
-					self.channelBuffer[self.currentChannel].logPool.push(row.get(0));
+					channel.logPool.push(row.get(0));
 				}
 			}
 
@@ -539,9 +540,26 @@ $(function(){
 			var self = this;
 			var row = self.createRow(log);
 
-			//if (self.channelBuffer.current.page * l + i === self.channelBuffer.current.unread) {
-				//row.addClass('unread_border');
-			//}
+			var path = window.location.pathname.substring(1).split('/');
+
+			var channel_id = null;
+
+			if (self.currentChannel && self.currentChannel in self.channelBuffer) {
+				channel_id = self.currentChannel;
+			} else if (path && path[0] === 'channel' && channel_id in self.channelBuffer) {
+				channel_id = Number(path[1]);
+			}
+
+			if (channel_id) {
+				var channel = self.channelBuffer[channel_id];
+
+				$.each(channel.logPool, function (i, e) { $(e).removeClass('unread_border') })
+
+				if (channel.unread > 0 && l > i && channel && l - i === channel.unread) {
+					row.addClass('unread_border');
+					channel.logPool.push(row.get(0));
+				}
+			}
 
 			$('#list').append(row);
 		},
@@ -667,14 +685,18 @@ $(function(){
 
 			this.currentLog = {};
 
+			var unread_num = $('#ch_'+channel_id+' span.ch_num');
+
 			this.channelBuffer[channel_id] = {
 				id: channel_id,
 				name: channel_name,
 				page: 0,
-				unread: Number($('#ch_'+channel_id+' span.ch_num').text())
+				unread: unread_num ? Number($('#ch_'+channel_id+' span.ch_num').text()) : 0,
+				logPool: []
 			};
 
 			this.loadChannel(channel_id, channel_name);
+
 			if( !this.isCurrentPivotByName("channel")){
 				this.goToPivotByName("channel");
 			}
