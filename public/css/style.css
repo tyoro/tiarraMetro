@@ -112,6 +112,9 @@ ul.channel_list li.hit span.ch_num small {
 	padding: 3px 3px 5px;
 	border-bottom: 1px solid #404040;
 }
+.line.unread_border {
+	border-bottom: 3px dashed #cccccc;
+}
 .line[type="notice"] {
 	color: #aaa;
 }
