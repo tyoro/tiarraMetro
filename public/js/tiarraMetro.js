@@ -328,6 +328,26 @@ $(function(){
 						.on("click", function() { newOnClick($(this)); })
 						.on("click", function() { oldOnClick($(this)); })
 						;
+				},
+				selectedItemChanged:function( index ){
+					self.popup.css('display','none');
+					self.updateStatusNotifier();
+
+					switch (index) {
+					case '0': //channel list
+						self.myPushState( 'channel list','/' );
+						self.onListInvisible();
+						break;
+					case '1':
+						self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
+						break;
+					case '2': //search
+						self.myPushState('search','/search/' );
+						break;
+					case '3': //setting
+						self.myPushState('setting','/setting/' );
+						break;
+					}
 				}
 			});
 
@@ -345,7 +365,6 @@ $(function(){
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
-			var index = header.attr("index");
 
 			if (header.hasClass("current")) {
 				switch( header.attr("name") ){
@@ -361,26 +380,6 @@ $(function(){
 						}
 						self.setChannelSetting( self.currentChannel, 'on_icon', !on_icon );
 						break;
-				}
-			}
-			else {
-				self.popup.css('display','none');
-				self.updateStatusNotifier();
-
-				switch (index) {
-				case '0': //channel list
-					self.myPushState( 'channel list','/' );
-					self.onListInvisible();
-					break;
-				case '1':
-					self.myPushState($('div.headers span.header[index=1]').text(),'/channel/'+self.currentChannel );
-					break;
-				case '2': //search
-					self.myPushState('search','/search/' );
-					break;
-				case '3': //setting
-					self.myPushState('setting','/setting/' );
-					break;
 				}
 			}
 		},
@@ -691,9 +690,7 @@ $(function(){
 
 			this.loadChannel(channel_id, channel_name);
 
-			if( !this.isCurrentPivotByName("channel")){
-				this.goToPivotByName("channel");
-			}
+			this.goToPivotByName("channel");
 		},
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
@@ -825,10 +822,10 @@ $(function(){
 			return this.getPivotHeaderByIndex(index).hasClass("current");
 		},
 		goToPivotByName: function(name) {
-			this.getPivotHeaderByName(name).click();
+			this.getPivotController().pivotHeader_Click( this.getPivotHeaderByName(name) );
 		},
 		goToPivotByIndex: function(index) {
-			this.getPivotHeaderByIndex(index).click();
+			this.getPivotController().pivotHeader_Click( this.getPivotHeaderByIndex(index) );
 		},
 		goToNextPivot: function(){
 			var next = $(".metro-pivot .headers .header:gt(0):not(:empty):first");
