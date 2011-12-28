@@ -20,6 +20,10 @@ tiarra_socket_name: 'tiarrametro'
 #update_time: 3
 #pickup_word: [ 'hoge', 'ほげ' ]
 
+# 新着通知バーによる巡回 以下2行のどちらかの書式でも可
+#patrol_channel: '#test@irc'
+#patrol_channel: [ '#test@irc', '#main@irc' ]
+
 log_popup_menu:
 #    separator: '@'
     network:
