@@ -4,6 +4,20 @@ $(function(){
 		return $("<div />").text(val).html();
 	};
 
+	var bufferBase = {
+		id: null,
+		name: null,
+
+		addedUnread: 0,
+		moreUnread: 0,
+
+		page: 0,
+
+		// 未読管理用のプール
+		moreLogPool: [],
+		addedLogPool: []
+	};
+
 	var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
 
 	var TiarraMetroClass = new Class();
@@ -22,19 +36,6 @@ $(function(){
 			this.currentLog = {};
 			this.channelBuffer = [];
 
-			var bufferBase = {
-				id: null,
-				name: null,
-
-				addedUnread: 0,
-				moreUnread: 0,
-
-				page: 0,
-
-				// 未読管理用のプール
-				moreLogPool: [],
-				addedLogPool: []
-			};
 
 			for (var channel_id in param.chLogs) {
 				if (param.chLogs.hasOwnProperty(channel_id)) {
@@ -434,6 +435,8 @@ $(function(){
 								$('ul.channel_list').prepend('<li id="ch_'+channel_id+'" ><span class="ch_name">new channel</span>&nbsp;'+'<span class="ch_num"></span></li>');
 
 								self.chLogs[ channel_id ] = new Array();
+
+								self.channelBuffer[channel_id] = $.extend({}, bufferBase);
 
 								$.ajax({
 									url:self.mountPoint+'/api/channel/name/'+channel_id,
