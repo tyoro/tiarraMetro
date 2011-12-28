@@ -115,6 +115,13 @@ ul.channel_list li.hit span.ch_num small {
 .line.unread_border {
 	border-bottom: 3px dashed #cccccc;
 }
+.line.unread_border.unread_border_added {
+	border-bottom: 1px dashed #cccccc;
+}
+.line.unread_border.unread_border_more {
+	border-bottom: 3px dashed #b22222;
+}
+
 .line[type="notice"] {
 	color: #aaa;
 }
