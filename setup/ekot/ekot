@@ -1,0 +1,25 @@
+<?php
+require_once 'Ekot.php';
+$ekot = new Ekot();
+$arg = '';
+$command = $argv[1];
+switch ($command) {
+    case 'generate':
+        $arg = $argv[2];
+        if ($arg === null) exit('command fault. ex ekot generate name.');
+        call_user_func(array($ekot, $command), $arg);
+        break;
+
+    case 'migrate':
+        // $arg = $argv[2];
+        call_user_func(array($ekot, $command), $arg);
+        break;
+    case 'version' :
+        call_user_func(array($ekot, $command), $arg);
+        break;
+    case 'dump':
+        call_user_func(array($ekot, $command), $arg);
+    default:
+        break;
+}
+exit(0);
