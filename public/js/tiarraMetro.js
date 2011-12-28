@@ -475,7 +475,9 @@ $(function(){
 
 							/* 選択中のチャンネルの場合、domへの流し込みを行う */
 							if( channel_id == self.currentChannel ){
-								self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
+								$.each(self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
+								self.channelBuffer[channel_id].logPool = [];
+
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, logs.length); } );
 
 								self.afterAdded(channel_id);
@@ -527,7 +529,7 @@ $(function(){
 			if (channel_id) {
 				var channel = self.channelBuffer[channel_id];
 
-				if (channel.unread > 0 && i + 1 === channel.unread) {
+				if (channel.unread > 0 && l - i === channel.unread) {
 					row.addClass('unread_border');
 					channel.logPool.push(row.get(0));
 				}
@@ -568,10 +570,6 @@ $(function(){
 		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
 				$('#list .boxviewimage').lightBox();
-			}
-
-			if (channel_id) {
-				this.channelBuffer[channel_id].logPool = [];
 			}
 		},
 		createRow : function( log,searchFlag ){
@@ -714,12 +712,10 @@ $(function(){
 				$('#list').removeClass( 'on_icon' );
 			}
 
-			self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
+			$.each(self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
 
 			var logs = [].concat(self.chLogs[channel_id]).reverse();
 			$.each( logs , function(i,log){ self.add_log(i,log, logs.length); } );
-
-			self.afterAdded(channel_id);
 
 			$.ajax({
 				url:self.mountPoint+'/api/read/'+channel_id,
