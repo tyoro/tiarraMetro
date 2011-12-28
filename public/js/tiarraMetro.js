@@ -357,6 +357,24 @@ $(function(){
 				if (!target.length) {
 					target = channels.siblings(".new:first");
 				}
+				if (!target.length && self.jsConf.patrol_channel ){
+					switch( typeof self.jsConf.patrol_channel ){
+						case 'string':
+							channel_name = self.jsConf.patrol_channel;
+							break;
+						case 'object':
+							current_channel_name = $('div.headers span.header[name=channel]').text();
+							if( ( index = self.jsConf.patrol_channel.indexOf( current_channel_name ) ) != -1 && index < self.jsConf.patrol_channel.length-1 ){
+								channel_name = self.jsConf.patrol_channel[index+1];
+							}else{
+								channel_name = self.jsConf.patrol_channel[0];
+							}
+							break;
+						default:
+							return;
+					}
+					target = channels.siblings(":contains('"+channel_name+"')");
+				}
 				target.click();
 				self.updateStatusNotifier();
 			});

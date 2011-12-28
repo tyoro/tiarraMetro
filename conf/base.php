@@ -48,6 +48,7 @@ $jsConf = Array(
 		,'network' =>  array()
 	)
 	,'quickpost_auto_close' => true
+	,'patrol_channel' => false
 );
 
 $tig_default_popup_menu = Array(
