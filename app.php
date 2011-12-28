@@ -274,6 +274,14 @@
 				
 				$log[ 'log' ] = htmlspecialchars( $log[ 'log' ] );
 
+				if (preg_match_all('/\\x03([0-9]+)(.+?)\\x03/', $log['log'], $m)) {
+					if ($m[0]) {
+						foreach ($m[0] as $k=>$v) {
+							$log['log'] = str_replace($m[0][$k], "<span class='colorcode{$m[1][$k]}'>{$m[2][$k]}</span>", $log['log']);
+						}
+					}
+				}
+
 				$log[ 'log' ] = preg_replace_callback( "/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/", function($url) use ($on_image,$link_class,&$after){
 					$url = $url[0];
 					if( ImageURLParser::isImageFileURL( $url ) ){

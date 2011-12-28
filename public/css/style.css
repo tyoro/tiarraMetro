@@ -344,6 +344,14 @@ form#setting_form dl dd {
 	padding: 0 0 0 2em;
 }
 
+
+.colorcode10 {
+	color: green;
+}
+.colorcode14 {
+	color: gray;
+}
+
 /* clearfix */
 .line.text:after,
 .clearfix:after {
