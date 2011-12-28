@@ -576,7 +576,7 @@ $(function(){
 			if (channel_id) {
 				var channel = self.channelBuffer[channel_id];
 				var page = channel.page;
-				var border = page > 0 ? (page - 1) * 30 : 0 ;
+				var border = /* page > 0 ? (page - 1) * 30 : */ 0 ;
 
 				if (channel.moreUnread > 0 && border + i + 1 === channel.moreUnread) {
 					row.addClass('unread_border unread_border_more');
