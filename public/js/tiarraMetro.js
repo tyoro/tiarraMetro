@@ -689,9 +689,7 @@ $(function(){
 
 			this.loadChannel(channel_id, channel_name);
 
-			if( !this.isCurrentPivotByName("channel")){
-				this.goToPivotByName("channel");
-			}
+			this.goToPivotByName("channel");
 		},
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
