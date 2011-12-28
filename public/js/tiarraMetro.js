@@ -395,6 +395,7 @@ $(function(){
 			if (header.hasClass("current")) {
 				switch( header.attr("name") ){
 					case "list":
+						header.toggleClass('closed')
 						$("ul.channel_list").toggleClass("invisible");
 						break;
 					case 'channel':
@@ -793,12 +794,15 @@ $(function(){
 		},
 		onListInvisible: function(){
 			if( $('ul.channel_list li.new').length || $('ul.channel_list li.hit').length ){
+				$('div.headers span.header[name="list"]').addClass('closed');
 				$('ul.channel_list').addClass('invisible');
 			}else{
+				$('div.headers span.header[name="list"]').removeClass('closed');
 				$('ul.channel_list').removeClass('invisible');
 			}
 		},
 		offListInvisible: function(){
+			$('div.headers span.header[name="list"]').removeClass('closed');
 			$('ul.channel_list').removeClass('invisible');
 		},
 		/* local strage */

@@ -42,6 +42,14 @@ h3 {
 	marggin-bottom: .25em;
 }
 
+div.headers span[name="list"]:before {
+	content: '▽ ';
+}
+
+div.headers span[name="list"].closed:before {
+	content: '△';
+}
+
 ul.channel_list {
 	margin: 0;
 	padding: 0;
@@ -348,7 +356,7 @@ form#setting_form dl dt:after {
 
 form#setting_form dl dd {
 	margin: 0.5em 0.8em;
-	padding: 0 0 0 2em;
+	padding: 0;
 }
 
 
