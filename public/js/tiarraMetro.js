@@ -25,11 +25,15 @@ $(function(){
 			var bufferBase = {
 				id: null,
 				name: null,
-				unread: 0,
+
+				addedUnread: 0,
+				moreUnread: 0,
+
 				page: 0,
 
-				// 継ぎ足し未読管理用のプール
-				logPool: []
+				// 未読管理用のプール
+				moreLogPool: [],
+				addedLogPool: []
 			};
 
 			for (var channel_id in param.chLogs) {
@@ -245,10 +249,13 @@ $(function(){
 
 				for (var channel_id in self.channelBuffer) {
 					if (self.channelBuffer.hasOwnProperty(channel_id) && 'unread' in self.channelBuffer[channel_id]) {
-						$(self.channelBuffer[channel_id].logPool).removeClass('unread_border');
+						$(self.channelBuffer[channel_id].addedLogPool).removeClass('unread_border unread_border_added');
+						$(self.channelBuffer[channel_id].moreLogPool).removeClass('unread_border unread_border_more');
 
-						self.channelBuffer[channel_id].logPool = [];
-						self.channelBuffer[channel_id].unread = 0;
+						self.channelBuffer[channel_id].addedLogPool = [];
+						self.channelBuffer[channel_id].addedUnread = 0;
+						self.channelBuffer[channel_id].moreLogPool = [];
+						self.channelBuffer[channel_id].moreUnread = 0;
 						self.channelBuffer[channel_id].page = 0;
 					}
 				}
@@ -457,8 +464,7 @@ $(function(){
 
 									num = $('#ch_'+channel_id+' span.ch_num');
 
-									self.channelBuffer[channel_id].unread = currentNum[channel_id] = Number($('small',num).text())-0+logs.length;
-									self.channelBuffer[channel_id].page = 0;
+									self.channelBuffer[channel_id].addedUnread = currentNum[channel_id] = Number($('small',num).text())-0+logs.length;
 
 									if( currentNum[channel_id] > 0 ){
 										num.html( '<small>'+currentNum[channel_id]+'</small>' );
@@ -466,16 +472,15 @@ $(function(){
 								}else{
 									$('#ch_'+channel_id).removeClass('hit new');
 
-									self.channelBuffer[channel_id].unread = currentNum[channel_id] = logs.length;
-									self.channelBuffer[channel_id].page = 0;
+									self.channelBuffer[channel_id].addedUnread = currentNum[channel_id] = logs.length;
 								}
 							}
 
 
 							/* 選択中のチャンネルの場合、domへの流し込みを行う */
 							if( channel_id == self.currentChannel ){
-								$.each(self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
-								self.channelBuffer[channel_id].logPool = [];
+								$.each(self.channelBuffer[channel_id].addedLogPool, function (i, e) { $(e).removeClass('unread_border') });
+								self.channelBuffer[channel_id].addedLogPool = [];
 
 								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, logs.length); } );
 
@@ -528,9 +533,9 @@ $(function(){
 			if (channel_id) {
 				var channel = self.channelBuffer[channel_id];
 
-				if (channel.unread > 0 && l - i === channel.unread) {
-					row.addClass('unread_border');
-					channel.logPool.push(row.get(0));
+				if (channel.addedUnread > 0 && l - i === channel.addedUnread) {
+					row.addClass('unread_border unread_border_added');
+					channel.addedLogPool.push(row.get(0));
 				}
 			}
 
@@ -552,12 +557,12 @@ $(function(){
 
 			if (channel_id) {
 				var channel = self.channelBuffer[channel_id];
+				var page = channel.page;
+				var border = page > 0 ? (page - 1) * 30 : 0 ;
 
-				$.each(channel.logPool, function (i, e) { $(e).removeClass('unread_border') })
-
-				if (channel.unread > 0 && l > i && channel && l - i === channel.unread) {
-					row.addClass('unread_border');
-					channel.logPool.push(row.get(0));
+				if (channel.moreUnread > 0 && border + i + 1 === channel.moreUnread) {
+					row.addClass('unread_border unread_border_more');
+					channel.moreLogPool.push(row.get(0));
 				}
 			}
 
@@ -686,7 +691,7 @@ $(function(){
 			this.currentLog = {};
 
 			var unread_num = $('#ch_'+channel_id+' span.ch_num small');
-			this.channelBuffer[channel_id].unread = unread_num.length > 0 ? Number(unread_num.text()) : 0 ;
+			this.channelBuffer[channel_id].addedUnread = this.channelBuffer[channel_id].moreUnread = unread_num.length > 0 ? Number(unread_num.text()) : 0 ;
 
 			this.loadChannel(channel_id, channel_name);
 
@@ -709,7 +714,8 @@ $(function(){
 				$('#list').removeClass( 'on_icon' );
 			}
 
-			$.each(self.channelBuffer[channel_id].logPool, function (i, e) { $(e).removeClass('unread_border') });
+			$.each(self.channelBuffer[channel_id].addedLogPool, function (i, e) { $(e).removeClass('unread_border') });
+			self.channelBuffer[channel_id].addedLogPool = [];
 
 			var logs = [].concat(self.chLogs[channel_id]).reverse();
 			$.each( logs , function(i,log){ self.add_log(i,log, logs.length); } );
@@ -740,7 +746,10 @@ $(function(){
 					type:'POST',
 					success:function(json){
 						if( json['error'] ){ return; }
-						$.each(json['logs'],function(i,log){ self.more_log(i,log, json['logs'].length); });
+
+						$.each(self.channelBuffer[self.currentChannel].moreLogPool, function (i, e) { $(e).removeClass('unread_border') });
+						$.each(json['logs'],function(i,log){ self.more_log(i, log, json['logs'].length); });
+
 						self.addMoreButton( );
 
 						self.afterAdded(self.currentChannel);
