@@ -688,8 +688,6 @@ $(function(){
 			var unread_num = $('#ch_'+channel_id+' span.ch_num');
 			this.channelBuffer[channel_id].unread = unread_num.length > 0 ? Number(unread_num.text()) : 0 ;
 
-			console.log(this.channelBuffer[channel_id]);
-
 			this.loadChannel(channel_id, channel_name);
 
 			if( !this.isCurrentPivotByName("channel")){
