@@ -43,11 +43,19 @@ h3 {
 }
 
 div.headers span[name="list"]:before {
-	content: ' - ';
+	content: '△ ';
+	margin: 0.7em 5px 0 0;
+	float: left;
+	display: block;
+	font-size: 50%;
 }
 
 div.headers span[name="list"].closed:before {
-	content: ' + ';
+	content: '▽ ';
+	margin: 0.7em 5px 0 0;
+	float: left;
+	display: block;
+	font-size: 50%;
 }
 
 ul.channel_list {
@@ -365,7 +373,7 @@ form#setting_form dl dd {
 	color: Black;
 }
 .colorcode02 {
-	color: Navy Blue;
+	color: Navy;
 }
 .colorcode03 {
 	color: Green;
