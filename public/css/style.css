@@ -43,11 +43,11 @@ h3 {
 }
 
 div.headers span[name="list"]:before {
-	content: '▽ ';
+	content: '△ ';
 }
 
 div.headers span[name="list"].closed:before {
-	content: '△';
+	content: '▽
 }
 
 ul.channel_list {
