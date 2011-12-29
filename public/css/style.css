@@ -360,11 +360,53 @@ form#setting_form dl dd {
 }
 
 
+.colorcode01 {
+	color: Black;
+}
+.colorcode02 {
+	color: Navy Blue;
+}
+.colorcode03 {
+	color: Green;
+}
+.colorcode04 {
+	color: Red;
+}
+.colorcode05 {
+	color: Brown;
+}
+.colorcode06 {
+	color: Purple;
+}
+.colorcode07 {
+	color: Olive;
+}
+.colorcode08 {
+	color: Yellow;
+}
+.colorcode09 {
+	color: Lime;
+}
 .colorcode10 {
-	color: green;
+	color: Teal;
+}
+.colorcode11 {
+	color: Aqua;
+}
+.colorcode12 {
+	color: RoyalBlue;
+}
+.colorcode13 {
+	color: HotPink;
 }
 .colorcode14 {
-	color: gray;
+	color: DarkGray;
+}
+.colorcode15 {
+	color: LightGray;
+}
+.colorcode16 {
+	color: White;
 }
 
 /* clearfix */
