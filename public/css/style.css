@@ -42,6 +42,22 @@ h3 {
 	marggin-bottom: .25em;
 }
 
+div.headers span[name="list"]:before {
+	content: '△ ';
+	margin: 0.7em 5px 0 0;
+	float: left;
+	display: block;
+	font-size: 50%;
+}
+
+div.headers span[name="list"].closed:before {
+	content: '▽ ';
+	margin: 0.7em 5px 0 0;
+	float: left;
+	display: block;
+	font-size: 50%;
+}
+
 ul.channel_list {
 	margin: 0;
 	padding: 0;
@@ -115,6 +131,13 @@ ul.channel_list li.hit span.ch_num small {
 .line.unread_border {
 	border-bottom: 3px dashed #cccccc;
 }
+.line.unread_border.unread_border_added {
+	border-bottom: 1px dashed #cccccc;
+}
+.line.unread_border.unread_border_more {
+	border-bottom: 3px dashed #b22222;
+}
+
 .line[type="notice"] {
 	color: #aaa;
 }
@@ -190,9 +213,11 @@ ul.channel_list li.hit span.ch_num small {
 /* */
 
 div { display:block; }
-hr { border: 2px solid #c0c0c0; }
-hr.status-notifier.new { border: 2px solid #404cd0; }
-hr.status-notifier.hit { border: 2px solid #f0b0b0; }
+hr { display: inline-block; width: 100%; zoom: 1; border: 2px solid #c0c0c0; }
+.status-notifier { width: 100%; height: 20px; line-height: 20px; }
+.status-notifier hr { margin: 0; padding: 0; }
+.status-notifier.new hr { border-color: #404cd0; }
+.status-notifier.hit hr { border-color: #f0b0b0; }
 
 h4 {
 	padding-top: .6em;
@@ -341,15 +366,57 @@ form#setting_form dl dt:after {
 
 form#setting_form dl dd {
 	margin: 0.5em 0.8em;
-	padding: 0 0 0 2em;
+	padding: 0;
 }
 
 
+.colorcode01 {
+	color: Black;
+}
+.colorcode02 {
+	color: Navy;
+}
+.colorcode03 {
+	color: Green;
+}
+.colorcode04 {
+	color: Red;
+}
+.colorcode05 {
+	color: Brown;
+}
+.colorcode06 {
+	color: Purple;
+}
+.colorcode07 {
+	color: Olive;
+}
+.colorcode08 {
+	color: Yellow;
+}
+.colorcode09 {
+	color: Lime;
+}
 .colorcode10 {
-	color: green;
+	color: Teal;
+}
+.colorcode11 {
+	color: Aqua;
+}
+.colorcode12 {
+	color: RoyalBlue;
+}
+.colorcode13 {
+	color: HotPink;
 }
 .colorcode14 {
-	color: gray;
+	color: DarkGray;
+}
+.colorcode15 {
+	color: LightGray;
+}
+.colorcode16 {
+	color: White;
 }
 
 /* clearfix */
