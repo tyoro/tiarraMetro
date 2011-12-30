@@ -463,7 +463,7 @@ $(function(){
 
 							/* 選択中のチャンネルの場合、domへの流し込みを行う */
 							if( channel_id == self.currentChannel ){
-								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, logs.length); } );
+								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, -1); } );
 								self.afterAdded(channel_id);
 							}
 						});
