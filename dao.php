@@ -35,7 +35,19 @@ class dao_nick extends dao_base{
 			$this->_conn->Prepare($sql),
 			array($name)
 		);
-		return ($id !== false) ? $id : -1;
+
+		if( $id !== false ){ return $id; }
+
+		$sql = "INSERT INTO `nick` 
+					(`name`, `created_on`, `updated_on`) 
+				VALUES 
+					(?, NOW(), NOW() )
+				";
+		$values = array($name);
+		
+		$ok = $this->_conn->Execute($this->_conn->Prepare($sql), $values);
+		if( $ok ){ return $this->_conn->Insert_ID( ); }
+		return false; 
 	}
 
 	function getName( $id ){
