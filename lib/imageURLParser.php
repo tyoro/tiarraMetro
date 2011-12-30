@@ -40,7 +40,7 @@ class ImageURLParser {
 		if (self::hasSuffix($host, 'twitpic.com')) {
 			$path = substr($path, 1);
 
-			if (self::hasSuffix($path, '/full')) {
+			if (self::hasPrefix($path, '/full')) {
 				$path = substr($path, 0, -5);
 			}
 
@@ -88,7 +88,7 @@ class ImageURLParser {
 		}
 		# imgur.com 
 		else if ($host === 'imgur.com') {
-			if (self::hasSuffix($path, '/gallery/')) {
+			if (self::hasPrefix($path, '/gallery/')) {
 				$path = substr($path, 9);
 
 				if (self::isAlphaNumericOnly($path)) {
@@ -121,7 +121,7 @@ class ImageURLParser {
 		}
 		# movapic
 		else if (self::hasSuffix($host, 'movapic.com')) {
-			if (self::hasSuffix($path, '/pic/')) {
+			if (self::hasPrefix($path, '/pic/')) {
 				$path = substr($path, 5);
 				if (self::isAlphaNumericOnly($path)) {
 					$image_url = sprintf('http://image.movapic.com/pic/m_%s.jpeg', $path);
