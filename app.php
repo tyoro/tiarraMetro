@@ -121,7 +121,10 @@
 							}
 							$return = array( 'error' => false );
 
-							$this->db->log->postLog( $this->request->post, $this->request->channel_id, $this->db->nick->getID( $this->options->my_name ), $this->request->notice );
+							$ok = $this->db->log->postLog( $this->request->post, $this->request->channel_id, $this->db->nick->getID( $this->options->my_name ), $this->request->notice );
+							if( $ok !== true ){
+								$return = array( 'error' => true, 'msg' => $ok );
+							}
 
 						} catch (Net_Socket_Tiarra_Exception $e) {
 							$return = array( 'error' => true, 'msg' => $e->getMessage() );
