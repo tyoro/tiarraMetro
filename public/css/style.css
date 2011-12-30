@@ -42,20 +42,29 @@ h3 {
 	marggin-bottom: .25em;
 }
 
-div.headers span[name="list"]:before {
-	content: '△ ';
-	margin: 0.7em 5px 0 0;
-	float: left;
-	display: block;
+div.headers span[name="list"].current:before {
+	content: '△';
+	display: inline-block;
+	vertical-align: middle;
+	width: 1.25em;
 	font-size: 50%;
+	font-family: monospace;
+	font-weight: bold;
+
+	/* コメント外すと +/- になるよ！ */
+	/*
+	content: '-';
+	font-size: 80%;
+	width: 1.8ex;
+	*/
 }
 
-div.headers span[name="list"].closed:before {
-	content: '▽ ';
-	margin: 0.7em 5px 0 0;
-	float: left;
-	display: block;
-	font-size: 50%;
+div.headers span[name="list"].current.closed:before {
+	content: '▽';
+
+	/*
+	content: '+';
+	*/
 }
 
 ul.channel_list {

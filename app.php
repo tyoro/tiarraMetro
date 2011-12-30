@@ -274,7 +274,7 @@
 				
 				$log[ 'log' ] = htmlspecialchars( $log[ 'log' ] );
 
-				if (preg_match_all('/\\x03([0-9]+)(.+?)\\x03/', $log['log'], $m)) {
+				if (preg_match_all('/\\x03([0-9]+)([^\\x03]+)(\\x03)?/', $log['log'], $m)) {
 					if ($m[0]) {
 						foreach ($m[0] as $k=>$v) {
               $cc = sprintf("%02d", $m[1][$k]);
