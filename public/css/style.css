@@ -52,15 +52,19 @@ div.headers span[name="list"].current:before {
 	font-weight: bold;
 
 	/* コメント外すと +/- になるよ！ */
+	/*
 	content: '-';
 	font-size: 80%;
 	width: 1.8ex;
+	*/
 }
 
 div.headers span[name="list"].current.closed:before {
 	content: '▽';
 
+	/*
 	content: '+';
+	*/
 }
 
 ul.channel_list {
