@@ -635,6 +635,7 @@ $(function(){
 
 			$("#list").empty();
 			$("#ch_foot").empty();
+			this.popup.css('display','none');
 
 			this.currentLog = {};
 
