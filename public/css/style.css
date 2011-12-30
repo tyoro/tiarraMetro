@@ -215,8 +215,9 @@ ul.channel_list li.hit span.ch_num small {
 div { display:block; }
 hr { display: inline-block; width: 100%; zoom: 1; border: 2px solid #c0c0c0; }
 .status-notifier { width: 100%; height: 20px; line-height: 20px; }
-.status-notifier.new hr { border: 2px solid #404cd0; margin: 0; padding: 0; }
-.status-notifier.hit hr { border: 2px solid #f0b0b0; margin: 0; padding: 0; }
+.status-notifier hr { margin: 0; padding: 0; }
+.status-notifier.new hr { border-color: #404cd0; }
+.status-notifier.hit hr { border-color: #f0b0b0; }
 
 h4 {
 	padding-top: .6em;
