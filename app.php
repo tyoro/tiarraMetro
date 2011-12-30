@@ -274,7 +274,7 @@
 				
 				$log[ 'log' ] = htmlspecialchars( $log[ 'log' ] );
 
-				if (preg_match_all('/\\x03([0-9]+)(.+?)\\x03/', $log['log'], $m)) {
+				if (preg_match_all('/\\x03([0-9]+)([^\\x03]+)(\\x03)?/', $log['log'], $m)) {
 					if ($m[0]) {
 						foreach ($m[0] as $k=>$v) {
 							$log['log'] = str_replace($m[0][$k], "<span class='colorcode{$m[1][$k]}'>{$m[2][$k]}</span>", $log['log']);
