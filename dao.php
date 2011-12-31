@@ -35,7 +35,19 @@ class dao_nick extends dao_base{
 			$this->_conn->Prepare($sql),
 			array($name)
 		);
-		return ($id !== false) ? $id : -1;
+
+		if( $id !== false ){ return $id; }
+
+		$sql = "INSERT INTO `nick` 
+					(`name`, `created_on`, `updated_on`) 
+				VALUES 
+					(?, NOW(), NOW() )
+				";
+		$values = array($name);
+		
+		$ok = $this->_conn->Execute($this->_conn->Prepare($sql), $values);
+		if( $ok ){ return $this->_conn->Insert_ID( ); }
+		return false; 
 	}
 
 	function getName( $id ){
@@ -289,7 +301,9 @@ class dao_log extends dao_base{
 				";
 		$values = array($channel_id, $nick_id, $message, $notice=='true'?1:0);
 		
-		return $this->_conn->Execute($this->_conn->Prepare($sql), $values);
+		$ok = $this->_conn->Execute($this->_conn->Prepare($sql), $values);
+		if(!$ok){ return $this->conn->ErrorMsg(); }
+		return true;
 	}
 
 	function getMaxID( ){

@@ -4,20 +4,6 @@ $(function(){
 		return $("<div />").text(val).html();
 	};
 
-	var bufferBase = {
-		id: null,
-		name: null,
-
-		addedUnread: 0,
-		moreUnread: 0,
-
-		page: 0,
-
-		// 未読管理用のプール
-		moreLogPool: [],
-		addedLogPool: []
-	};
-
 	var Class = function(){ return function(){this.initialize.apply(this,arguments)}};
 
 	var TiarraMetroClass = new Class();
@@ -34,14 +20,9 @@ $(function(){
 			this.mountPoint = param.mountPoint;
 			this.variable = {};
 			this.currentLog = {};
-			this.channelBuffer = [];
+			this.addedLogCount = 0;
+			this.unread_num = 0;
 
-
-			for (var channel_id in param.chLogs) {
-				if (param.chLogs.hasOwnProperty(channel_id)) {
-					this.channelBuffer[channel_id] = $.extend({}, bufferBase);
-				}
-			}
 
 			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
@@ -247,19 +228,6 @@ $(function(){
 
 				$('.channel_list li').attr('class','');
 				$('.channel_list li span.ch_num').html('');
-
-				for (var channel_id in self.channelBuffer) {
-					if (self.channelBuffer.hasOwnProperty(channel_id) && 'unread' in self.channelBuffer[channel_id]) {
-						$(self.channelBuffer[channel_id].addedLogPool).removeClass('unread_border unread_border_added');
-						$(self.channelBuffer[channel_id].moreLogPool).removeClass('unread_border unread_border_more');
-
-						self.channelBuffer[channel_id].addedLogPool = [];
-						self.channelBuffer[channel_id].addedUnread = 0;
-						self.channelBuffer[channel_id].moreLogPool = [];
-						self.channelBuffer[channel_id].moreUnread = 0;
-						self.channelBuffer[channel_id].page = 0;
-					}
-				}
 			});
 			
 			/* ログアウト */
@@ -426,8 +394,6 @@ $(function(){
 					current: self.isCurrentPivotByName("list") ? "" : self.currentChannel
 				},
 				success:function(json){
-					var currentNum = [];
-
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
 							
@@ -436,8 +402,6 @@ $(function(){
 								$('ul.channel_list').prepend('<li id="ch_'+channel_id+'" ><span class="ch_name">new channel</span>&nbsp;'+'<span class="ch_num"></span></li>');
 
 								self.chLogs[ channel_id ] = new Array();
-
-								self.channelBuffer[channel_id] = $.extend({}, bufferBase);
 
 								$.ajax({
 									url:self.mountPoint+'/api/channel/name/'+channel_id,
@@ -486,26 +450,20 @@ $(function(){
 
 									num = $('#ch_'+channel_id+' span.ch_num');
 
-									self.channelBuffer[channel_id].addedUnread = currentNum[channel_id] = Number($('small',num).text())-0+logs.length;
+									currentNum = Number($('small',num).text())-0+logs.length;
 
-									if( currentNum[channel_id] > 0 ){
-										num.html( '<small>'+currentNum[channel_id]+'</small>' );
+									if( currentNum > 0 ){
+										num.html( '<small>'+currentNum+'</small>' );
 									}
 								}else{
 									$('#ch_'+channel_id).removeClass('hit new');
-
-									self.channelBuffer[channel_id].addedUnread = currentNum[channel_id] = logs.length;
 								}
 							}
 
 
 							/* 選択中のチャンネルの場合、domへの流し込みを行う */
 							if( channel_id == self.currentChannel ){
-								$.each(self.channelBuffer[channel_id].addedLogPool, function (i, e) { $(e).removeClass('unread_border') });
-								self.channelBuffer[channel_id].addedLogPool = [];
-
-								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, logs.length); } );
-
+								$.each( logs.reverse(), function(i,log){ self.add_log(i,log, -1); } );
 								self.afterAdded(channel_id);
 							}
 						});
@@ -539,53 +497,21 @@ $(function(){
 			return log;
 		},
 
-		add_log:function( i, log, l ){
+		add_log:function( i, log, unread_point ){
 			var self = this;
 			var row = self.createRow(log);
-			var path = window.location.pathname.substring(1).split('/');
 
-			var channel_id = null;
-
-			if (self.currentChannel && self.currentChannel in self.channelBuffer) {
-				channel_id = self.currentChannel;
-			} else if (path && path[0] === 'channel' && channel_id in self.channelBuffer) {
-				channel_id = Number(path[1]);
+			if( unread_point == i ){
+				row.addClass( 'unread_border' );
 			}
-
-			if (channel_id) {
-				var channel = self.channelBuffer[channel_id];
-
-				if (channel.addedUnread > 0 && l - i === channel.addedUnread) {
-					row.addClass('unread_border unread_border_added');
-					channel.addedLogPool.push(row.get(0));
-				}
-			}
-
 			$('#list').prepend(row);
 		},
-		more_log : function( i, log, l ){
+		more_log : function( i, log, unread_point ){
 			var self = this;
 			var row = self.createRow(log);
 
-			var path = window.location.pathname.substring(1).split('/');
-
-			var channel_id = null;
-
-			if (self.currentChannel && self.currentChannel in self.channelBuffer) {
-				channel_id = self.currentChannel;
-			} else if (path && path[0] === 'channel' && channel_id in self.channelBuffer) {
-				channel_id = Number(path[1]);
-			}
-
-			if (channel_id) {
-				var channel = self.channelBuffer[channel_id];
-				var page = channel.page;
-				var border = /* page > 0 ? (page - 1) * 30 : */ 0 ;
-
-				if (channel.moreUnread > 0 && border + i + 1 === channel.moreUnread) {
-					row.addClass('unread_border unread_border_more');
-					channel.moreLogPool.push(row.get(0));
-				}
+			if( unread_point == i ){
+				row.addClass( 'unread_border' );
 			}
 
 			$('#list').append(row);
@@ -709,11 +635,9 @@ $(function(){
 
 			$("#list").empty();
 			$("#ch_foot").empty();
+			this.popup.css('display','none');
 
 			this.currentLog = {};
-
-			var unread_num = $('#ch_'+channel_id+' span.ch_num small');
-			this.channelBuffer[channel_id].addedUnread = this.channelBuffer[channel_id].moreUnread = unread_num.length > 0 ? Number(unread_num.text()) : 0 ;
 
 			this.loadChannel(channel_id, channel_name);
 
@@ -721,6 +645,7 @@ $(function(){
 		},
 		loadChannel : function( channel_id, channel_name ){
 			var self = this;
+			self.unread_num = $('#ch_'+channel_id+' span.ch_num small').text()-0;
 
 			$('div.headers span.header[name=channel]').html( channel_name );
 			$('#ch_'+channel_id).attr('class','');
@@ -736,11 +661,10 @@ $(function(){
 				$('#list').removeClass( 'on_icon' );
 			}
 
-			$.each(self.channelBuffer[channel_id].addedLogPool, function (i, e) { $(e).removeClass('unread_border') });
-			self.channelBuffer[channel_id].addedLogPool = [];
-
 			var logs = [].concat(self.chLogs[channel_id]).reverse();
-			$.each( logs , function(i,log){ self.add_log(i,log, logs.length); } );
+			var unread_point = self.unread_num > 0 ? logs.length - self.unread_num: -1;
+			$.each( logs , function(i,log){ self.add_log(i,log, unread_point); } );
+			self.addedLogCount = logs.length;
 
 			$.ajax({
 				url:self.mountPoint+'/api/read/'+channel_id,
@@ -757,7 +681,6 @@ $(function(){
 			button = $('<input type="button" value="more">');
 			button.click(function(){
 				$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..."></div>' );
-				self.channelBuffer[self.currentChannel].page++;
 
 				$.ajax({
 					url:self.mountPoint+'/api/logs/'+self.currentChannel,
@@ -769,8 +692,8 @@ $(function(){
 					success:function(json){
 						if( json['error'] ){ return; }
 
-						$.each(self.channelBuffer[self.currentChannel].moreLogPool, function (i, e) { $(e).removeClass('unread_border') });
-						$.each(json['logs'],function(i,log){ self.more_log(i, log, json['logs'].length); });
+						$.each(json['logs'],function(i,log){ self.more_log(i, log, self.unread_num-self.addedLogCount); });
+						self.addedLogCount += json['logs'].length;
 
 						self.addMoreButton( );
 
