@@ -259,7 +259,9 @@ sub _write {
     if (ref($line) eq 'HASH') {
       	$this->store($line);
     } else {
-        main::printmsg(Tiarra::Encoding->new("$line\n",'utf8')->conv($this->config->charset || 'jis'));
+		if( defined($line) && $line ne '' ){
+			main::printmsg( Tiarra::Encoding->new( "$line\n",'utf8')->conv( $this->config->charset || 'jis'));
+		}
     }
 }
 
