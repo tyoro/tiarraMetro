@@ -334,12 +334,12 @@ $(function(){
 					target = channels.siblings(".new:first");
 				}
 				if (!target.length && self.jsConf.patrol_channel ){
+					current_channel_name = $('div.headers span.header[name=channel]').text();
 					switch( typeof self.jsConf.patrol_channel ){
 						case 'string':
 							channel_name = self.jsConf.patrol_channel;
 							break;
 						case 'object':
-							current_channel_name = $('div.headers span.header[name=channel]').text();
 							if( ( index = self.jsConf.patrol_channel.indexOf( current_channel_name ) ) != -1 && index < self.jsConf.patrol_channel.length-1 ){
 								channel_name = self.jsConf.patrol_channel[index+1];
 							}else{
@@ -349,9 +349,13 @@ $(function(){
 						default:
 							return;
 					}
-					target = channels.siblings(":contains('"+channel_name+"')");
+					if( current_channel_name != channel_name ){
+						target = channels.siblings(":contains('"+channel_name+"')");
+					}
 				}
-				target.click();
+				if (target.length) {
+					target.click();
+				}
 				self.updateStatusNotifier();
 			});
 			
