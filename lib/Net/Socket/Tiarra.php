@@ -69,6 +69,19 @@ Text: %s\r
 ";
 
     /**
+     * Nick receiver Message template
+     */
+    const nick_request_template = "
+NOTIFY System::SendMessage %s\r
+Sender: %s\r
+Notice: %s\r
+Nick: %s\r
+Charset: %s\r
+Text: %s\r
+\r
+";
+
+    /**
      * Socket name to connect
      * @var    string
      * @access protected
@@ -164,7 +177,7 @@ Text: %s\r
      * @access public
      * @throws Net_Socket_Tiarra_Exception Exception
      */
-    public function message($channel, $text, $use_notice = false)
+    public function message($channel, $text, $use_notice = false, $to_nick = false)
     {
         foreach ($this->strSplit($text, 430) as $k => $t) {
             $this->_socket_resource = fsockopen("unix:///tmp/tiarra-control/" . $this->_socket_name);
@@ -175,8 +188,7 @@ Text: %s\r
 
             fwrite($this->_socket_resource,
                 sprintf(
-                    Net_Socket_Tiarra::request_template, // template
-
+                    ($to_nick ? Net_Socket_Tiarra::nick_request_template : Net_Socket_Tiarra::request_template), // template
                     Net_Socket_Tiarra::protocol,
                     Net_Socket_Tiarra::sender,
                     ($use_notice ? 'yes' : 'no'),
@@ -205,8 +217,12 @@ Text: %s\r
      */
     public function noticeMessage($channel, $text)
     {
-        $this->message($channel, $text, true);
+        $this->message($channel, $text, true,false);
     }
+
+	public function tonickMessage($nick, $text){
+		$this->message($nick, $text, false, true);
+	}
 
     /**
      * strSplit

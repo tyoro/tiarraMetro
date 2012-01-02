@@ -31,47 +31,76 @@ sub control_requested {
     # >> TIARRACONTROL/1.0 200 OK
 
     my $mask = $request->table->{Channel};
+    my $nick = $request->table->{Nick};
     my $text = $request->table->{Text};
     my $command = utils->cond_yesno($request->table->{Notice}, 1) ?
-        'NOTICE' : 'PRIVMSG';
-    unless ($mask) {
-        return new ControlPort::Reply(403, "Channel is not set");
+	'NOTICE' : 'PRIVMSG';
+    unless ($mask||$nick) {
+	return new ControlPort::Reply(403, "Channel & Nick is not set");
     }
     unless ($text) {
-        return new ControlPort::Reply(403, "Doesn't have remark");
+	return new ControlPort::Reply(403, "Doesn't have remark");
     }
 
-    my ($channel_mask, $network_name) = Multicast::detach($mask);
 
-    my $server = $this->_runloop->network($network_name);
-    unless (defined $server) {
-        return new ControlPort::Reply(404, "Server Not Found");
-    }
+	my $matched = 0;
+	my $receiver = '';
 
-    my $matched = 0;
+	my $error = '';
 
-    foreach my $chinfo ($server->channels_list) {
-        if (Mask::match_array([$channel_mask], $chinfo->name)) {
-            ++$matched;
-            Auto::Utils::sendto_channel_closure(
-                $chinfo->fullname, $command, undef, undef, undef, 0
-            )->($text);
-            $this->_runloop->mod_manager->get('Log::Channel')->message_arrived(
-                Tiarra::IRC::Message->new(
-                    Command => $command,
-                    Params  => [ $chinfo->fullname, $text ]
-                ),
-                $this->_runloop->{sockets}->[1]
-            );
-        }
-    }
-    if ($matched) {
-        my $reply = ControlPort::Reply->new(200, 'OK');
-        $reply->MatchedChannels($matched);
-        return $reply;
-    } else {
-        return new ControlPort::Reply(404, "Channel Not Found");
-    }
+	if( $mask ){
+		my ($channel_mask, $network_name) = Multicast::detach($mask);
+
+		my $server = $this->_runloop->network($network_name);
+		unless (defined $server) {
+		return new ControlPort::Reply(404, "Server Not Found");
+		}
+
+		foreach my $chinfo ($server->channels_list) {
+		  if (Mask::match_array([$channel_mask], $chinfo->name)) {
+			++$matched;
+			$receiver = $chinfo->fullname;
+		  }
+		}
+	}
+	else
+	{
+		unless( Multicast::nick_p( $nick ) ){
+			return new ControlPort::Reply(403, "Nick illegal format");
+		}
+		my ($nick_mask, $network_name) = Multicast::detach($nick);
+
+		my $server = $this->_runloop->network($network_name);
+		unless (defined $server) {
+		return new ControlPort::Reply(404, "Server Not Found");
+		}
+
+		foreach my $person ( $server->person_list ) {
+		  if ($nick_mask eq $person->nick) {
+				++$matched;
+				$receiver = $nick;
+			}
+		}
+
+	}
+	if ($matched) {
+		Auto::Utils::sendto_channel_closure(
+			$receiver, $command, undef, undef, undef, 0
+				)->($text);
+	    $this->_runloop->mod_manager->get('Log::Channel')->message_arrived(
+		   Tiarra::IRC::Message->new(
+			 Command => $command,
+			 Params  => [ $receiver, $text ]
+		   ),
+		   $this->_runloop->{sockets}->[1]
+	    );
+
+		my $reply = ControlPort::Reply->new(200, 'OK');
+		$reply->MatchedChannels($matched);
+		return $reply;
+	} else {
+		return new ControlPort::Reply(404, "receiver Not Found (" . $error );
+	}
 }
 
 1;
