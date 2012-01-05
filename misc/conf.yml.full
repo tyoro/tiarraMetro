@@ -10,7 +10,13 @@ tiarra_socket_name: 'tiarrametro'
 #mountPoint: '/hoge/public'
 #theme: 'light'
 #template: 'simple'
+
+# ./public/css/ 以下に設置されたファイルを メインcssの変わりに読み込む。 urlの形で指定された場合は、外部サイトからのロードとして 内部のパスを付与しない。
 #style: 'style.wp.css'
+# ./public/images/ 以下に設置したファイルを背景画像として読み込む
+#wallparper: 'wallparper.png'
+
+#
 #channel_list_label: 'channnels'
 #channel_list_sort: { network: 'DESC', name: 'ASC' }
 #cookie_save_time: 86400

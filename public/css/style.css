@@ -10,6 +10,17 @@ a {
 	text-decoration:none;
 }
 
+#wallparper .theme-bg{
+	opacity: 0.8;
+}
+
+#wallparper {
+	width: 100%;
+	margin: auto;
+	overflow: hidden;
+	background-size: contain;
+}
+
 #container {
 	width: 100%;
 	margin: auto;

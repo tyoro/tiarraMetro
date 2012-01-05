@@ -31,6 +31,7 @@ $conf = Array(
 	,'channel_list_sort' => 'name'
 	,'cookie_save_time' => 7*86400
 	,'on_image' => 0
+	,'wallparper' => ''
 );
 
 // javascript setting

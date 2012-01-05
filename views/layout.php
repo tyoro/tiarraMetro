@@ -26,11 +26,17 @@
 <script type="text/javascript" src= "js/tiarraMetro.js"></script>
 </head>
 <body theme="<?php print $options->theme; ?>" accent="<?php print $options->accent; ?>">
-	<div id='container'>
+<?php if( !empty( $options->wallparper )){ ?>
+  <div id='wallparper' style='background-image: url("../images/<?php print $options->wallparper; ?>");' >
+<?php } ?>
+	<div id='container' class='theme-bg'>
       <?php echo $content; ?>
 	</div>
 	<div id='preload'>
 		<img src='./images/spinner_b.gif' style='display: none;' />
 	</div>
+<?php if( !empty( $options->wallparper )){ ?>
+  </div>
+<?php } ?>
 </body>
 </html>
