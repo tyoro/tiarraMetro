@@ -231,7 +231,7 @@ $(function(){
 
 				self.offListInvisible();
 
-				$('.channel_list li').attr('class','');
+				$('.channel_list li').removeClass("new hit");
 				$('.channel_list li span.ch_num').html('');
 			});
 			
@@ -333,11 +333,14 @@ $(function(){
 			});
 
 			$(".status-notifier").on("click", function(event) {
-				var channels = $(".channel_list li");
-				var target = channels.siblings(".hit:first");
-				if (!target.length) {
-					target = channels.siblings(".new:first");
+				var target = $(); // empty
+				var classes = ["hit", "new"]
+				for (i in classes) {
+					target = $(".channel_list li.current ~ li."+classes[i]+":first");
+					if (!target.length) target = $(".channel_list li."+classes[i]+":first");
+					if (!!target.length) break;
 				}
+
 				if (!target.length && self.jsConf.patrol_channel ){
 					current_channel_name = $('div.headers span.header[name=channel]').text();
 					switch( typeof self.jsConf.patrol_channel ){
@@ -355,7 +358,7 @@ $(function(){
 							return;
 					}
 					if( current_channel_name != channel_name ){
-						target = channels.siblings(":contains('"+channel_name+"')");
+						target = $(".channel_list li:contains('"+channel_name+"')");
 					}
 				}
 				if (target.length) {
@@ -642,6 +645,9 @@ $(function(){
 		selectChannel : function( channel_id, channel_name ){
 			this.currentChannel = channel_id;
 
+			$('.channel_list li').removeClass("current");
+			$('#ch_'+channel_id).addClass("current");
+
 			$("#list").empty();
 			$("#ch_foot").empty();
 			this.popup.css('display','none');
@@ -657,7 +663,7 @@ $(function(){
 			self.unread_num = $('#ch_'+channel_id+' span.ch_num small').text()-0;
 
 			$('div.headers span.header[name=channel]').html( channel_name );
-			$('#ch_'+channel_id).attr('class','');
+			$('#ch_'+channel_id).removeClass("new hit");
 			$('#ch_'+channel_id+' span.ch_num').html('');
 
 			channel_name.match( new RegExp( '(' + self.jsConf['log_popup_menu']['separator']+'\\w+)' ) );
