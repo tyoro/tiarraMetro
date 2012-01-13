@@ -16,6 +16,7 @@ $(function(){
 			this.currentMenu = null;
 			this.chLogs = param.chLogs;
 			this.updating = param.updating;
+			this.sending = false;
 			this.jsConf = param.jsConf;
 			this.mountPoint = param.mountPoint;
 			this.variable = {};
@@ -75,6 +76,8 @@ $(function(){
 			
 			/* クイック投稿 */
 			$('form#quick_form').submit(function(){
+				if( self.sending ){ return; }
+				self.sending = true;
 				var form = this;
 				var post = $('input[name="post"]',form);
 				message = post.val();
@@ -97,10 +100,12 @@ $(function(){
 						if( !('auto_close' in self.currentMenu) || self.currentMenu[ 'auto_close' ] ){
 							self.popup.css('display','none');
 						}
+						self.sending = false;
 					},
 					error:function(){
 						post.removeAttr('disabled').removeClass('error');
 						$('input[type=submit]',form).removeAttr('disabled');
+						self.sending = false;
 					},
 				});
 				return false;
