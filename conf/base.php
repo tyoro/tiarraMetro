@@ -42,6 +42,7 @@ $jsConf = Array(
 	,'pickup_channel'=> '.*'
 	,'on_icon' => false
 	,'on_image' => 0
+	,'on_twitter_link' => 1
 	,'template' => 'table'
 	,'alias' => false
 	,'log_popup_menu' => array(

@@ -631,7 +631,15 @@ $(function(){
 			nick = log.nick;
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
 			
-			return '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank"><img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'"></a>';
+			var ret = '<img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'">';
+
+			if( this.jsConf['on_twitter_link'] == 1 ){
+				ret = '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank">'+ret+'</a>';
+			}else{
+				ret = '<span class="avatar" >' + ret + '</span>';
+			}
+
+			return ret;
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();
