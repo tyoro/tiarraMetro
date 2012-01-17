@@ -66,6 +66,7 @@ class ImageURLParser {
 		else if (self::hasSuffix($host, 'yfrog.com')) {
 			$path = substr($path, 1);
 			$image_url = sprintf("%s:small", $url);
+			$thumb_url = $image_url;
 		}
 		# twitgoo.com
 		else if (self::hasSuffix($host, 'twitgoo.com')) {
@@ -83,6 +84,7 @@ class ImageURLParser {
 
 			if (self::isAlphaNumericOnly($path)) {
 				$image_url = sprintf('http://img.ly/show/thumb/%s', $path);
+				$thumb_url = $image_url;
 				//$image_url = sprintf('http://img.ly/show/mini/%s', $path);
 			}
 		}
@@ -146,6 +148,7 @@ class ImageURLParser {
 						substr($photo_id, 0, 8),
 						$photo_id
 					);
+					$thumb_url = $image_url;
 				}
 			}
 		}
@@ -154,30 +157,32 @@ class ImageURLParser {
 			if (self::hasPrefix($path, '/photo/') && strlen($path) >= 29) {
 				$path = substr($path, 7, 22);
 				$image_url = sprintf('http://pikubo.jp/p/p/%s', $path);
+				$thumb_url = $image_url;
 			}
 		}
 		# pikubo.me
 		else if (self::hasSuffix($host, 'pikubo.me')) {
 			$path = substr($path, 1);
 			$image_url = sprintf('http://pikubo.me/p/%s', $path);
+			$thumb_url = $image_url;
 		}
 		# puu.sh
 		else if (self::hasSuffix($host, 'puu.sh')) {
 			if( strlen( $path ) ){
 				$image_url = $url;
+				$thumb_url = $image_url;
 			}
-
 		}
 		# youtube.com
 		else if (self::hasSuffix($host, 'youtube.com')) {
 			$parameters = self::getParametersFromQuery($parsed_url['query']);
 
 			if (!empty($parameters['v'])) {
-				$image_url = sprintf('http://img.youtube.com/vi/%s/default.jpg', $parameters['v']);
+				$thumb_url = sprintf('http://img.youtube.com/vi/%s/default.jpg', $parameters['v']);
 			}
 		} else if ($host === 'youtu.be') {
 			$path = substr($path, 1);
-			$image_url = sprintf('http://img.youtube.com/vi/%s/default.jpg', $path);
+			$thumb_url = sprintf('http://img.youtube.com/vi/%s/default.jpg', $path);
 		}
 /*
 		# twitvid.com
@@ -193,6 +198,7 @@ class ImageURLParser {
 		else if ( $host === 'gyazo.com' ) {
 			$path = substr($path, 1);
 			$image_url = sprintf('http://cache.gyazo.com%@.png', $path);
+			$thumb_url = $image_url;
 		}
 		/*
 		#
@@ -213,10 +219,10 @@ class ImageURLParser {
 		}
 */
 
-		if( empty($image_url) ){
+		if( empty($thumb_url) ){
 			return null;
 		}
-		return array( $image_url, empty($thumb_url)?$image_url:$thumb_url );
+		return array( $image_url, $thumb_url );
 	}
 
 	static function hasPrefix ($value, $prefix) {

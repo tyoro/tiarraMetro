@@ -719,6 +719,7 @@ $(function(){
 			var unread_point = self.unread_num > 0 ? logs.length - self.unread_num: -1;
 			$.each( logs , function(i,log){ self.add_log(i,log, unread_point); } );
 			self.addedLogCount = logs.length;
+			self.afterAdded( channel_id );
 
 			$.ajax({
 				url:self.mountPoint+'/api/read/'+channel_id,

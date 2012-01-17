@@ -280,7 +280,7 @@
 				if (preg_match_all('/\\x03([0-9]+)([^\\x03]+)(\\x03)?/', $log['log'], $m)) {
 					if ($m[0]) {
 						foreach ($m[0] as $k=>$v) {
-              $cc = sprintf("%02d", $m[1][$k]);
+              				$cc = sprintf("%02d", $m[1][$k]);
 							$log['log'] = str_replace($m[0][$k], "<span class='colorcode{$cc}'>{$m[2][$k]}</span>", $log['log']);
 						}
 					}
@@ -291,7 +291,11 @@
 					if( ImageURLParser::isImageFileURL( $url ) ){
 						$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'"><img src="'.$url.'"></a>';
 					}else if( $resutlt = ImageURLParser::getServiceImageURL( $url ) ){
-						$after .= '<br><a href="'.$resutlt[0].'" target="_blank" class="'.$link_class.'"><img src="'.$resutlt[1].'"></a>';
+						if( empty( $resutlt[0] ) ){
+							$after .= '<br><span class="'.$link_class.'"><img src="'.$resutlt[1].'"></span>';
+						}else{
+							$after .= '<br><a href="'.$resutlt[0].'" target="_blank" class="'.$link_class.'"><img src="'.$resutlt[1].'"></a>';
+						}
 					}
 
 					return '<a href="'.$url.'"  target="_blank">'.$url.'</a>';
