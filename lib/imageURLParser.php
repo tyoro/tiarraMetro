@@ -199,11 +199,21 @@ class ImageURLParser {
 				if( self::hasPrefix($path, 'sm' ) || self::hasPrefix($path, 'nm' ) ){
 					$vid = $path;
 				}
+			}else if (self::hasPrefix($path, '/seiga/') ) {
+				$path = substr($path, 7);
+				if( self::hasPrefix($path, 'im' ) ){
+					$iid = $path;
+				}
 			}
 
 			if( $vid && strlen( $vid ) > 2 ){
 				$vid = substr($vid, 2);
 				$thumb_url = sprintf("http://tn-skr%s.smilevideo.jp/smile?i=%s", ($vid%4+1), $vid);
+			}
+			else if( $iid && strlen( $iid ) > 2 ){
+				$iid = substr($iid, 2);
+				$image_url = sprintf("http://lohas.nicoseiga.jp/thumb/%si",$iid);
+				$thumb_url = $image_url;
 			}
 
 		}
