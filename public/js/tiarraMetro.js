@@ -533,7 +533,7 @@ $(function(){
 		},
 		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
-				$('#list .boxviewimage').lightBox();
+				$('#list a.boxviewimage').lightBox();
 			}
 		},
 		createRow : function( log,searchFlag ){
