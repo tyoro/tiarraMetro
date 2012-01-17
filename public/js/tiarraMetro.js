@@ -613,6 +613,37 @@ $(function(){
 											$('form#quick_form input[name="post"]').val(label+' '+matchStr+' ' ).focus();
 										});
 										break;
+									case 'action':
+										li.on('click',function(event){
+											switch( label ){
+												case 'close':
+													$('div.headers span.header[name=channel]').html( '' );
+												case 'list':
+													if (!self.isCurrentPivotByName("list")) {
+														self.goToPivotByName("list");
+														self.onListInvisible();
+													}
+													break;
+												case 'top':
+													$( window ).scrollTop(0);
+													self.popup.css('display','none');
+													break;
+												case 'post':
+													self.popup.css('display','none');
+													$.ajax({
+														url:self.mountPoint+'/api/post/',
+														data:{
+															channel_id:self.currentChannel,
+															post:menu['value'],
+															notice:false,
+														},
+														dataType:'json',
+														type:'POST',
+													});
+													break;
+											}
+										});
+										break;
 								}
 								ul.append( li );
 							});

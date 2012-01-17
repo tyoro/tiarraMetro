@@ -87,7 +87,43 @@ class  yaml2conf
 					}
 					else
 					{
-						$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $network_setting;
+						if( isset($network_setting[ 'base' ]) ){
+							switch( $network_setting[ 'base' ] )
+							{
+								case 'fig_default':
+								case 'fig_menu':
+									global $fig_default_popup_menu;
+									$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $fig_default_popup_menu;
+									break;
+								case 'tig_default':
+								case 'tig_menu':
+									global $tig_default_popup_menu;
+									$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $tig_default_popup_menu;
+									break;
+								case 'quickpost':
+									global $quickpost_only_popup_menu;
+									$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $quickpost_only_popup_menu;
+									break;
+								case 'quickpost_no_close':
+									global $quickpost_only_popup_menu_no_close;
+									$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $quickpost_only_popup_menu_no_close;
+									break;
+							}
+							if( isset($network_setting[ 'match' ]) ){
+								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ][ 'match' ] = $network_setting[ 'match' ];
+							}
+							if( isset($network_setting[ 'auto_close' ]) ){
+								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ][ 'auto_close' ] = $network_setting[ 'auto_close' ];
+							}
+							if( isset($network_setting[ 'menu' ]) ){
+								foreach( $network_setting[ 'menu' ] as $menu_label => $menu ){
+									$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ][ 'menu' ][ $menu_label ] = $menu;
+								}
+							}
+
+						}else{
+							$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $network_setting;
+						}
 					}
 				}
 			}
