@@ -189,11 +189,24 @@ class ImageURLParser {
 		else if () {
 
 		}
+		*/
 		# nicovideo.jp
-		else if () {
+		else if (self::hasSuffix($host, 'nicovideo.jp')) {
+			$vid = null;
+			$iid = null;
+			if (self::hasPrefix($path, '/watch/') ) {
+				$path = substr($path, 7);
+				if( self::hasPrefix($path, 'sm' ) || self::hasPrefix($path, 'nm' ) ){
+					$vid = $path;
+				}
+			}
+
+			if( $vid && strlen( $vid ) > 2 ){
+				$vid = substr($vid, 2);
+				$thumb_url = sprintf("http://tn-skr%s.smilevideo.jp/smile?i=%s", ($vid%4+1), $vid);
+			}
 
 		}
-		*/
 		# gyazo.com
 		else if ( $host === 'gyazo.com' ) {
 			$path = substr($path, 1);
