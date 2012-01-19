@@ -375,7 +375,6 @@ $(function(){
 			var self = this;
 			if( keymapping ){
 				if( keymapping.hasOwnProperty( 'channel_list' ) ){
-					// create pointer
 					target = $(".channel_list li:first").addClass( 'select' );
 					$.each( keymapping[ 'channel_list' ] , function(key,val){
 						switch(key){
@@ -400,7 +399,7 @@ $(function(){
 									$(".channel_list li.select").click();
 								});
 								break;
-							case 'channel_togle':
+							case 'channel_toggle':
 								$(document).bind('keydown', val, function(){
 									$("ul.channel_list").toggleClass("invisible");
 								});

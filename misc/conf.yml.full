@@ -58,16 +58,17 @@ log_popup_menu:
 #  キーボードショートカット
 keymapping:
   channel_list:
-    up: k
-    down: j
-    open: o
-    channel_togle: e
+    up: 'k'
+    down: 'j'
+    open: 'o'
+    channel_toggle: 'e'
   pivot_controller:
-    next: l
-    prev: h
-    close: c
+    next: 'l'
+    prev: 'h'
+    close: 'c'
   action:
-    tour: n
+    tour: 'n'
+
 
 
 # Databaseの設定
