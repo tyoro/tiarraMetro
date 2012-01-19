@@ -383,15 +383,17 @@ $(function(){
 									var current = $(".channel_list li.select");
 									prev = current;
 									while( prev.length ){
-										if( prev.prev( ':visible' ).addClass( 'select' ).length ){
+										if( (p =prev.prev( ':visible' ).addClass( 'select' ) ).length ){
 											current.removeClass( 'select' );
+											self.viewScroll( p );
 											break;
 										}
 										prev = prev.prev();
 									}
 									if( !prev.length ){
-										if( $(".channel_list li:visible:last").addClass( 'select' ).length ){
+										if( ( prev = $(".channel_list li:visible:last").addClass( 'select' ) ).length ){
 											current.removeClass( 'select' );
+											self.viewScroll( prev );
 										}
 									}
 								});
@@ -406,6 +408,7 @@ $(function(){
 									
 									if( next.addClass( 'select' ).length ){
 										current.removeClass( 'select' );
+										self.viewScroll( next );
 									}
 								});
 								break;
@@ -874,6 +877,19 @@ $(function(){
 			$('div.headers span.header[name="list"]').removeClass('closed');
 			$('ul.channel_list').removeClass('invisible');
 		},
+		updateStatusNotifier: function() {
+			$(".status-notifier")
+				.toggleClass('new', !!$('.channel_list li.new').length)
+				.toggleClass('hit', !!$('.channel_list li.hit').length)
+				;
+		},
+		viewScroll: function( elm ){
+			var et = elm.offset().top;
+			var eh = elm.height();
+			var st = $(window).scrollTop();
+			var wh = $(window).height();
+			if ( st+wh < et+eh || st > et ) $("html,body").animate( {scrollTop:et-$('div.headers').height()},100);
+		},
 		/* local strage */
 		getChannelSettings: function( channel_id ){
 			channels = localStorage.getItem( 'channels' );
@@ -897,12 +913,6 @@ $(function(){
 			if( !channels.hasOwnProperty(channel_id) ) { channels[ channel_id ] = {}; }
 			channels[ channel_id ][ key ] = value;
 			localStorage.setItem( 'channels', JSON.stringify(channels) );
-		},
-		updateStatusNotifier: function() {
-			$(".status-notifier")
-				.toggleClass('new', !!$('.channel_list li.new').length)
-				.toggleClass('hit', !!$('.channel_list li.hit').length)
-				;
 		},
 
 		/* Pivot helpers */
