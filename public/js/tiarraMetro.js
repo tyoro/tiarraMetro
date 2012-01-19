@@ -945,11 +945,11 @@ $(function(){
 		},
 		goToNextPivot: function(){
 			var next = $(".metro-pivot .headers .header:gt(0):not(:empty):first");
-			if (next && self.isCurrentPivotByName( next.attr("name") )) this.goToPivotByName(next.attr("name"));
+			if (next.length) this.goToPivotByName(next.attr("name"));
 		},
 		goToPreviousPivot: function(){
 			var prev = $(".metro-pivot .headers .header:not(:empty):last");
-			if (prev) this.goToPivotByName(prev.attr("name"));
+			if (prev.length) this.goToPivotByName(prev.attr("name"));
 		}
 	};
 
