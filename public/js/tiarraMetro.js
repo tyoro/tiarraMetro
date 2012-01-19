@@ -452,6 +452,9 @@ $(function(){
 							case 'tour':
 								$(document).bind('keydown', val, function(){ $(".status-notifier").click(); });
 								break;
+							case 'input_focus':
+								$(document).bind('keydown', val, function(){ $('input#message').focus(); });
+								break;
 							case 'sample':
 								$(document).bind('keydown', val, function(){  });
 								break;

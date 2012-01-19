@@ -68,6 +68,7 @@ keymapping:
     close: 'c'
   action:
     tour: 'n'
+    input_focus: 'f'
 
 
 
