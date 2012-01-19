@@ -945,7 +945,7 @@ $(function(){
 		},
 		goToNextPivot: function(){
 			var next = $(".metro-pivot .headers .header:gt(0):not(:empty):first");
-			if (next) this.goToPivotByName(next.attr("name"));
+			if (next && self.isCurrentPivotByName( next.attr("name") )) this.goToPivotByName(next.attr("name"));
 		},
 		goToPreviousPivot: function(){
 			var prev = $(".metro-pivot .headers .header:not(:empty):last");
