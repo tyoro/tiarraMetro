@@ -381,15 +381,30 @@ $(function(){
 							case 'up':
 								$(document).bind('keydown', val, function(){ 
 									var current = $(".channel_list li.select");
-									if( current.prev().addClass( 'select' ).length ){
-										current.removeClass( 'select' );
+									prev = current;
+									while( prev.length ){
+										if( prev.prev( ':visible' ).addClass( 'select' ).length ){
+											current.removeClass( 'select' );
+											break;
+										}
+										prev = prev.prev();
+									}
+									if( !prev.length ){
+										if( $(".channel_list li:visible:last").addClass( 'select' ).length ){
+											current.removeClass( 'select' );
+										}
 									}
 								});
 								break;
 							case 'down':
 								$(document).bind('keydown', val, function(){
 									var current = $(".channel_list li.select");
-									if( current.next().addClass( 'select' ).length ){
+
+									if( ! ( next = $(".channel_list li.select ~ li:visible:first") ).length ){
+										next = $(".channel_list li:visible:first");
+									}
+									
+									if( next.addClass( 'select' ).length ){
 										current.removeClass( 'select' );
 									}
 								});
