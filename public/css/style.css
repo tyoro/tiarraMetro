@@ -139,6 +139,10 @@ ul.channel_list li.hit span.ch_num small {
 	background: -moz-linear-gradient(top, #d0404c, #64202c);
 	background: -webkit-gradient(linear, left top, left bottom, from(#d0404c), to(#64202c));
 }
+ul.channel_list li.select {
+	padding-left: 20px;
+	background: transparent url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAALCAIAAADN+VtyAAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAtElEQVR42mP4////////Zxob/0cFDBDR5wsW1KqqIkswzTIx8cvN/ff9e2pKSp2aGgMMMKWdObNp8mQmTs6/P37E+/vD5ZgYGBggchzy8v++f4+ytobIMf7//x+iBGLmux07/n39uurGDSZk0fe7d//7+XPVjRtNt24xwUU/7N//7+fPVVeuNN26xcDAwCy1ZYtfbu7HQ4f+ff++8sIFiCgDAwPUH9eiotD8wQCh0ET///8PAI0Gmocmb3e4AAAAAElFTkSuQmCC") no-repeat center left;
+}
 
 /* log  */
 .line.text {

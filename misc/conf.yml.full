@@ -16,9 +16,13 @@ tiarra_socket_name: 'tiarrametro'
 # ./public/images/ 以下に設置したファイルを背景画像として読み込む
 #wallparper: 'wallparper.png'
 
-#
+# チャンネル一覧のヘッダーの文字列を任意の文字列に変える場合
 #channel_list_label: 'channnels'
-#channel_list_sort: { network: 'DESC', name: 'ASC' }
+# チャンネル一覧のソート順の設定 下記のいずれかの形式で書ける
+#channel_list_sort: { network: 'DESC', name: 'ASC' }  #ネットワーク名を第一、チャンネル名を第二ソートキーとする
+#channel_list_sort: 'read' #前回のアクセス時に開いた順序にする
+
+# cookieの生存時間
 #cookie_save_time: 86400
 
 #on_icon: false
@@ -30,17 +34,41 @@ tiarra_socket_name: 'tiarrametro'
 #patrol_channel: '#test@irc'
 #patrol_channel: [ '#test@irc', '#main@irc' ]
 
+
+
 log_popup_menu:
-#    separator: '@'
-    network:
-        @tig:
-            match: '\((\w+)\)'
-            menu:
-                rt: 
-                    type: 'typablemap'
-                    label: 're tweet'
-        @fig: 'fig_menu'
-        @w: 'quickpost'
+#  separator: '@'  #tiarraのチャンネルセパレータを指定する
+  network:
+    @w: 'quickpost' #プリセットのメニューを使う場合は1行で良い、  他に、fig_menuやtig_menuなどが使える
+    @tig: #全てのメニューを自前で設定する場合はこのようにする。
+      match: '\((\w+)\)'
+      menu:
+        rt: 
+          type: 'typablemap'
+          label: 're tweet'
+    @fig: #プリセットメニューを上書きする場合はbaseを使う
+      base: 'fig_menu'
+      menu:
+        list: { type: 'action', label: 'move channels' }
+        tour: { type: 'action', label: 'tour channels' }
+        top: { type: 'action', label: 'move top' }
+        close: { type: 'action', label: 'close channel' }
+        post: { type: 'action', label: 'text post', value: 'post message.' }
+
+#  キーボードショートカット
+keymapping:
+  channel_list:
+    up: k
+    down: j
+    open: o
+    channel_togle: e
+  pivot_controller:
+    next: l
+    prev: h
+    close: c
+  action:
+    tour: n
+
 
 # Databaseの設定
 

@@ -28,6 +28,8 @@ $(function(){
 			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
 			this.htmlInitialize( param );
+
+			this.keymappingInitialize( param.jsConf[ 'keymapping' ] );
 		},
 		htmlInitialize: function( param ){
 			var self = this;
@@ -369,6 +371,78 @@ $(function(){
 			
 			self.updateStatusNotifier();
 		},
+		keymappingInitialize: function( keymapping ){
+			var self = this;
+			if( keymapping ){
+				if( keymapping.hasOwnProperty( 'channel_list' ) ){
+					// create pointer
+					target = $(".channel_list li:first").addClass( 'select' );
+					$.each( keymapping[ 'channel_list' ] , function(key,val){
+						switch(key){
+							case 'up':
+								$(document).bind('keydown', val, function(){ 
+									var current = $(".channel_list li.select");
+									if( current.prev().addClass( 'select' ).length ){
+										current.removeClass( 'select' );
+									}
+								});
+								break;
+							case 'down':
+								$(document).bind('keydown', val, function(){
+									var current = $(".channel_list li.select");
+									if( current.next().addClass( 'select' ).length ){
+										current.removeClass( 'select' );
+									}
+								});
+								break;
+							case 'open':
+								$(document).bind('keydown', val, function(){
+									$(".channel_list li.select").click();
+								});
+								break;
+							case 'channel_togle':
+								$(document).bind('keydown', val, function(){
+									$("ul.channel_list").toggleClass("invisible");
+								});
+								break;
+						}
+					});
+				}
+				if( keymapping.hasOwnProperty( 'pivot_controller' ) ){
+					$.each( keymapping[ 'pivot_controller' ] , function(key,val){
+						switch(key){
+							case 'next':
+								$(document).bind('keydown', val, function(){ self.goToNextPivot(); });
+								break;
+							case 'prev':
+								$(document).bind('keydown', val, function(){ self.goToPreviousPivot(); });
+								break;
+							case 'close':
+								$(document).bind('keydown', val, function(){
+									$('div.headers span.header[name=channel]').html( '' );
+									if (!self.isCurrentPivotByName("list")) {
+										self.goToPivotByName("list");
+										self.onListInvisible();
+									}
+								});
+								break;
+						}
+					});
+				}
+				if( keymapping.hasOwnProperty( 'action' ) ){
+					$.each( keymapping[ 'action' ] , function(key,val){
+						switch(key){
+							case 'tour':
+								$(document).bind('keydown', val, function(){ $(".status-notifier").click(); });
+								break;
+							case 'sample':
+								$(document).bind('keydown', val, function(){  });
+								break;
+						}
+					});
+				}
+			}
+		},
 		onClickPivotHeader: function(header) {
 			var self = this;
 
@@ -623,6 +697,9 @@ $(function(){
 														self.goToPivotByName("list");
 														self.onListInvisible();
 													}
+													break;
+												case 'tour':
+													$(".status-notifier").click();
 													break;
 												case 'top':
 													$( window ).scrollTop(0);
