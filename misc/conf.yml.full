@@ -69,6 +69,7 @@ keymapping:
   action:
     tour: 'n'
     input_focus: 'f'
+  input_histry: true
 
 
 

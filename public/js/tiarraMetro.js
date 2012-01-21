@@ -23,7 +23,7 @@ $(function(){
 			this.currentLog = {};
 			this.addedLogCount = 0;
 			this.unread_num = 0;
-
+			this.history = { i:-1, log: new Array() };
 
 			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
@@ -53,6 +53,10 @@ $(function(){
 
 				$('input#message').attr('disabled','disabled');
 				$('form#post_form input[type=submit]').attr('disabled','disabled');
+
+				self.history.log.unshift( message );
+				self.history.i = -1;
+
 				$.ajax({
 					url:self.mountPoint+'/api/post/',
 					data:{
@@ -458,6 +462,23 @@ $(function(){
 							case 'sample':
 								$(document).bind('keydown', val, function(){  });
 								break;
+						}
+					});
+				}
+				if( keymapping.hasOwnProperty( 'input_histry' ) && keymapping[ 'input_histry'] ){
+					$('input#message').bind('keydown', 'up', function(){
+						if( self.history.log.length > self.history.i+1){
+							self.history.i++;
+							$('input#message').val( self.history.log[ self.history.i ] );
+						}
+					});
+					$('input#message').bind('keydown', 'down', function(){
+						if( self.history.i > 0 ){
+							self.history.i--;
+							$('input#message').val( self.history.log[ self.history.i ] );
+						}else{
+							self.history.i = -1;
+							$('input#message').val( '' );
 						}
 					});
 				}
