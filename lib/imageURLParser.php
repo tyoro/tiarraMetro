@@ -8,7 +8,7 @@
 class ImageURLParser {
 
 	static function isImageFileURL ($url) {
-		if (preg_match("/\.(?:gif|jpe?g|png|svg)$/", $url)) {
+		if (preg_match("/\.(?:gif|jpe?g|png|svg)$/i", $url)) {
 			return true;
 		}
 
