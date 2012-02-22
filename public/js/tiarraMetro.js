@@ -457,7 +457,10 @@ $(function(){
 								$(document).bind('keydown', val, function(){ $(".status-notifier").click(); });
 								break;
 							case 'input_focus':
-								$(document).bind('keydown', val, function(){ $('input#message').focus(); });
+								$(document).bind('keydown', val, function(e){
+									$('input#message').focus();
+									e.preventDefault();
+								});
 								break;
 							case 'sample':
 								$(document).bind('keydown', val, function(){  });
