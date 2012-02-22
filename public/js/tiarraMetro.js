@@ -462,6 +462,11 @@ $(function(){
 									e.preventDefault();
 								});
 								break;
+							case 'input_blur':
+								$('input#message').bind('keydown', val, function(){
+									$('input#message').blur();
+								});
+								break;
 							case 'sample':
 								$(document).bind('keydown', val, function(){  });
 								break;
