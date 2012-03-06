@@ -66,7 +66,13 @@ $(function(){
 					},
 					dataType:'json',
 					type:'POST',
-					success:function(){
+					success:function( json ){
+						if( json[ 'error' ] ){
+							$('input#message').removeAttr('disabled').addClass('error');
+							$('form#post_form input[type=submit]').removeAttr('disabled');
+							alert( "socket回りで問題が発生しています。(投稿に成功している可能性もあります) : " + json[ 'msg' ] );
+							return;
+						}
 						$('input#message').removeAttr('disabled').removeClass('error');
 						$('form#post_form input[type=submit]').removeAttr('disabled');
 						$('input#message').val('');
