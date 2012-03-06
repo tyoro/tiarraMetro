@@ -86,6 +86,7 @@
 		}
 
 		protected function getURIBase() {
+			if( $this->options->base_uri == 'relative' ){ return $this->options->mountPoint."/"; }
 			$protocol = $this->settings->is_ssl ? 'https:' : 'http:' ;
 			$host = $_SERVER['HTTP_HOST'];
 

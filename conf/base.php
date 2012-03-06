@@ -32,6 +32,7 @@ $conf = Array(
 	,'cookie_save_time' => 7*86400
 	,'on_image' => 0
 	,'wallparper' => ''
+	,'base_uri' => 'absolute' //absolute,relative 
 );
 
 // javascript setting
