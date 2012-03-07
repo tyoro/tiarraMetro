@@ -659,8 +659,16 @@ $(function(){
 		},
 		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
-				elems = $('#list a.boxviewimage').attr("rel", "shadowbox[boxview];player=img");
-				Shadowbox.setup(elems.get(), {});
+				$("#list a.boxviewimage").each(function() {
+					link = $(this);
+					player = link.data("player");
+					if (player) {
+						Shadowbox.setup(link.get(), {
+							gallery: "preview",
+							player: player,
+						});
+					}
+				});
 			}
 		},
 		createRow : function( log,searchFlag ){
