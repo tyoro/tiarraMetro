@@ -31,7 +31,7 @@ $(function(){
 
 			this.keymappingInitialize( param.jsConf[ 'keymapping' ] );
 
-			Shadowbox.init();
+			Shadowbox.init({skipSetup: true});
 			$(document).on("click", "#sb-player", function() { Shadowbox.close(); });
 		},
 		htmlInitialize: function( param ){
@@ -659,7 +659,8 @@ $(function(){
 		},
 		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
-				$('#list a.boxviewimage').attr("rel", "shadowbox");
+				elems = $('#list a.boxviewimage').attr("rel", "shadowbox[boxview];player=img");
+				Shadowbox.setup(elems.get(), {});
 			}
 		},
 		createRow : function( log,searchFlag ){
