@@ -30,6 +30,9 @@ $(function(){
 			this.htmlInitialize( param );
 
 			this.keymappingInitialize( param.jsConf[ 'keymapping' ] );
+
+			Shadowbox.init();
+			$(document).on("click", "#sb-player", function() { Shadowbox.close(); });
 		},
 		htmlInitialize: function( param ){
 			var self = this;
@@ -656,7 +659,7 @@ $(function(){
 		},
 		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
-				$('#list a.boxviewimage').lightBox();
+				$('#list a.boxviewimage').attr("rel", "shadowbox");
 			}
 		},
 		createRow : function( log,searchFlag ){
