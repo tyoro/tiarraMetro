@@ -30,6 +30,9 @@ $(function(){
 			this.htmlInitialize( param );
 
 			this.keymappingInitialize( param.jsConf[ 'keymapping' ] );
+
+			Shadowbox.init({skipSetup: true});
+			$(document).on("click", "#sb-player", function() { Shadowbox.close(); });
 		},
 		htmlInitialize: function( param ){
 			var self = this;
@@ -662,7 +665,16 @@ $(function(){
 		},
 		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
-				$('#list a.boxviewimage').lightBox();
+				$("#list a.boxviewimage").each(function() {
+					link = $(this);
+					player = link.data("player");
+					if (player) {
+						Shadowbox.setup(link.get(), {
+							gallery: "preview",
+							player: player,
+						});
+					}
+				});
 			}
 		},
 		createRow : function( log,searchFlag ){

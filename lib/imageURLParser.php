@@ -35,6 +35,7 @@ class ImageURLParser {
 
 		$image_url = null;
 		$thumb_url = null;
+		$player = 'img';
 
 		# twitpic.com
 		if (self::hasSuffix($host, 'twitpic.com')) {
@@ -175,13 +176,17 @@ class ImageURLParser {
 		}
 		# youtube.com
 		else if (self::hasSuffix($host, 'youtube.com')) {
+			$player = 'swf';
 			$parameters = self::getParametersFromQuery($parsed_url['query']);
 
 			if (!empty($parameters['v'])) {
+				$image_url = sprintf('http://youtube.com/v/%s', $parameters['v']);
 				$thumb_url = sprintf('http://img.youtube.com/vi/%s/default.jpg', $parameters['v']);
 			}
 		} else if ($host === 'youtu.be') {
+			$player = 'swf';
 			$path = substr($path, 1);
+			$image_url = sprintf('http://youtube.com/v/%s', $path);
 			$thumb_url = sprintf('http://img.youtube.com/vi/%s/default.jpg', $path);
 		}
 /*
@@ -195,6 +200,7 @@ class ImageURLParser {
 			$vid = null;
 			$iid = null;
 			if (self::hasPrefix($path, '/watch/') ) {
+				$player = 'swf';
 				$path = substr($path, 7);
 				if( self::hasPrefix($path, 'sm' ) || self::hasPrefix($path, 'nm' ) ){
 					$vid = $path;
@@ -245,7 +251,7 @@ class ImageURLParser {
 		if( empty($thumb_url) ){
 			return null;
 		}
-		return array( $image_url, $thumb_url );
+		return array( $image_url, $thumb_url, $player );
 	}
 
 	static function hasPrefix ($value, $prefix) {
