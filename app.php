@@ -275,7 +275,7 @@
 			$on_image = $this->options->on_image;
 			$link_class = $on_image === 2 ? 'boxviewimage' : 'inlineimage';
 
-			return array_map( function($log) use ($on_image,$link_class) {
+			$logs = array_map( function($log) use ($on_image,$link_class) {
 				$after = "";
 				
 				$log[ 'log' ] = htmlspecialchars( $log[ 'log' ] );
@@ -306,6 +306,21 @@
 				
 				return $log;
 			}, $logs);
+
+			$combined_logs = array();
+			$prev_log = null;
+			foreach ($logs as $log) {
+				if ($prev_log && $prev_log['nick'] == $log['nick'] && $prev_log['time'] == $log['time']) {
+					$prev_log['log'] = $log['log'] . '<br>' . $prev_log['log'];
+				}
+				else {
+					if ($prev_log) array_push($combined_logs, $prev_log);
+					$prev_log = $log;
+				}
+			}
+			if ($prev_log) array_push($combined_logs, $prev_log);
+
+			return $combined_logs;
 		}
 	}
 
