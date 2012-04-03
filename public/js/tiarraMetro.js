@@ -871,9 +871,7 @@ $(function(){
 				type:'POST',
 			});
 
-			if( self.chLogs[channel_id].length >= 30 ){
-				self.addMoreButton( );
-			}
+			self.addMoreButton( );
 		},
 		addMoreButton : function(){
 			var self = this;
@@ -891,10 +889,15 @@ $(function(){
 					success:function(json){
 						if( json['error'] ){ return; }
 
-						$.each(json['logs'],function(i,log){ self.more_log(i, log, self.unread_num-self.addedLogCount); });
-						self.addedLogCount += json['logs'].length;
+						logs = json['logs'];
+						$.each(logs, function(i, log) { self.more_log(i, log, self.unread_num-self.addedLogCount); });
+						self.addedLogCount += logs.length;
 
-						self.addMoreButton( );
+						if (logs.length > 0) {
+							self.addMoreButton();
+						} else {
+							$('div#ch_foot').empty();
+						}
 
 						self.afterAdded(self.currentChannel);
 					}
