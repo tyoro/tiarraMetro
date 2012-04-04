@@ -1,0 +1,13 @@
+/* vim: set noet ft=css: */
+@charset "utf-8";
+
+/* チャンネル一覧の既読のみトグルマークを +/- に */
+div.headers span[name="list"].current:before {
+    content: '-';
+    font-size: 80%;
+    width: 1.8ex;
+}
+
+div.headers span[name="list"].current.closed:before {
+    content: '+';
+}

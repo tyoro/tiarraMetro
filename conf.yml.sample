@@ -8,7 +8,7 @@ password_md5: "4a7d1ed414474e4033ac29ccb8653d9b"
 tiarra_socket_name: 'tiarrametro'
 
 #mountPoint: '/hoge/public'
-#style: 'style-custom.css'
+#style: 'style-extend.css'
 #channel_list_label: 'channnels'
 #cookie_save_time: 86400
 
