@@ -23,6 +23,7 @@ $conf = Array(
 	//applicaiton
 	,'my_name'=> 'noname'
 	,'password_md5' => '4a7d1ed414474e4033ac29ccb8653d9b'
+	,'page_title' => 'tiarraMetro'
 	,'tiarra_socket_name' => 'tiarrametro'
 	,'theme' => 'dark'
 	,'accent' => 'tiarra'
