@@ -101,10 +101,10 @@
 				}
 			}
 
-			if( strlen($this->debug_msg) )
+			if( strlen(TiarraWEB::$debug_msg) )
 			{
-				$return['debug'] = $this->debug_msg;
-				$this->debug_msg = '';
+				$return['debug'] = TiarraWEB::$debug_msg;
+				TiarraWEB::$debug_msg = '';
 			}
 
 			return json_encode($return);
