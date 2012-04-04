@@ -14,6 +14,7 @@
 	class TiarraWEB extends MyFitzgerald {
 		public static $page_title = "tiarraMetro";
 		public static $msg = '';
+		public static $debug_msg = "";
 
 		public function index_main( $pivot = 'default', $default_channel_id = -1 ){
 			if( !$this->isLoggedIn() ){ 
@@ -99,6 +100,13 @@
 					$return = array( 'error' => true, 'msg' => 'parameter not found.' );
 				}
 			}
+
+			if( strlen($this->debug_msg) )
+			{
+				$return['debug'] = $this->debug_msg;
+				$this->debug_msg = '';
+			}
+
 			return json_encode($return);
 		}
 		public function api_post(){

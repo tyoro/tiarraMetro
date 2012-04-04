@@ -538,6 +538,10 @@ $(function(){
 					current: self.isCurrentPivotByName("list") ? "" : self.currentChannel
 				},
 				success:function(json){
+					if( 'debug' in json ){
+						console.log(json['debug']);
+					}
+
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
 							
