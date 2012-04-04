@@ -91,15 +91,24 @@ class dao_channel extends dao_base{
 		return ($name !== false) ? $name : null;
 	}
 
-	function getList( $server = "" ){
-		
+	function getList( $server = "", $sort = 0 ){ /* function getList( $server = "" ){} */
+/*		
 		$sql = "SELECT * FROM channel";
+		$sql = "SELECT channel.id as id, channel.name as name, channel.view as view, channel.created_on as created_on, channel.updated_on as updated_on, channel.readed_on as readed_on FROM channel, substring(channel.name, locate('@', channel.name) + 1) as network";
+*/
+                $sql = "SELECT channel.id, channel.name, channel.view, channel.created_on, channel.updated_on, channel.readed_on, substring(channel.name, locate('@', channel.name) + 1) as network FROM channel";
 		$values = array();
 
 		if( !empty($server) ){
-			$sql .= " WHERE name like ?";
+			$sql .= " WHERE channel.name like ? ";
 			$values[] = "%@".$server;
 		}
+                $order = $this->detectOrder($sort);
+                if (!empty($order)) {
+                        $sql .= $order;
+                }
+		// $this->debug_msg = $sql;
+		// print(htmlspecialchars($sql));
 
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
@@ -132,7 +141,7 @@ class dao_channel extends dao_base{
 		if (!empty($order)) {
 			$sql .= $order;
 		}
-
+		// print(htmlspecialchars($sql));
 
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}

@@ -46,7 +46,7 @@
 				array(
 					'max_id' => $max_id,
 					'channels' => $channel_list,
-					'all_channels' => $this->db->channel->getList(),
+					'all_channels' => $this->db->channel->getList('', $this->options->channel_list_sort),
 					'logs' => $log_list,
 					'pivot' => $pivot,
 					'default_channel' => $default_channel,
