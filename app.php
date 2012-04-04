@@ -321,7 +321,7 @@
 				if ($prev_log &&
 					$prev_log['nick'] == $log['nick'] &&
 					$prev_log['time'] == $log['time'] &&
-					$prev_log['channel_id'] == $log['channel_id'])
+					( !is_set( $prev_log['channel_id'] ) || $prev_log['channel_id'] == $log['channel_id']) )
 				{
 					$prev_log['log'] = $log['log'] . '<br>' . $prev_log['log'];
 				}
