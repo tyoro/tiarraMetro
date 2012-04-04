@@ -37,7 +37,7 @@ class Cookie
 	{
 		$closeKey = $pass;
 
-		if (is_file('/tmp/tM_' . $name.'.tmp') && isset($_COOKIE[$name])) {
+		if (is_file('/tmp/tM_'.md5($path).'.tmp') && isset($_COOKIE[$name])) {
 			//ワンタイムパスワードを読み込む
 			try{
 				$fp = fopen('/tmp/tM_'.md5($path).'.tmp','r');
