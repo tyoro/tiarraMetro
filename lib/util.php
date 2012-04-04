@@ -20,7 +20,7 @@ class Cookie
 		
 		//ワンタイムパスワードを書き込む
 		try{
-			$fp = fopen('/tmp/tM_'.$name.'.tmp','w');
+			$fp = fopen('/tmp/tM_'.md5($path).'.tmp','w');
 			fwrite($fp,base64_encode($iv));
 			fclose($fp);
 		}catch( Exception $e ){
@@ -40,7 +40,7 @@ class Cookie
 		if (is_file('/tmp/tM_' . $name.'.tmp') && isset($_COOKIE[$name])) {
 			//ワンタイムパスワードを読み込む
 			try{
-				$fp = fopen('/tmp/tM_'.$name.'.tmp','r');
+				$fp = fopen('/tmp/tM_'.md5($path).'.tmp','r');
 				$iv = base64_decode(fgets($fp));
 				fclose($fp);
 			}catch(Exception $e ){
