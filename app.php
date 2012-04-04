@@ -310,7 +310,11 @@
 			$combined_logs = array();
 			$prev_log = null;
 			foreach ($logs as $log) {
-				if ($prev_log && $prev_log['nick'] == $log['nick'] && $prev_log['time'] == $log['time']) {
+				if ($prev_log &&
+					$prev_log['nick'] == $log['nick'] &&
+					$prev_log['time'] == $log['time'] &&
+					$prev_log['channel_id'] == $log['channel_id'])
+				{
 					$prev_log['log'] = $log['log'] . '<br>' . $prev_log['log'];
 				}
 				else {
