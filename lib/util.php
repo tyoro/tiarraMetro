@@ -17,13 +17,19 @@ class Cookie
 		$closeKey = $pass;
 	   
 		$encryptValue = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $closeKey, $value, MCRYPT_MODE_CBC, $iv);
+		
+		//ワンタイムパスワードを書き込む
+		try{
+			$fp = fopen('/tmp/tM_'.$name.'.tmp','w');
+			fwrite($fp,base64_encode($iv));
+			fclose($fp);
+		}catch( Exception $e ){
+			return;
+		}
 	  
 		//暗号化された値をCookieに書き込みます。
 		//DOMAIN_FOR_COOKIEはCookieを使用するサイトのドメインです。
 		setcookie($name,base64_encode($encryptValue),$time , $path, $_SERVER['SERVER_NAME']);
-	   
-		//暗号化された値を解読するためのキーをCookieに書き込みます。
-		setcookie("iv_" . $name ,base64_encode($iv),$time , $path, $_SERVER['SERVER_NAME'] );
 	}
 
 	//Cookieを取得するためのメソッド
@@ -31,8 +37,16 @@ class Cookie
 	{
 		$closeKey = $pass;
 
-		if (isset($_COOKIE['iv_' . $name]) && isset($_COOKIE[$name])) {
-			$iv = base64_decode($_COOKIE['iv_' . $name]);
+		if (is_file('/tmp/tM_' . $name.'.tmp') && isset($_COOKIE[$name])) {
+			//ワンタイムパスワードを読み込む
+			try{
+				$fp = fopen('/tmp/tM_'.$name.'.tmp','r');
+				$iv = base64_decode(fgets($fp));
+				fclose($fp);
+			}catch(Exception $e ){
+				return false;
+			}
+			
 			$encryptValue = base64_decode($_COOKIE[$name]);
 		   
 			//Cookieに保存されていたキーを使用してCookieの値を複合します。
@@ -44,9 +58,9 @@ class Cookie
 
 	//Cookieを削除する為のメソッド
 	static public function delete($name,$path){
-		if (isset($_COOKIE['iv_' . $name]) && isset($_COOKIE[$name])) {
+		if (is_file('/tmp/tM_' . $name.'.tmp') && isset($_COOKIE[$name])) {
+			unlink( '/tmp/tM_' . $name.'.tmp' );
 			setcookie( $name, null, Cookie::$endExpire, $path, $_SERVER['SERVER_NAME'] );
-			setcookie( 'iv_'.$name, null, Cookie::$endExpire, $path, $_SERVER['SERVER_NAME'] );
 		}
 	}
 
