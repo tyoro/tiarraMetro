@@ -1,0 +1,61 @@
+/* vim: set noet ft=css: */
+@charset "utf-8";
+@import url("style.css");
+
+
+/* for Windows Phone */
+/*
+ul.channel_list li span {
+	font-size: 2.2em;
+}
+*/
+
+
+/* チャンネル一覧の既読のみトグルマークを +/- に */
+div.headers span[name="list"].current:before {
+    content: '-';
+    font-size: 80%;
+    width: 1.8ex;
+}
+div.headers span[name="list"].current.closed:before {
+    content: '+';
+}
+
+
+/* 電卓風ポップアップメニュー */
+div#log_popup_menu {
+    width: auto;
+}
+div#log_popup_menu ul {
+    margin: -0.3em 0.7em 0.8em;
+    padding: 0;
+    zoom: 1;
+}
+div#log_popup_menu ul:before {
+    display: table;
+    content: "";
+    zoom: 1;
+}
+div#log_popup_menu ul:after {
+    display: table;
+    content: "";
+    zoom: 1;
+    clear: both;
+}
+div#log_popup_menu ul li {
+    width: 2.5em;
+    padding: 0.3em 0.7em;
+    float: left;
+    overflow: hidden;
+    text-align: center;
+    border: 2px solid #202020;
+    margin: 0.1em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    border-radius: 0.3em;
+}
+div#log_popup_menu ul li:nth-child(3n + 4) {
+    clear: both;
+}
+
+
