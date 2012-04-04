@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="./images/apple-touch-icon.png" />
 <!-- link rel="apple-touch-icon" href="apple-touch-icon-precomposed.png" / -->
 <base href="<?php print $uri_base; ?>">
-<title><?php echo TiarraWEB::$page_title; ?></title>
+<title><?php !empty($options->page_title) ? print(htmlspecialchars($options->page_title)):print(htmlspecialchars(TiarraWEB::$page_title)); ?></title>
 <link type="text/css" rel="stylesheet" href="css/jquery.metro.css" />
 <link type="text/css" rel="stylesheet" href="css/jquery.jgrowl.css" />
 <link type="text/css" rel="stylesheet" href="css/shadowbox.css" />
