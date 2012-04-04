@@ -81,7 +81,7 @@ class  yaml2conf
 								$this->jsConf[ 'log_popup_menu' ][ 'network' ][ $key ] = $quickpost_only_popup_menu_no_close;
 								break;
 							default:
-								$this->addError( "network default setting not fodun. [ $network_setting ]");
+								$this->addError( "network default setting not found. [ $network_setting ]");
 								continue;
 						}
 					}
