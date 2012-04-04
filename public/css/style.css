@@ -1,5 +1,11 @@
+@charset "utf-8";
+
 * {
 	font-family: sans-serif;
+}
+body {
+	/* for fix font size at screen lotation on iPhone */
+        -webkit-text-size-adjust: 96%;
 }
 div {display:block;}
 body,div,span,font,input,select {
@@ -186,6 +192,7 @@ ul.channel_list li.select {
 	height: 32px;
 	margin-top: 2px;
 	margin-right: 5px;
+        background-color: #404040;
 }
 .line .avatar img {
 	max-width: 32px;
@@ -337,6 +344,7 @@ div#log_popup_menu {
 div#log_popup_menu form {
 	margin: 0;
 	padding: .3em .8em;
+        padding-top: .6em;
 }
 div#log_popup_menu input[type=text] {
 	width: 192px;
