@@ -102,9 +102,9 @@
 		</form>
 	</div>
 	<h4>setting menu</h4>
-	<input type="button" value="setting reset" id="setting_reset" />
 	<div id="setting_foot">
-	<input type="button" value="close" id="setting_close" />
+		<input type="button" value="setting reset" id="setting_reset" />
+		<input type="button" value="close" id="setting_close" />
 	</div>
 </div>
 <div id="log_popup_menu" style="display:none;">
