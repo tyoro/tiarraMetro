@@ -191,16 +191,16 @@ $(function(){
 				}else{
 					on_icon = self.jsConf['on_icon'];
 				}
-				$('form#setting_form select[name=on_icon]').val( on_icon?'on':'off' );
+				$('form#setting_form input[name=on_icon]').val( on_icon?'on':'off' );
 				if( $('ul.channel_list li#ch_'+channel_id ).length ){
 					view = true;
 				}else{
 					view = false;
 				}
-				$('form#setting_form select[name=view]').val( view?'on':'off' );
+				$('form#setting_form input[name=view]').val( view?'on':'off' );
 
-				$('form#setting_form select[name=new_check]').val( (setting.hasOwnProperty( 'new_check' )?setting['new_check']:true)?'on':'off'  );
-				$('form#setting_form select[name=pickup_check]').val( (setting.hasOwnProperty( 'pickup_check' )?setting['new_check']:true)?'on':'off'  );
+				$('form#setting_form input[name=new_check]').val( (setting.hasOwnProperty( 'new_check' )?setting['new_check']:true)?'on':'off'  );
+				$('form#setting_form input[name=pickup_check]').val( (setting.hasOwnProperty( 'pickup_check' )?setting['new_check']:true)?'on':'off'  );
 			});
 			/* チャンネル設定の適用 */
 			$('form#setting_form').submit( function(){
@@ -208,21 +208,21 @@ $(function(){
 				submit.attr('disabled','disabled');
 
 				channel_id = $('select#channel_setting_select option:selected').val();
-				on_icon = $('form#setting_form select[name=on_icon] option:selected').val();
+				on_icon = $('form#setting_form input[name=on_icon]:checked').val();
 				if( on_icon == 'default' ){
 					self.deleteChannelSetting( channel_id, 'on_icon' );
 				}else{
 					self.setChannelSetting( channel_id, 'on_icon', on_icon == 'on' );
 				}
-				self.setChannelSetting( channel_id, 'new_check', $('form#setting_form select[name=new_check] option:selected').val()=='on' );
-				self.setChannelSetting( channel_id, 'pickup_check', $('form#setting_form select[name=pickup_check] option:selected').val()=='on' );
+				self.setChannelSetting( channel_id, 'new_check', $('form#setting_form input[name=new_check]:checked').val()=='on' );
+				self.setChannelSetting( channel_id, 'pickup_check', $('form#setting_form input[name=pickup_check]:checked').val()=='on' );
 
 				$.ajax({
 					url:self.mountPoint+'/api/setting/view/'+channel_id,
 					dataType:'json',
 					type:'POST',
 					data:{
-						value: $('form#setting_form select[name=view] option:selected').val()
+						value: $('form#setting_form radio[name=view] option:selected').val()
 					},
 					success: function( data ){
 						submit.removeAttr('disabled');

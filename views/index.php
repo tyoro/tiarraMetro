@@ -56,7 +56,7 @@
 <div class='pivot-item' name="setting">
 	<h3></h3>
 	<span id="setting_message">setting</span>
-	<h4>channels setting</h4>
+	<h4>channel settings</h4>
 	<div class="setting_entry" >
 		<form id="setting_form" >
 			<select name="channel" id="channel_setting_select" >
@@ -66,6 +66,7 @@
 				<?php } ?>
 			</select>
 			<div id="channel_setting_elements" style="display:none;" >
+<!--
 			<dl>
 				<dt>アイコンの表示</dt>
 				<dd>
@@ -95,6 +96,30 @@
 						<option value="on">オン</option>
 						<option value="off">オフ</option>
 					</select>
+				</dd>
+			</dl>
+-->
+			<dl>
+				<dt>アイコンの表示</dt>
+				<dd>
+					<input type='radio' id='show_icon_def' name='on_icon' value='default' /><label for='show_icon_def'>規定値</label>
+					<input type='radio' id='show_icon_on' name='on_icon' value='on' /><label for='show_icon_on'>オン</label>
+					<input type='radio' id='show_icon_off' name='on_icon' value='off' /><label for='show_icon_off'>オフ</label>
+				</dd>
+				<dt>チャンネル一覧への表示</dt>
+				<dd>
+					<input type='radio' id='show_to_list_on' name='view' value='on' /><label for='show_to_list_on'>オン</label>
+					<input type='radio' id='show_to_list_off' name='view' value='off' /><label for='show_to_list_off'>オフ</label>
+				</dd>
+				<dt>新着のチェック</dt>
+				<dd>
+					<input type='radio' id='check_new_on' name='new_check' value='on' /><label for='check_new_on'>オン</label>
+					<input type='radio' id='check_new_off' name='new_check' value='off' /><label for='check_new_off'>オフ</label>
+				</dd>
+				<dt>ピックアップのチェック</dt>
+				<dd>
+					<input type='radio' id='check_pickup_on' name='pickup_check' value='on' /><label for='check_pickup_on'>オン</label>
+					<input type='radio' id='check_pickup_off' name='pickup_check' value='off' /><label for='check_pickup_off'>オフ</label>
 				</dd>
 			</dl>
 			<input type="submit" value='submit' />
