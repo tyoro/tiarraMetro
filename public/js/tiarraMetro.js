@@ -208,14 +208,14 @@ $(function(){
 				}else{
 					view = false;
 				}
-				$('form#setting_form input:checkbox[name=view]').attr( { checked: "( view?'checked':'' )" } );
+				$('form#setting_form input:checkbox[name=view]').attr( { checked: ( view?true:false ) } );
 
 				// 新着のチェック
-				$('form#setting_form input:checkbox[name=new_check]').attr( { checked: "( (setting.hasOwnProperty( 'new_check' )?setting['new_check']:true)?'checked':'' )" } );
+				$('form#setting_form input:checkbox[name=new_check]').attr( { checked: ( (setting.hasOwnProperty( 'new_check' )?setting['new_check']:true)?true:false ) } );
 				// キーワードヒット
-				$('form#setting_form input:checkbox[name=pickup_check]').attr( { checked: "( (setting.hasOwnProperty( 'pickup_check' )?setting['new_check']:true)?'checked':'' )" } );
+				$('form#setting_form input:checkbox[name=pickup_check]').attr( { checked: ( (setting.hasOwnProperty( 'pickup_check' )?setting['pickup_check']:true)?true:false ) } );
 				// 巡回対象
-				$('form#setting_form input:checkbox[name=to_rounds]').attr( { checked: "( (setting.hasOwnProperty( 'to_rounds' )?setting['to_rounds']:true)?'checked':'' )" } );
+				$('form#setting_form input:checkbox[name=to_rounds]').attr( { checked: ( (setting.hasOwnProperty( 'to_rounds' )?setting['to_rounds']:true)?true:false ) } );
 			});
 			/* チャンネル設定の適用 */
 			$('form#setting_form').submit( function(){
