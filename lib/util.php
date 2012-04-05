@@ -58,8 +58,8 @@ class Cookie
 
 	//Cookieを削除する為のメソッド
 	static public function delete($name,$path){
-		if (is_file('/tmp/tM_' . $name.'.tmp') && isset($_COOKIE[$name])) {
-			unlink( '/tmp/tM_' . $name.'.tmp' );
+		if (is_file('/tmp/tM_'.md5($path).'.tmp') && isset($_COOKIE[$name])) {
+			unlink( '/tmp/tM_'.md5($path).'.tmp' );
 			setcookie( $name, null, Cookie::$endExpire, $path, $_SERVER['SERVER_NAME'] );
 		}
 	}
