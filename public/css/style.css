@@ -377,6 +377,20 @@ div#log_popup_menu ul li:hover {
 	background-color: #404040;
 }
 
+form#setting_form #setting_next {
+	content: "&raquo";
+	height: 2em;
+	width: 3em;
+}
+
+form#setting_form ul {
+	padding-left: 1em;
+}
+form#setting_form li {
+	line-height: 2em;
+	list-style-type: none;
+}
+
 form#setting_form dl {
 	margin: 0.5em 0;
 	padding: 0;

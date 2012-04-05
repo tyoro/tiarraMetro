@@ -55,7 +55,7 @@
 </div>
 <div class='pivot-item' name="setting">
 	<h3></h3>
-	<span id="setting_message">setting</span>
+	<!-- span id="setting_message">setting</span -->
 	<h4>channel settings</h4>
 	<div class="setting_entry" >
 		<form id="setting_form" >
@@ -65,64 +65,21 @@
 					<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
 				<?php } ?>
 			</select>
+			<input type='button' id='setting_next' name='next' value='next' style='content: &raquo;' onclick="var obj = document.getElementById('channel_setting_select'); var i = obj.selectedIndex ; obj.selectedIndex = (i>=obj.length-1 ? 0:i+1); $('select#channel_setting_select').trigger('change'); return false;" />
 			<div id="channel_setting_elements" style="display:none;" >
-<!--
-			<dl>
-				<dt>アイコンの表示</dt>
-				<dd>
-					<select name="on_icon">
-						<option value="default">既定値</option>
-						<option value="on">オン</option>
-						<option value="off">オフ</option>
-					</select>
-				</dd>
-				<dt>チャンネル一覧への表示</dt>
-				<dd>
-					<select name="view">
-						<option value="on">オン</option>
-						<option value="off">オフ</option>
-					</select>
-				</dd>
-				<dt>新着のチェック</dt>
-				<dd>
-					<select name="new_check">
-						<option value="on">オン</option>
-						<option value="off">オフ</option>
-					</select>
-				</dd>
-				<dt>ピックアップのチェック</dt>
-				<dd>
-					<select name="pickup_check">
-						<option value="on">オン</option>
-						<option value="off">オフ</option>
-					</select>
-				</dd>
-			</dl>
--->
-			<dl>
-				<dt>アイコンの表示</dt>
-				<dd>
-					<input type='radio' id='show_icon_def' name='on_icon' value='default' /><label for='show_icon_def'>規定値</label>
-					<input type='radio' id='show_icon_on' name='on_icon' value='on' /><label for='show_icon_on'>オン</label>
-					<input type='radio' id='show_icon_off' name='on_icon' value='off' /><label for='show_icon_off'>オフ</label>
-				</dd>
-				<dt>チャンネル一覧への表示</dt>
-				<dd>
-					<input type='radio' id='show_to_list_on' name='view' value='on' /><label for='show_to_list_on'>オン</label>
-					<input type='radio' id='show_to_list_off' name='view' value='off' /><label for='show_to_list_off'>オフ</label>
-				</dd>
-				<dt>新着のチェック</dt>
-				<dd>
-					<input type='radio' id='check_new_on' name='new_check' value='on' /><label for='check_new_on'>オン</label>
-					<input type='radio' id='check_new_off' name='new_check' value='off' /><label for='check_new_off'>オフ</label>
-				</dd>
-				<dt>ピックアップのチェック</dt>
-				<dd>
-					<input type='radio' id='check_pickup_on' name='pickup_check' value='on' /><label for='check_pickup_on'>オン</label>
-					<input type='radio' id='check_pickup_off' name='pickup_check' value='off' /><label for='check_pickup_off'>オフ</label>
-				</dd>
-			</dl>
-			<input type="submit" value='submit' />
+				<ul>
+					<li>
+						アイコンの表示
+                                        	<input type='radio' id='show_icon_def' name='on_icon' value='default' /><label for='show_icon_def'>規定値</label>
+                                   		<input type='radio' id='show_icon_on' name='on_icon' value='on' /><label for='show_icon_on'>オン</label>
+                                        	<input type='radio' id='show_icon_off' name='on_icon' value='off' /><label for='show_icon_off'>オフ</label>
+					</li>
+					<li><input type='checkbox' id='show_to_list' name='view' value='on' /><label for='show_to_list'>チャンネル一覧へ表示する</label></li>
+					<li><input type='checkbox' id='check_new' name='new_check' value='on' /><label for='check_new'>新着をチェックする</label></li>
+					<li><input type='checkbox' id='check_pickup' name='pickup_check' value='on' /><label for='check_pickup'>キーワードヒットさせる</label></li>
+					<li><input type='checkbox' id='to_rounds' name='to_rounds' value='on' /><label for='to_rounds'>巡回機能の対象に入れる</label></li>
+				</ul>
+				<input type="submit" value='submit' />
 			</div>
 		</form>
 	</div>

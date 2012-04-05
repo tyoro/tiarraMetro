@@ -73,7 +73,7 @@ $(function(){
 						if( json[ 'error' ] ){
 							$('input#message').removeAttr('disabled').addClass('error');
 							$('form#post_form input[type=submit]').removeAttr('disabled');
-							alert( "socket回りで問題が発生しています。(投稿に成功している可能性もあります) : " + json[ 'msg' ] );
+							alert( "Socket通信時にエラーが発生しました(投稿に成功している場合もあります)。\r\n" + json[ 'msg' ] );
 							return;
 						}
 						$('input#message').removeAttr('disabled').removeClass('error');
@@ -181,26 +181,41 @@ $(function(){
 			/* 設定のチャンネルリストの変更 */
 			$('select#channel_setting_select').change( function(){
 				channel_id = $('select#channel_setting_select option:selected').val();
-				if( channel_id == '' ){ $('#channel_setting_elements').css('display','none'); }
-				else{ $('#channel_setting_elements').css('display','block'); }
+				if( channel_id == '' ) {
+					$('#channel_setting_elements').css('display','none');
+				} else {
+					$('#channel_setting_elements').css('display','block');
+				}
 
 				setting = self.getChannelSettings( channel_id );
-				
+
+				// アイコンの表示
+				// def_show_icon = self.jsConf['on_icon'];
 				if( setting.hasOwnProperty( 'on_icon' ) ){
 					on_icon = setting['on_icon'];
+					if (on_icon) {
+						$('form#setting_form input[name=on_icon]:radio').val(['on']);
+					} else {
+						$('form#setting_form input[name=on_icon]:radio').val(['off']);
+					}
 				}else{
-					on_icon = self.jsConf['on_icon'];
+					$('form#setting_form input[name=on_icon]:radio').val(['default']);
 				}
-				$('form#setting_form input[name=on_icon]').val( on_icon?'on':'off' );
+
+				// チャンネル一覧への表示
 				if( $('ul.channel_list li#ch_'+channel_id ).length ){
 					view = true;
 				}else{
 					view = false;
 				}
-				$('form#setting_form input[name=view]').val( view?'on':'off' );
+				$('form#setting_form input:checkbox[name=view]').attr( { checked: "( view?'checked':'' )" } );
 
-				$('form#setting_form input[name=new_check]').val( (setting.hasOwnProperty( 'new_check' )?setting['new_check']:true)?'on':'off'  );
-				$('form#setting_form input[name=pickup_check]').val( (setting.hasOwnProperty( 'pickup_check' )?setting['new_check']:true)?'on':'off'  );
+				// 新着のチェック
+				$('form#setting_form input:checkbox[name=new_check]').attr( { checked: "( (setting.hasOwnProperty( 'new_check' )?setting['new_check']:true)?'checked':'' )" } );
+				// キーワードヒット
+				$('form#setting_form input:checkbox[name=pickup_check]').attr( { checked: "( (setting.hasOwnProperty( 'pickup_check' )?setting['new_check']:true)?'checked':'' )" } );
+				// 巡回対象
+				$('form#setting_form input:checkbox[name=to_rounds]').attr( { checked: "( (setting.hasOwnProperty( 'to_rounds' )?setting['to_rounds']:true)?'checked':'' )" } );
 			});
 			/* チャンネル設定の適用 */
 			$('form#setting_form').submit( function(){
@@ -208,21 +223,28 @@ $(function(){
 				submit.attr('disabled','disabled');
 
 				channel_id = $('select#channel_setting_select option:selected').val();
-				on_icon = $('form#setting_form input[name=on_icon]:checked').val();
+
+				// アイコンの表示
+				on_icon = $('form#setting_form input:radio[name=on_icon]:checked').val();
 				if( on_icon == 'default' ){
 					self.deleteChannelSetting( channel_id, 'on_icon' );
 				}else{
 					self.setChannelSetting( channel_id, 'on_icon', on_icon == 'on' );
 				}
-				self.setChannelSetting( channel_id, 'new_check', $('form#setting_form input[name=new_check]:checked').val()=='on' );
-				self.setChannelSetting( channel_id, 'pickup_check', $('form#setting_form input[name=pickup_check]:checked').val()=='on' );
+				// 新着のチェック
+				self.setChannelSetting( channel_id, 'new_check', $('form#setting_form input:checkbox[name=new_check]:checked').val()=='on' );
+				// キーワードヒット
+				self.setChannelSetting( channel_id, 'pickup_check', $('form#setting_form input:checkbox[name=pickup_check]:checked').val()=='on' );
+				// 巡回対象
+				self.setChannelSetting( channel_id, 'to_rounds', $('form#setting_form input:checkbox[name=to_rounds]:checked').val()=='on' );
 
+				// チャンネル一覧への表示
 				$.ajax({
 					url:self.mountPoint+'/api/setting/view/'+channel_id,
 					dataType:'json',
 					type:'POST',
 					data:{
-						value: $('form#setting_form radio[name=view] option:selected').val()
+						value: $('form#setting_form input:checkbox[name=view]:checked').val()
 					},
 					success: function( data ){
 						submit.removeAttr('disabled');
@@ -971,6 +993,16 @@ $(function(){
 			channels[ channel_id ][ key ] = value;
 			localStorage.setItem( 'channels', JSON.stringify(channels) );
 		},
+                deleteChannelSetting: function( channel_id, key ){
+                        channels = localStorage.getItem( 'channels' );
+                        if( channels == null ){ channels = {}; }
+                        else{ channels = JSON.parse( channels ); }
+                        if( !channels.hasOwnProperty(channel_id) ) { channels[ channel_id ] = {}; }
+			if (channels[channel_id].hasOwnProperty(key)) {
+				delete channels[channel_id][key];
+			}
+                        localStorage.setItem( 'channels', JSON.stringify(channels) );
+                },
 
 		/* Pivot helpers */
 		getPivotController: function() {
