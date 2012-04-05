@@ -79,7 +79,7 @@
 					<li><input type='checkbox' id='check_pickup' name='pickup_check' value='on' /><label for='check_pickup'>キーワードヒットさせる</label></li>
 					<li><input type='checkbox' id='to_rounds' name='to_rounds' value='on' /><label for='to_rounds'>巡回機能の対象に入れる</label></li>
 				</ul>
-				<input type="submit" value='submit' />
+				<input type="submit" name='submit' value='save' />
 			</div>
 		</form>
 	</div>
