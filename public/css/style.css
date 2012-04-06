@@ -377,6 +377,10 @@ div#log_popup_menu ul li:hover {
 	background-color: #404040;
 }
 
+#channel_setting_select {
+	width: 256px;
+}
+
 form#setting_form #setting_next {
 /*
 	content: "&raquo";
