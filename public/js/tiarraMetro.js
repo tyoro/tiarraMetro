@@ -166,6 +166,11 @@ $(function(){
 				if (!self.isCurrentPivotByName("search")) {
 					self.goToPivotByName("search");
 				}
+				if (self.jsConf['on_icon']) {
+					$('#search-list').addClass( 'on_icon' );
+				} else {
+					$('#search-list').removeClass( 'on_icon' );
+				}
 			});
 			/* 検索画面を閉じる */
 			$('input#search_close').click(function(){
