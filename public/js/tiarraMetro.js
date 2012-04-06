@@ -563,6 +563,13 @@ $(function(){
 					if( 'debug' in json ){
 						console.log(json['debug']);
 					}
+					if (json['error']) {
+						if (json['msg'] == 'no login.') {
+							// セッション期限切れ
+							location.href = self.mountPoint+'/logout';
+							return false;
+						}
+					}
 
 					if( json['update'] ){
 						$.each( json['logs'], function(channel_id, logs){
