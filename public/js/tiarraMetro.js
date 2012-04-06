@@ -132,7 +132,7 @@ $(function(){
 				if( kw.length == 0 ){ return false; }
 
 				$('#search-list').empty();
-				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..."></div>' );
+				$('#search_result_message').html( '<span>searching...</span><div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..."></div>' );
 
 				$('div.headers span.header[name=search]').text( 'search' );
 				if (!self.isCurrentPivotByName("search")) {
@@ -151,18 +151,31 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 					success:function(json){
-						$('#search_result_message').text('search result '+json.length);
+						$('#search_result_message').text('search: "'+kw+'", result: '+json.length);
 						if( json.length	){
 							$.each( json, function(i,log){ self.add_result(i,log); } ); 
 						}
-						self.addCloseButton();
-
-						self.afterAdded(null);
 					}
 				})
 				return false;
 			});
 			
+			/* 検索画面の表示 */
+			$('input#search_open').click(function(){
+				$('div.headers span.header[name=search]').text( 'search' );
+				if (!self.isCurrentPivotByName("search")) {
+					self.goToPivotByName("search");
+				}
+			});
+			/* 検索画面を閉じる */
+			$('input#search_close').click(function(){
+				$('div.headers span.header[name=search]').html( '' );
+				if (!self.isCurrentPivotByName("list")) {
+					self.goToPivotByName("list");
+					self.onListInvisible();
+				}
+			});
+
 			/* 設定画面の表示 */
 			$('input#setting_button').click(function(){
 				$('div.headers span.header[name=setting]').text( 'setting' );
@@ -937,18 +950,6 @@ $(function(){
 				});
 			});
 			$('div#ch_foot').html(button);
-		},
-		addCloseButton : function(){
-			var self = this;
-			button = $('<input type="button" value="close">');
-			button.click(function(){
-				$('div.headers span.header[name=search]').html( '' );
-				if (!self.isCurrentPivotByName("list")) {
-					self.goToPivotByName("list");
-					self.onListInvisible();
-				}
-			});
-			$('div#search_foot').html(button);
 		},
 		onListInvisible: function(){
 			if( $('ul.channel_list li.new').length || $('ul.channel_list li.hit').length ){

@@ -12,22 +12,10 @@
 	</li>
 	<?php } ?>
 	</ul>
-	<div class="search">
-		<h4>search</h4>
-		<form method="POST" id="search_form" role="search">
-			<input type="text" name="word"  id="keyword" />
-			<select name="channel" id="channel_select">
-				<option value="" >----</option>
-				<?php foreach( $channels as $ch ){ ?>
-					<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
-				<?php } ?>
-			</select>
-			<input type="submit" id="search" name="search" value='search' />
-		</form>
-	</div>
 	<div class="util">
 		<h4>utilities</h4>
 		<input type="button" id="unread_reset" value="reset unread count" />
+		<input type='button' id='search_open' value='search' />
 		<input type="button" id="setting_button" value="setting" />
 		<input type="button" id="logout" value="logout" />
 	</div>
@@ -48,10 +36,22 @@
 </div>
 <div class='pivot-item' name="search">
 	<h3></h3>
-	<span id="search_result_message">search result</span>
+	<h4>search</h4>
+	<form method="POST" id="search_form" role="search">
+		<input type="text" name="word"  id="keyword" />
+		<select name="channel" id="channel_select">
+			<option value="" >----</option>
+			<?php foreach( $channels as $ch ){ ?>
+			<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
+			<?php } ?>
+		</select>
+		<input type="submit" id="search" name="search" value='search' />
+	</form>
+
+	<span id="search_result_message">input search options, then press 'search'.</span>
 	<div id="search-list" class="list">
 	</div>
-	<div id="search_foot"></div>
+	<div id="search_foot"><h4>misc.</h4><input type="button" id='search_close' name='close' value="close" /></div>
 </div>
 <div class='pivot-item' name="setting">
 	<h3></h3>
