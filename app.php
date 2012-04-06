@@ -261,13 +261,13 @@
 			
  		private function isLoggedIn() {
 			if( empty($this->options->password_md5) ){ return true; }
-			if( $this->session->login ){ return true; }
+			if( !is_null($this->session->login) && $this->session->login ){ return true; }
 
 			if( Cookie::get('UniqueId', $this->options->password_md5 ) == $this->options->my_name ){
 				Cookie::set('UniqueId',$this->options->my_name,$this->options->password_md5,time()+$this->options->cookie_save_time, $this->options->mountPoint.'/' );
 				return true;
 			}
-			return !is_null($this->session->login);
+			return false;
 		}
 
 		//util
