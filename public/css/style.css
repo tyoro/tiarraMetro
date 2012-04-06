@@ -378,9 +378,22 @@ div#log_popup_menu ul li:hover {
 }
 
 form#setting_form #setting_next {
+/*
 	content: "&raquo";
 	height: 2em;
 	width: 3em;
+*/
+}
+
+#setting_next {
+        border: 0;
+        padding: 0;
+        margin: 4px .5em;
+        width: 24px;
+        height: 24px;
+        background-size: 24px 24px; /* contain */
+        text-indent: -9999px;
+        background: url(../images/tool_right.png) no-repeat;
 }
 
 form#setting_form ul {
