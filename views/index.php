@@ -24,8 +24,8 @@
 	<h3></h3>
 	<form method="POST" id="post_form" class="theme-bg">
 		<input type="text" name="post" id="message" />
-		<input type="submit" value="post" />
-		<label for='notice'>notice</label><input type="checkbox" name="notice" id="notice" value="true" />
+		<input type="submit" id='post_submit' name='post' value="post" />
+		<input type="checkbox" name="notice" id="notice" value="true" /><label for='notice'>notice</label>
 	</form>
 	<div class="status-notifier">
 		<hr />

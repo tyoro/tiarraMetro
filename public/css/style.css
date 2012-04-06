@@ -382,14 +382,6 @@ div#log_popup_menu ul li:hover {
 }
 
 form#setting_form #setting_next {
-/*
-	content: "&raquo";
-	height: 2em;
-	width: 3em;
-*/
-}
-
-#setting_next {
         border: 0;
         padding: 0;
         margin: 4px .5em;
