@@ -111,8 +111,8 @@ class ImageURLParser {
 		else if (self::hasSuffix($host, 'flic.kr')) {
 			$short_id = substr($path, 3);
 			$short_id = preg_replace('/\/?$/', '', $short_id);
-			$image_url = sprintf('http://flic.kr/p/img/%@_m.jpg', $short_id);
-			$thumb_url = sprintf('http://flic.kr/p/img/%@_t.jpg', $short_id);
+			$image_url = sprintf('http://flic.kr/p/img/%s_m.jpg', $short_id);
+			$thumb_url = sprintf('http://flic.kr/p/img/%s_t.jpg', $short_id);
 		}
 		# instagram
 		else if (self::hasSuffix($host, 'instagr.am')) {
