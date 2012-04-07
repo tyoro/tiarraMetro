@@ -194,7 +194,7 @@ class ImageURLParser {
 		else if () {
 
 		}
-		*/
+*/
 		# nicovideo.jp
 		else if (self::hasSuffix($host, 'nicovideo.jp')) {
 			$vid = null;
@@ -243,6 +243,14 @@ class ImageURLParser {
 				$thumb_url = $image_url . '/thumb'; # . '/400'
 			}
 		}
+                # photozou.jp
+                else if ($host === 'photozou.jp') {
+			$paths = explode('/', substr($path, 1));
+
+			$image_url = $url;
+			$thumb_url = 'http://photozou.jp/p/thumb/' . $paths[count($paths)-1]; #  'p/img/' . $paths[count($paths)-1]
+                }
+
 /*
 		#
 		else if () {
