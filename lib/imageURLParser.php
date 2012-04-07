@@ -236,11 +236,14 @@ class ImageURLParser {
                                 $thumb_url = $image_url . '.jpeg'; # . '&size=256'
                         }
 		}
-/*
-		#
-		else if () {
-
+		# picplz.com
+		else if ($host === 'picplz.com') {
+			if( strlen( $path ) ){
+				$image_url = $url;
+				$thumb_url = $image_url . '/thumb'; # . '/400'
+			}
 		}
+/*
 		#
 		else if () {
 
