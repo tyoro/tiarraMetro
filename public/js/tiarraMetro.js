@@ -527,6 +527,7 @@ $(function(){
 				}
 				if( keymapping.hasOwnProperty( 'input_histry' ) && keymapping[ 'input_histry'] ){
 					$('input#message').bind('keydown', 'up', function(){
+						// 入力中にうっかりしたとき対策
 						message = document.getElementById('message').value;
 						if (self.history.i < 0) {
 							if (message != '') {	// maybe -1
@@ -547,7 +548,7 @@ $(function(){
 							self.history.i--;
 							$('input#message').val( self.history.log[ self.history.i ] );
 						} else if (self.history.i < 0) {
-							//
+							// 入力中にうっかりしたとき対策
 						}else{
 							self.history.i = -1;
 							$('input#message').val( '' );
