@@ -98,6 +98,9 @@ $(function(){
 				message = post.val();
 				if( message.length == 0 ){ return false; }
 
+                                self.history.log.unshift( message );
+                                self.history.i = -1;
+
 				post.attr('disabled','disabled');
 				$('input[type=submit]',form).attr('disabled','disabled');
 				$.ajax({
@@ -524,15 +527,27 @@ $(function(){
 				}
 				if( keymapping.hasOwnProperty( 'input_histry' ) && keymapping[ 'input_histry'] ){
 					$('input#message').bind('keydown', 'up', function(){
+						message = document.getElementById('message').value;
+						if (self.history.i < 0) {
+							if (message != '') {	// maybe -1
+								if (message != self.history.log[0]) {
+									self.history.log.unshift( message );
+									// self.history.i = 0;
+								}
+							}
+						}
 						if( self.history.log.length > self.history.i+1){
 							self.history.i++;
 							$('input#message').val( self.history.log[ self.history.i ] );
 						}
 					});
 					$('input#message').bind('keydown', 'down', function(){
+						console.log('[down]history:'+self.history.i);
 						if( self.history.i > 0 ){
 							self.history.i--;
 							$('input#message').val( self.history.log[ self.history.i ] );
+						} else if (self.history.i < 0) {
+							//
 						}else{
 							self.history.i = -1;
 							$('input#message').val( '' );
