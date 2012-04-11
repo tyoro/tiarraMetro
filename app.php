@@ -2,6 +2,9 @@
 	set_include_path(dirname(__FILE__).'/lib:'.get_include_path());
 	set_include_path(dirname(__FILE__).'/conf:'.get_include_path());
 
+	include_once 'lib/checkExtension.php';
+	checkExtension( 'mbstring', 'mysql' );
+
 	include_once 'conf/load.php';
 
 	include_once 'dao.php';
