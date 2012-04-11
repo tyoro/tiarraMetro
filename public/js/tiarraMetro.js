@@ -98,6 +98,9 @@ $(function(){
 				message = post.val();
 				if( message.length == 0 ){ return false; }
 
+                                self.history.log.unshift( message );
+                                self.history.i = -1;
+
 				post.attr('disabled','disabled');
 				$('input[type=submit]',form).attr('disabled','disabled');
 				$.ajax({
@@ -132,7 +135,7 @@ $(function(){
 				if( kw.length == 0 ){ return false; }
 
 				$('#search-list').empty();
-				$('div#search_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..."></div>' );
+				$('#search_result_message').html( '<span>searching...</span><div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="searching..."></div>' );
 
 				$('div.headers span.header[name=search]').text( 'search' );
 				if (!self.isCurrentPivotByName("search")) {
@@ -151,18 +154,36 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 					success:function(json){
-						$('#search_result_message').text('search result '+json.length);
+						$('#search_result_message').text('search: "'+kw+'", result: '+json.length);
 						if( json.length	){
 							$.each( json, function(i,log){ self.add_result(i,log); } ); 
 						}
-						self.addCloseButton();
-
-						self.afterAdded(null);
 					}
 				})
 				return false;
 			});
 			
+			/* 検索画面の表示 */
+			$('input#search_open').click(function(){
+				$('div.headers span.header[name=search]').text( 'search' );
+				if (!self.isCurrentPivotByName("search")) {
+					self.goToPivotByName("search");
+				}
+				if (self.jsConf['on_icon']) {
+					$('#search-list').addClass( 'on_icon' );
+				} else {
+					$('#search-list').removeClass( 'on_icon' );
+				}
+			});
+			/* 検索画面を閉じる */
+			$('input#search_close').click(function(){
+				$('div.headers span.header[name=search]').html( '' );
+				if (!self.isCurrentPivotByName("list")) {
+					self.goToPivotByName("list");
+					self.onListInvisible();
+				}
+			});
+
 			/* 設定画面の表示 */
 			$('input#setting_button').click(function(){
 				$('div.headers span.header[name=setting]').text( 'setting' );
@@ -506,15 +527,28 @@ $(function(){
 				}
 				if( keymapping.hasOwnProperty( 'input_histry' ) && keymapping[ 'input_histry'] ){
 					$('input#message').bind('keydown', 'up', function(){
+						// 入力中にうっかりしたとき対策
+						message = document.getElementById('message').value;
+						if (self.history.i < 0) {
+							if (message != '') {	// maybe -1
+								if (message != self.history.log[0]) {
+									self.history.log.unshift( message );
+									// self.history.i = 0;
+								}
+							}
+						}
 						if( self.history.log.length > self.history.i+1){
 							self.history.i++;
 							$('input#message').val( self.history.log[ self.history.i ] );
 						}
 					});
 					$('input#message').bind('keydown', 'down', function(){
+						console.log('[down]history:'+self.history.i);
 						if( self.history.i > 0 ){
 							self.history.i--;
 							$('input#message').val( self.history.log[ self.history.i ] );
+						} else if (self.history.i < 0) {
+							// 入力中にうっかりしたとき対策
 						}else{
 							self.history.i = -1;
 							$('input#message').val( '' );
@@ -937,18 +971,6 @@ $(function(){
 				});
 			});
 			$('div#ch_foot').html(button);
-		},
-		addCloseButton : function(){
-			var self = this;
-			button = $('<input type="button" value="close">');
-			button.click(function(){
-				$('div.headers span.header[name=search]').html( '' );
-				if (!self.isCurrentPivotByName("list")) {
-					self.goToPivotByName("list");
-					self.onListInvisible();
-				}
-			});
-			$('div#search_foot').html(button);
 		},
 		onListInvisible: function(){
 			if( $('ul.channel_list li.new').length || $('ul.channel_list li.hit').length ){

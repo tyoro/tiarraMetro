@@ -111,8 +111,8 @@ class ImageURLParser {
 		else if (self::hasSuffix($host, 'flic.kr')) {
 			$short_id = substr($path, 3);
 			$short_id = preg_replace('/\/?$/', '', $short_id);
-			$image_url = sprintf('http://flic.kr/p/img/%@_m.jpg', $short_id);
-			$thumb_url = sprintf('http://flic.kr/p/img/%@_t.jpg', $short_id);
+			$image_url = sprintf('http://flic.kr/p/img/%s_m.jpg', $short_id);
+			$thumb_url = sprintf('http://flic.kr/p/img/%s_t.jpg', $short_id);
 		}
 		# instagram
 		else if (self::hasSuffix($host, 'instagr.am')) {
@@ -194,7 +194,7 @@ class ImageURLParser {
 		else if () {
 
 		}
-		*/
+*/
 		# nicovideo.jp
 		else if (self::hasSuffix($host, 'nicovideo.jp')) {
 			$vid = null;
@@ -226,7 +226,7 @@ class ImageURLParser {
 		# gyazo.com
 		else if ( $host === 'gyazo.com' ) {
 			$path = substr($path, 1);
-			$image_url = sprintf('http://cache.gyazo.com%@.png', $path);
+			$image_url = sprintf('http://cache.gyazo.com%s.png', $path);
 			$thumb_url = $image_url;
 		}
 		# miil.me
@@ -236,11 +236,27 @@ class ImageURLParser {
                                 $thumb_url = $image_url . '.jpeg'; # . '&size=256'
                         }
 		}
-/*
-		#
-		else if () {
-
+		# picplz.com
+		else if ($host === 'picplz.com') {
+			if( strlen( $path ) ){
+				$image_url = $url;
+				$thumb_url = $image_url . '/thumb'; # . '/400'
+			}
 		}
+                # photozou.jp
+                else if ($host === 'photozou.jp') {
+			$paths = explode('/', substr($path, 1));
+
+			$image_url = $url;
+			$thumb_url = 'http://photozou.jp/p/thumb/' . $paths[count($paths)-1]; #  'p/img/' . $paths[count($paths)-1]
+                }
+		# p.twipple.jp
+		else if ( $host === 'p.twipple.jp' ) {
+			$path = substr($path, 1);
+			$image_url = sprintf('http://p.twipple.jp/show/thumb/%s', $path);
+			$thumb_url = $image_url;
+		}
+/*
 		#
 		else if () {
 

@@ -164,13 +164,13 @@ ul.channel_list li.select {
 .line .channel {
 	margin-right: 5px;
 	color: #404cd0;
-	font-size: 11px;
+	font-size: .9em;
 }
 .line .time {
 	float: right;
 	margin-top: 2px;
 	color: #bbb;
-	font-size: 9px;
+	font-size: .7em;
 }
 .line .avatar {
 	display: none;
@@ -190,7 +190,7 @@ ul.channel_list li.select {
 	border: none;
 }
 .line .sender {
-	font-size: 11px;
+	font-size: .9em;
 	color: #9f9;
 }
 .line .sender[type=myself]{
@@ -201,7 +201,7 @@ ul.channel_list li.select {
 }
 .line .message {
 	display: block;
-	line-height: 1.4;
+	line-height: 1.4em;
 	margin-top: 4px;
 	text-align: left;
 }
@@ -382,14 +382,6 @@ div#log_popup_menu ul li:hover {
 }
 
 form#setting_form #setting_next {
-/*
-	content: "&raquo";
-	height: 2em;
-	width: 3em;
-*/
-}
-
-#setting_next {
         border: 0;
         padding: 0;
         margin: 4px .5em;
