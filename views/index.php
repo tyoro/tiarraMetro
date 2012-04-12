@@ -56,6 +56,29 @@
 <div class='pivot-item' name="setting">
 	<h3></h3>
 	<!-- span id="setting_message">setting</span -->
+	<h4>current configurations</h4>
+	<div class='setting_view'>
+		<dl>
+			<dt id='setting_view_my_name_title'>ユーザー名</dt>
+			<dd id='setting_view_my_name'></dd>
+			<dt>使用中のテンプレート</dt>
+			<dd id='setting_view_template'></dd>
+			<dt>抽出キーワード</dt>
+			<dd id='setting_view_pickup_word'></dd>
+			<dt>アイコンの表示</dt>
+			<dd id='setting_view_on_icon'></dd>
+			<dt>アイコンのTwitterリンク</dt>
+			<dd id='setting_view_on_twitter_link'></dd>
+			<dt>画像の表示方法</dt>
+			<dd id='setting_view_on_image'></dd>
+			<dt>スワイプでタブを切り替える</dt>
+			<dd id='setting_view_disable_swipe'></dd>
+			<dt>入力ヒストリ機能</dt>
+			<dd id='setting_view_keymapping_input_histry'></dd>
+			<dt>クイック投稿を自動で閉じる</dt>
+			<dd id='setting_view_quickpost_auto_close'></dd>
+		</dl>
+	</div>
         <h4>client settings</h4>
         <div class="setting_entry" >
                 <form id="client_setting_form" >
