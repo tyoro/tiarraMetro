@@ -25,6 +25,12 @@ $(function(){
 			this.unread_num = 0;
 			this.history = { i:-1, log: new Array() };
 
+			// localStorageからの設定読み込み
+			disable_swipe = localStorage.getItem('disable_swipe');
+			if (disable_swipe != null) {
+				this.jsConf['disable_swipe'] = disable_swipe;
+			}
+
 			this.popup = $('#log_popup_menu');
 			this.autoReload =  setInterval(function(){self.reload();}, this.jsConf["update_time"]*1000);
 			this.htmlInitialize( param );
@@ -190,6 +196,9 @@ $(function(){
 				if (!self.isCurrentPivotByName("setting")) {
 					self.goToPivotByName("setting");
 				}
+				// クライアント設定の読み込み
+				console.log('[load]self:'+self.jsConf['disable_swipe']);
+				$('form#client_setting_form input:checkbox[name=enable_swipe]').attr( { checked: ( self.jsConf['disable_swipe']?false:true ) } );	// スワイプ
 			});
 			/* 設定画面を閉じる */
 			$('input#setting_close').click(function(){
@@ -198,6 +207,23 @@ $(function(){
 					self.goToPivotByName("list");
 					self.onListInvisible();
 				}
+			});
+			/* クライアント設定の保存 */
+			$('form#client_setting_form').submit( function(){
+				var submit = $('input[type=submit]', this );
+				submit.attr('disabled','disabled');
+
+				// スワイプ(※設定≒localStorage|conf.yml上では disable_swipe つまり !enable_swipe であることに注意)
+				enable_swipe = $('form#client_setting_form input:checkbox[name=enable_swipe]:checked').val()=='on'?true:false;
+
+				// 設定の保存
+				localStorage.setItem('disable_swipe', !enable_swipe);
+				console.log('[save]self:'+self.jsConf['disable_swipe']+'|val:'+!enable_swipe);
+				self.jsConf['disable_swipe'] = !enable_swipe;
+				console.log('[saved]self:'+self.jsConf['disable_swipe']);
+
+				submit.removeAttr('disabled');
+				return false;
 			});
 			/* 設定のチャンネルリストの変更 */
 			$('select#channel_setting_select').change( function(){
@@ -322,12 +348,10 @@ $(function(){
 
 			/* フリックによるヘッダー遷移 */
 			$(document).touchwipe({
-				if (!this.jsConf['disable_swipe']) {
-					preventDefaultEvents: false,
-					min_move_x: 75,
-					wipeLeft: function() { self.goToNextPivot(); },
-					wipeRight: function() { self.goToPreviousPivot(); }
-				}
+				preventDefaultEvents: false,
+				min_move_x: 75,
+				wipeLeft: function() { if (!self.jsConf['disable_swipe']) { self.goToNextPivot(); } },
+				wipeRight: function() { if (!self.jsConf['disable_swipe']) { self.goToPreviousPivot(); } }
 			});
 
 			/* pivot化 */

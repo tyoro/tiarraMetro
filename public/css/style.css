@@ -392,10 +392,10 @@ form#setting_form #setting_next {
         background: url(../images/tool_right.png) no-repeat;
 }
 
-form#setting_form ul {
+form#client_setting_form ul, form#setting_form ul {
 	padding-left: 1em;
 }
-form#setting_form li {
+form#client_setting_form li, form#setting_form li {
 	line-height: 2em;
 	list-style-type: none;
 }

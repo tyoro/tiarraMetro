@@ -56,6 +56,15 @@
 <div class='pivot-item' name="setting">
 	<h3></h3>
 	<!-- span id="setting_message">setting</span -->
+        <h4>client settings</h4>
+        <div class="setting_entry" >
+                <form id="client_setting_form" >
+                        <ul>
+                                <li><input type='checkbox' id='enable_swipe' name='enable_swipe' value='on' /><label for='enable_swipe'>スワイプでタブを切り替える</label></li>
+                        </ul>
+                        <input type='submit' name='submit' value='save' />
+                </form>
+        </div>
 	<h4>channel settings</h4>
 	<div class="setting_entry" >
 		<form id="setting_form" >
