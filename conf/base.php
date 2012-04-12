@@ -42,6 +42,7 @@ $jsConf = Array(
 	,'update_time' => 3
 	,'pickup_word' => false
 	,'pickup_channel'=> '.*'
+	,'disable_swipe' => false
 	,'on_icon' => false
 	,'on_image' => 0
 	,'on_twitter_link' => 1

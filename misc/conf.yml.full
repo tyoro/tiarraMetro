@@ -25,6 +25,8 @@ tiarra_socket_name: 'tiarrametro'
 # cookieの生存時間
 #cookie_save_time: 86400
 
+#disable_swipe: false # trueでスワイプ無効
+
 #on_icon: false
 #on_image: 0
 #update_time: 3

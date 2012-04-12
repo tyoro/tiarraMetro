@@ -322,10 +322,12 @@ $(function(){
 
 			/* フリックによるヘッダー遷移 */
 			$(document).touchwipe({
-				preventDefaultEvents: false,
-				min_move_x: 75,
-				wipeLeft: function() { self.goToNextPivot(); },
-				wipeRight: function() { self.goToPreviousPivot(); }
+				if (!this.jsConf['disable_swipe']) {
+					preventDefaultEvents: false,
+					min_move_x: 75,
+					wipeLeft: function() { self.goToNextPivot(); },
+					wipeRight: function() { self.goToPreviousPivot(); }
+				}
 			});
 
 			/* pivot化 */

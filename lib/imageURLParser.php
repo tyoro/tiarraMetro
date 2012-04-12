@@ -226,7 +226,7 @@ class ImageURLParser {
 		# gyazo.com
 		else if ( $host === 'gyazo.com' ) {
 			$path = substr($path, 1);
-			$image_url = sprintf('http://cache.gyazo.com%s.png', $path);
+			$image_url = sprintf('http://cache.gyazo.com/%s.png', $path);
 			$thumb_url = $image_url;
 		}
 		# miil.me
