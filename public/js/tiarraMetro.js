@@ -207,6 +207,8 @@ $(function(){
 				$('#setting_view_quickpost_auto_close').text( self.jsConf['quickpost_auto_close']?'ON':'OFF' );
 				$('#setting_view_disable_swipe').text( self.jsConf['disable_swipe']?'OFF':'ON' );
 				$('#setting_view_template').text( self.jsConf['template'] );
+				// Cookie|Session
+				$('#setting_view_cookie').text( document.cookie.indexOf('UniqueId=')>=0 ? 'Cookie':'セッション' );
 
 				// クライアント設定の読み込み
 				$('form#client_setting_form input:checkbox[name=enable_swipe]').attr( { checked: ( self.jsConf['disable_swipe']?false:true ) } );	// スワイプ

@@ -61,6 +61,8 @@
 		<dl>
 			<dt id='setting_view_my_name_title'>ユーザー名</dt>
 			<dd id='setting_view_my_name'></dd>
+			<dt>ログイン方法</dt>
+			<dd id='setting_view_cookie'></dd>
 			<dt>使用中のテンプレート</dt>
 			<dd id='setting_view_template'></dd>
 			<dt>抽出キーワード</dt>
