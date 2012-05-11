@@ -253,8 +253,8 @@ class ImageURLParser {
 		# p.twipple.jp
 		else if ( $host === 'p.twipple.jp' ) {
 			$path = substr($path, 1);
-			$image_url = sprintf('http://p.twipple.jp/show/thumb/%s', $path);
-			$thumb_url = $image_url;
+			$image_url = sprintf('http://p.twipple.jp/show/orig/%s', $path);
+			$thumb_url = sprintf('http://p.twipple.jp/show/thumb/%s', $path);
 		}
 /*
 		#
