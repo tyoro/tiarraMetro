@@ -117,18 +117,8 @@ class dao_channel extends dao_base{
 		$sql = "SELECT 
 					channel.id, 
 					channel.name, 
-					substring(channel.name, locate('@', channel.name) + 1) as network,
-					COALESCE(log_count.cnt,0) as cnt 
+					substring(channel.name, locate('@', channel.name) + 1) as network
 				FROM channel 
-					LEFT JOIN (
-						SELECT 
-							channel.id, 
-							count(*) as cnt 
-						FROM channel 
-							LEFT JOIN log ON channel.id = log.channel_id 
-						WHERE channel.readed_on < log.created_on 
-						GROUP BY channel.id
-					) as log_count ON channel.id = log_count.id 
 				WHERE view = ?";
 		$values = array(1);
 
@@ -141,9 +131,20 @@ class dao_channel extends dao_base{
 		if (!empty($order)) {
 			$sql .= $order;
 		}
-		// print(htmlspecialchars($sql));
+		$list = $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 
-		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
+		foreach( $list as $key => $c ){
+			$sql = "SELECT 
+						count(*) as cnt 
+					FROM channel 
+						LEFT JOIN log ON channel.id = log.channel_id 
+					WHERE channel.readed_on < log.created_on 
+						&& channel.id = ".$c['id'];
+
+			$list[ $key ][ 'cnt' ] = $this->_conn->GetOne( $sql );
+		}
+
+		return $list;
 	}
 
 	function detectOrder($sort) {
