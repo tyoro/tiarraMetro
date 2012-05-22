@@ -83,6 +83,8 @@ DATABASE_ID: 'tiarra'
 DATABASE_PASS: 'xxxxxx'
 DATABASE_NAME: 'tiarra'
 
+# nickの末尾の_を削除する
+auto_tail_delete: true
 
 # alias setting
 alias:

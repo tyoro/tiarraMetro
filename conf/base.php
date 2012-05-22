@@ -55,6 +55,7 @@ $jsConf = Array(
 	,'quickpost_auto_close' => true
 	,'patrol_channel' => false
 	,'keymapping' => false
+	,'auto_tail_delete' => false
 );
 
 $tig_default_popup_menu = Array(

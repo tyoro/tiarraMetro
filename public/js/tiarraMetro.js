@@ -908,6 +908,11 @@ $(function(){
 		},
 		getIconString : function ( log ){
 			nick = log.nick;
+			
+			if( this.jsConf[ 'auto_tail_delete' ] ){
+				nick = nick.replace(/_+$/g, "");
+			}
+
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
 			
 			var ret = '<img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'">';
