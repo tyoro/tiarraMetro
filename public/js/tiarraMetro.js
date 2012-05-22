@@ -336,7 +336,17 @@ $(function(){
 			});
 
 			/* ブラウザの戻る、進むのフック */
+			// Used to detect initial (useless) popstate.
+			// If history.state exists, assume browser isn't going to fire initial popstate.
+			var popped = ('state' in window.history);
+			var initialURL = location.href;
+
 			$(window).bind('popstate', function(event) {
+				// Ignore inital popstate that some browsers fire on page load
+				var initialPop = !popped && location.href == initialURL
+				popped = true
+				if ( initialPop ) return
+				
 				switch( event.originalEvent.state ){
 					case '/':
 						self.goToPivotByName("list");
@@ -355,7 +365,7 @@ $(function(){
 						self.selectChannel(channel_id,channel_name);
 						break;
 				}
-			}, false);
+			});
 
 			/* フリックによるヘッダー遷移 */
 			$(document).touchwipe({
@@ -463,7 +473,7 @@ $(function(){
 			});
 			
 			self.updateStatusNotifier();
-		},
+		},// /htmlInitialize
 		keymappingInitialize: function( keymapping ){
 			var self = this;
 			if( keymapping ){
