@@ -197,7 +197,7 @@ $(function(){
 					self.goToPivotByName("setting");
 				}
 				// conf.ymlから読み込んだ内容の表示
-				$('#setting_view_my_name_title').html( "<a href='http://mobile.twitter.com/"+self.jsConf['my_name']+"' target='_blank'><img src='http://img.tweetimag.es/i/"+self.jsConf['my_name']+"_n' title='"+self.jsConf['my_name']+"' /></a>" );
+				$('#setting_view_my_name_title').html( "<a href='http://mobile.twitter.com/"+self.jsConf['my_name']+"' target='_blank'><img src='http://usericons.relucks.org/twitter/"+self.jsConf['my_name']+"' title='"+self.jsConf['my_name']+"' /></a>" );
 				$('#setting_view_my_name').text( self.jsConf['my_name'] );
 				$('#setting_view_pickup_word').text( self.jsConf['pickup_word'] );
 				$('#setting_view_on_icon').text( self.jsConf['on_icon']?'ON':'OFF' );
@@ -925,7 +925,7 @@ $(function(){
 
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
 			
-			var ret = '<img src="http://img.tweetimag.es/i/'+nick+'_n" alt="'+nick+'">';
+			var ret = '<img src="http://usericons.relucks.org/twitter/'+nick+'" alt="'+nick+'">';
 
 			if( this.jsConf['on_twitter_link'] == 1 ){
 				ret = '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank">'+ret+'</a>';
