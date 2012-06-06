@@ -56,6 +56,8 @@ $jsConf = Array(
 	,'patrol_channel' => false
 	,'keymapping' => false
 	,'auto_tail_delete' => false
+	,'side_channel_list' => false
+	,'single_mode' => false
 );
 
 $tig_default_popup_menu = Array(

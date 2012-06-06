@@ -147,6 +147,30 @@ class dao_channel extends dao_base{
 		return $list;
 	}
 
+	function getUnreadChannel( $channel ){
+		$sql = "SELECT 
+					channel.id, 
+					channel.name
+				FROM channel 
+				WHERE
+					channel.id = ?
+				AND
+			   		view = ?";
+		$values = array($channel,1);
+		$list = $this->_conn->getArray($this->_conn->Prepare($sql), $values);
+
+		$sql = "SELECT 
+					count(*) as cnt 
+				FROM channel 
+					LEFT JOIN log ON channel.id = log.channel_id 
+				WHERE channel.readed_on < log.created_on 
+					&& channel.id = ".$channel;
+
+		$list[ 0 ][ 'cnt' ] = $this->_conn->GetOne( $sql );
+
+		return $list;
+	}
+
 	function detectOrder($sort) {
 		$order = '';
 

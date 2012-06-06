@@ -3,7 +3,7 @@
 	set_include_path(dirname(__FILE__).'/conf:'.get_include_path());
 
 	include_once 'lib/checkExtension.php';
-	checkExtension( 'mbstring', 'mysql' );
+	checkExtension( 'mbstring', 'mysql' , 'mcrypt' );
 
 	include_once 'conf/load.php';
 
@@ -70,6 +70,36 @@
 		public function channel_select( $channel_id ){
 			return $this->index_main( 'channel', $channel_id );
 		}
+		public function channel_select_single( $channel_id ){
+			if( !$this->isLoggedIn() ){ 
+				return $this->redirect('/login');
+			}
+			global $jsConf;
+			$this->options->single_mode = true;
+
+			$channel_list = array();
+			$log_list = array();
+			$default_channel = array( 'id'=>$channel_id );
+			$max_id = 0;
+
+			$max_id = $this->db->log->getMaxID();
+			foreach( $this->db->channel->getUnreadChannel( $channel_id, '', $this->options->channel_list_sort ) as $ch ){
+				$channel_list[$ch['id']] = $ch;
+				$log_list[$ch['id']] = $this->logFilter( $this->db->log->getLog($ch['id']) );
+				if( $channel_id == $ch['id'] ){ $default_channel[ 'name' ] = $ch['name']; }
+			}
+			return $this->render( 'single',
+				array(
+					'max_id' => $max_id,
+					'channels' => $channel_list,
+					'all_channels' => $this->db->channel->getList('', $this->options->channel_list_sort),
+					'logs' => $log_list,
+					'pivot' => "channel",
+					'default_channel' => $default_channel,
+					'jsConf' => $jsConf
+					)
+			);
+		}
 
 		public function channel_name_select( $channel_name ){
 			return $this->channel_select( $this->db->channel->getID( "#".$channel_name ) );
@@ -82,22 +112,42 @@
 				$return = array( 'error'=> false, 'update'=>false,'checktime'=>date("Y-m-d H:i:s") );
 
 				if( !empty($this->request->max_id) ){
-					$logs = $this->getLogs($this->request->current,$this->request->max_id);
-					if( count($logs) ){
-						$return['update'] = true;
-						$return['max_id'] = $logs[0]['id'];
+					if( !empty($this->request->single_mode) ){
+						$logs = $this->getLogs($this->request->current,$this->request->max_id);
+						if( count($logs) ){
+							$return['update'] = true;
+							$return['max_id'] = $logs[0]['id'];
 
-						$ch_log = array();
-						foreach( $logs as $log ){
-							$ch_log[$log['channel_id']][ ] = array(
-								'id' => $log['id'],
-								'nick' => $log['nick'],
-								'log' => $log['log'],
-								'time' => $log['time'],
-								'is_notice' => $log['is_notice']
-							);
+							$ch_log = array();
+							foreach( $logs as $log ){
+								$ch_log[$log['channel_id']][ ] = array(
+									'id' => $log['id'],
+									'nick' => $log['nick'],
+									'log' => $log['log'],
+									'time' => $log['time'],
+									'is_notice' => $log['is_notice']
+								);
+							}
+							$return['logs'] = $ch_log;
 						}
-						$return['logs'] = $ch_log;
+					}else{
+						$logs = $this->getLog($this->request->current,$this->request->max_id);
+						if( count($logs) ){
+							$return['update'] = true;
+							$return['max_id'] = $logs[0]['id'];
+
+							$ch_log = array();
+							foreach( $logs as $log ){
+								$ch_log[$this->request->current][ ] = array(
+									'id' => $log['id'],
+									'nick' => $log['nick'],
+									'log' => $log['log'],
+									'time' => $log['time'],
+									'is_notice' => $log['is_notice']
+								);
+							}
+							$return['logs'] = $ch_log;
+						}
 					}
 				}else{
 					$return = array( 'error' => true, 'msg' => 'parameter not found.' );
@@ -347,6 +397,7 @@
 	$app->get('/','index');
 	$app->get('/search/','search_select');
 	$app->get('/setting/','setting_select');
+	$app->get('/single/:channel_id','channel_select_single',array('channel_id'=>'\d+'));
 	$app->get('/channel/:channel_id','channel_select',array('channel_id'=>'\d+'));
 	$app->post_and_get('/login','login' );
 	$app->get('/logout','logout' );

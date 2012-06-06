@@ -26,7 +26,11 @@
 <?php } ?>
 <script type="text/javascript" src= "js/shadowbox.js"></script>
 <script type="text/javascript" src= "js/metroNotifier.js"></script>
+<?php if( $options->single_mode ){ ?>
+<script type="text/javascript" src= "js/tiarraMetro.single.js"></script>
+<?php }else{ ?>
 <script type="text/javascript" src= "js/tiarraMetro.js"></script>
+<?php } ?>
 </head>
 <body theme="<?php print $options->theme; ?>" accent="<?php print $options->accent; ?>">
 <?php if( !empty( $options->wallparper )){ ?>
