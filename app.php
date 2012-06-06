@@ -112,7 +112,7 @@
 				$return = array( 'error'=> false, 'update'=>false,'checktime'=>date("Y-m-d H:i:s") );
 
 				if( !empty($this->request->max_id) ){
-					if( !empty($this->request->single_mode) ){
+					if( !isset($this->request->single_mode) ){
 						$logs = $this->getLogs($this->request->current,$this->request->max_id);
 						if( count($logs) ){
 							$return['update'] = true;

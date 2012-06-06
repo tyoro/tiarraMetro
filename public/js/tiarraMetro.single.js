@@ -279,7 +279,8 @@ $(function(){
 				type:'POST',
 				data:{
 					max_id:self.max_id,
-					current: self.isCurrentPivotByName("list") ? "" : self.currentChannel
+					current: self.isCurrentPivotByName("list") ? "" : self.currentChannel,
+					single_mode: true
 				},
 				success:function(json){
 					if( 'debug' in json ){
