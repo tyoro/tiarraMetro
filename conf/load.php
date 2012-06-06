@@ -59,7 +59,7 @@ class  yaml2conf
 			{
 				foreach( $this->yaml[ 'log_popup_menu' ][ 'network' ] as $key => $network_setting )
 				{
-					if( trim($network_setting) != '' && is_string( $network_setting ) ){
+					if( is_string( $network_setting ) && trim($network_setting) != '' ){
 						switch( $network_setting )
 						{
 							case 'fig_default':
