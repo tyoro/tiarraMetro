@@ -1042,6 +1042,10 @@ $(function(){
 				.toggleClass('new', !!$('.channel_list li.new').length)
 				.toggleClass('hit', !!$('.channel_list li.hit').length)
 				;
+			$('div.headers span.header[name="list"]')
+				.toggleClass('new', !!$('.channel_list li.new').length)
+				.toggleClass('hit', !!$('.channel_list li.hit').length)
+				;
 		},
 		viewScroll: function( elm ){
 			var et = elm.offset().top;
