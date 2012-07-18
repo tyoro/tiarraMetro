@@ -32,6 +32,13 @@ tiarra_socket_name: 'tiarrametro'
 #update_time: 3
 #pickup_word: [ 'hoge', 'ほげ' ]
 
+
+#icon_server_uri: 'http://img.tweetimag.es/i/' # アイコンサーバーの設定(このあとに{id}が来るようなURIを想定)
+
+#channel_filter: # チャンネルリストのフィルタ(品位のないチャンネル名向け)
+#  _sex: '_nyan' # 'hoge_sex' というチャンネルを 'hoge_nyan' と置き換える
+
+
 # 新着通知バーによる巡回 以下2行のどちらかの書式でも可
 #patrol_channel: '#test@irc'
 #patrol_channel: [ '#test@irc', '#main@irc' ]

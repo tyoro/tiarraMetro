@@ -925,7 +925,7 @@ $(function(){
 
 			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
 			
-			var ret = '<img src="http://usericons.relucks.org/twitter/'+nick+'" alt="'+nick+'">';
+			var ret = '<img src="'+this.jsConf['icon_server_uri']+nick+'" alt="'+nick+'">';
 
 			if( this.jsConf['on_twitter_link'] == 1 ){
 				ret = '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank">'+ret+'</a>';
