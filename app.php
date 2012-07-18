@@ -89,6 +89,11 @@
 
 			$max_id = $this->db->log->getMaxID();
 			foreach( $this->db->channel->getUnreadChannel( $channel_id, '', $this->options->channel_list_sort ) as $ch ){
+                                if ($jsConf['channel_filter'] !== false && is_array($jsConf['channel_filter']) === true) {
+                                        foreach ($jsConf['channel_filter'] as $key => $value) {
+                                                $ch = str_replace($key, $value, $ch);
+                                        }
+                                }
 				$channel_list[$ch['id']] = $ch;
 				$log_list[$ch['id']] = $this->logFilter( $this->db->log->getLog($ch['id']) );
 				if( $channel_id == $ch['id'] ){ $default_channel[ 'name' ] = $ch['name']; }
