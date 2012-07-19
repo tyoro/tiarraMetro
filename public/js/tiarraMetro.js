@@ -197,7 +197,7 @@ $(function(){
 					self.goToPivotByName("setting");
 				}
 				// conf.ymlから読み込んだ内容の表示
-				$('#setting_view_my_name_title').html( "<a href='http://mobile.twitter.com/"+self.jsConf['my_name']+"' target='_blank'><img src='http://usericons.relucks.org/twitter/"+self.jsConf['my_name']+"' title='"+self.jsConf['my_name']+"' /></a>" );
+				$('#setting_view_my_name_title').html( "<a href='http://mobile.twitter.com/"+self.jsConf['my_name']+"' target='_blank'><img src='"+self.jsConf['icon_server_uri']+self.jsConf['my_name']+"' title='"+self.jsConf['my_name']+"' /></a>" );
 				$('#setting_view_my_name').text( self.jsConf['my_name'] );
 				$('#setting_view_pickup_word').text( self.jsConf['pickup_word'] );
 				$('#setting_view_on_icon').text( self.jsConf['on_icon']?'ON':'OFF' );
