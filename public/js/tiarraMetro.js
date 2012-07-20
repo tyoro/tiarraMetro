@@ -192,7 +192,7 @@ $(function(){
 
 			/* 設定画面の表示 */
 			$('input#setting_button').click(function(){
-				$('div.headers span.header[name=setting]').text( 'setting' );
+				$('div.headers span.header[name=setting]').text( 'settings' );
 				if (!self.isCurrentPivotByName("setting")) {
 					self.goToPivotByName("setting");
 				}

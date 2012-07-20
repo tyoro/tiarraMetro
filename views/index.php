@@ -54,7 +54,7 @@
 	<div id="search_foot"><h4>misc.</h4><input type="button" id='search_close' name='close' value="close" /></div>
 </div>
 <div class='pivot-item' name="setting">
-	<h3></h3>
+	<h3>settings</h3>
 	<!-- span id="setting_message">setting</span -->
 	<h4>current configurations</h4>
 	<div class='setting_view'>
