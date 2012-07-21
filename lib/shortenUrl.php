@@ -9,6 +9,18 @@
 		public $response = '';
 		public $data = '';
 		public $json = '';
+		public $shorten = array(
+			'goo.gl',
+			'bit.ly',
+			'j.mp',
+			'ow.ly',
+			't.co',
+			'fb.me',
+			'tmblr.co',
+			'ustre.am',
+			'nico.ms',
+			'htn.to',
+		);
 
 		function __construct() {
 			if (file_exists_ex('HTTP/Request2.php')) {
@@ -24,7 +36,7 @@
 			if ($this->is_enabled) {
 				$this->uri = parse_url($url);
 				if ($this->uri['scheme'] == 'http' || $this->uri['scheme'] == 'https') {
-					if ($this->uri['host'] != 'goo.gl') {
+					if (!in_array($this->uri['host'], $this->shorten)) {
 						$this->uri = 'https://www.googleapis.com/urlshortener/v1/url?key=' . $this->api_key;
 	
 						$this->data = json_encode(array('longUrl' => $url));
@@ -52,21 +64,23 @@
 			if ($this->is_enabled) {
 				$this->uri = parse_url($url);
 				if ($this->uri['scheme'] == 'http' || $this->uri['scheme'] == 'https') {
-					if ($this->uri['host'] == 'goo.gl') {
-						$this->uri = 'https://www.googleapis.com/urlshortener/v1/url?shortUrl=' . $url . '&key=' . $this->api_key;
-						$this->request = new HTTP_Request2(null);
-						$this->request->setUrl($this->uri);
-						$this->request->setConfig('ssl_verify_peer', false);
-						$this->request->setMethod(HTTP_Request2::METHOD_GET);
-						$this->reponse = $this->request->send();
+					if (in_array($this->uri['host'], $this->shorten)) {
+						if ($this->uri['host'] == 'goo.gl') {
+							$this->uri = 'https://www.googleapis.com/urlshortener/v1/url?shortUrl=' . $url . '&key=' . $this->api_key;
+							$this->request = new HTTP_Request2(null);
+							$this->request->setUrl($this->uri);
+							$this->request->setConfig('ssl_verify_peer', false);
+							$this->request->setMethod(HTTP_Request2::METHOD_GET);
+							$this->reponse = $this->request->send();
 
-						if ($this->response->getStatus() == HTTP_STATUS_OK) {
-							$this->json = json_decode($this->response->getBody());
-						}
-					}
+							if ($this->response->getStatus() == HTTP_STATUS_OK) {
+								$this->json = json_decode($this->response->getBody());
+							}
 	
-					if (trim($this->json->longUrl) != '') {
-						return $this->json->longUrl;
+							if (trim($this->json->longUrl) != '') {
+								return $this->json->longUrl;
+							}
+						}
 					}
 				}
 			}
