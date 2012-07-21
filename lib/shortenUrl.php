@@ -53,9 +53,9 @@
 						}
 					}
 
-					if (trim($this->json->id) != '') {
-						return $this->json->id;
-					}
+					# if (trim($this->json->id) != '') {
+						return empty($this->json->id)?$url:$this->json->id;
+					# }
 				}
 			}
 			return $url;
@@ -77,9 +77,9 @@
 								$this->json = json_decode($this->response->getBody());
 							}
 	
-							if (trim($this->json->longUrl) != '') {
-								return $this->json->longUrl;
-							}
+							# if (trim($this->json->longUrl) != '') {
+								return empty($this->json->longUrl)?$url:$this->json->longUrl;
+							# }
 						}
 					}
 				}
