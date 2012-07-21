@@ -32,6 +32,8 @@ $conf = Array(
 	,'channel_list_sort' => 'name'
 	,'cookie_save_time' => 7*86400
 	,'on_image' => 0
+	,'shorten_url' => false
+	,'shorten_url_api_key' => ''
 	,'wallparper' => ''
 	,'base_uri' => 'absolute' //absolute,relative 
 );
@@ -46,6 +48,8 @@ $jsConf = Array(
 	,'on_icon' => false
 	,'on_image' => 0
 	,'on_twitter_link' => 1
+	,'shorten_url' => false
+	,'shorten_url_api_key' => ''
 	,'template' => 'table'
 	,'icon_server_uri' => 'http://img.tweetimag.es/i/'
 	,'channel_filter' => false

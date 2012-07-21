@@ -35,6 +35,11 @@ tiarra_socket_name: 'tiarrametro'
 # アイコンサーバーの設定(このあとに{id}が来るようなURIを想定)
 #icon_server_uri: 'http://img.tweetimag.es/i/'
 
+# URL短縮の設定(表示上は変更せず、リンク先をgoo.glにする。referer漏れ対策)
+# shorten_url: true
+# shorten_url_api_key: '' # https://code.google.com/apis/console/ でAPIキーを発行済みならそれを指定
+
+
 #channel_filter: # チャンネルリストのフィルタ(品位のないチャンネル名向け)
 #  _sex: '_nyan' # 'hoge_sex' というチャンネルを 'hoge_nyan' と置き換える
 

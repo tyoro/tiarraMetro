@@ -11,6 +11,7 @@
 	include_once 'lib/myFitzgerald.php';
 	include_once 'lib/util.php';
 	include_once 'lib/imageURLParser.php';
+	include_once 'lib/shortenUrl.php';
 
 	include_once 'lib/Net/Socket/Tiarra.php';
 
@@ -374,7 +375,14 @@
 						}
 					}
 
-					return '<a href="'.$url.'"  target="_blank">'.$url.'</a>';
+					// URLの短縮
+					global $jsConf;
+					$uri = $url;
+					$short_url = new shortenUrl();
+					if ($jsConf['shorten_url'] === true) {
+						$url = $short_url->shorten($uri);
+					}
+					return '<a href="'.$url.'"  target="_blank">'.$uri.'</a>';
 				}, $log['log'] ).$after;
 				
 				return $log;

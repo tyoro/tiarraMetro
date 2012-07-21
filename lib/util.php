@@ -146,3 +146,5 @@ class Cookie
 			return $result;
 		}
 	}
+?>
+
