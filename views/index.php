@@ -73,6 +73,8 @@
 			<dd id='setting_view_on_twitter_link'></dd>
 			<dt>画像の表示方法</dt>
 			<dd id='setting_view_on_image'></dd>
+			<dt>表示URLリンク先の短縮</dt>
+			<dd id='setting_view_shorten_url'></dd>
 			<dt>スワイプでタブを切り替える</dt>
 			<dd id='setting_view_disable_swipe'></dd>
 			<dt>入力ヒストリ機能</dt>
