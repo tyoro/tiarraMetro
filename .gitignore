@@ -1,2 +1,4 @@
 conf.yml
 log/
+data/cache.sqlitedb
+
