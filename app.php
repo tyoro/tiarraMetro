@@ -365,15 +365,6 @@
 
 				$log[ 'log' ] = preg_replace_callback( "/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/", function($url) use ($on_image,$link_class,&$after){
 					$url = $url[0];
-					if( ImageURLParser::isImageFileURL( $url ) ){
-						$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'" data-player="img"><img src="'.$url.'"></a>';
-					}else if( $resutlt = ImageURLParser::getServiceImageURL( $url ) ){
-						if( empty( $resutlt[0] ) ){
-							$after .= '<br><span href="'.$url.'" class="'.$link_class.'"><img src="'.$resutlt[1].'"></span>';
-						}else{
-							$after .= '<br><a href="'.$resutlt[0].'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
-						}
-					}
 
 					// URLの短縮と展開
 					global $jsConf;
@@ -385,6 +376,18 @@
 					if ($jsConf['expand_url'] === true) {
 						$uri = $short_url->expand($uri);
 					}
+
+					// 画像サムネイルビューの生成
+					if( ImageURLParser::isImageFileURL( $uri ) ){
+						$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'" data-player="img"><img src="'.$uri.'"></a>';
+					}else if( $resutlt = ImageURLParser::getServiceImageURL( $uri ) ){
+						if( empty( $resutlt[0] ) ){
+							$after .= '<br><span href="'.$url.'" class="'.$link_class.'"><img src="'.$resutlt[1].'"></span>';
+						}else{
+							$after .= '<br><a href="'.$resutlt[0].'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
+						}
+					}
+
 					return '<a href="'.$url.'"  target="_blank">'.$uri.'</a>';
 				}, $log['log'] ).$after;
 				
