@@ -384,7 +384,7 @@
 						if( empty( $resutlt[0] ) ){
 							$after .= '<br><span href="'.$url.'" class="'.$link_class.'"><img src="'.$resutlt[1].'"></span>';
 						}else{
-							$after .= '<br><a href="'.$resutlt[0].'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
+							$after .= '<br><a href="'.$short_url->shorten($resutlt[0]).'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
 						}
 					}
 
