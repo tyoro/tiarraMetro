@@ -375,12 +375,15 @@
 						}
 					}
 
-					// URLの短縮
+					// URLの短縮と展開
 					global $jsConf;
 					$uri = $url;
 					$short_url = new shortenUrl();
 					if ($jsConf['shorten_url'] === true) {
 						$url = $short_url->shorten($uri);
+					}
+					if ($jsConf['expand_url'] === true) {
+						$uri = $short_url->expand($uri);
 					}
 					return '<a href="'.$url.'"  target="_blank">'.$uri.'</a>';
 				}, $log['log'] ).$after;

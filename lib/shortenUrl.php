@@ -7,6 +7,8 @@
 		public $uri = '';
 		public $request = '';
 		public $response = '';
+		public $header = '';
+		public $body = '';
 		public $data = '';
 		public $json = '';
 		public $shorten = array(
@@ -17,6 +19,7 @@
 			't.co',
 			'fb.me',
 			'tmblr.co',
+			'youtu.be',
 			'ustre.am',
 			'nico.ms',
 			'htn.to',
@@ -71,7 +74,7 @@
 							$this->request->setUrl($this->uri);
 							$this->request->setConfig('ssl_verify_peer', false);
 							$this->request->setMethod(HTTP_Request2::METHOD_GET);
-							$this->reponse = $this->request->send();
+							$this->response = $this->request->send();
 
 							if ($this->response->getStatus() == HTTP_STATUS_OK) {
 								$this->json = json_decode($this->response->getBody());
@@ -80,6 +83,18 @@
 							# if (trim($this->json->longUrl) != '') {
 								return empty($this->json->longUrl)?$url:$this->json->longUrl;
 							# }
+						} else {
+							$this->request = new HTTP_Request2(null);
+							$this->request->setUrl($url);
+							$this->request->setConfig('ssl_verify_peer', false);
+							$this->request->setMethod(HTTP_Request2::METHOD_HEAD);
+							$this->response = $this->request->send();
+
+							if ($this->response->getStatus() == 301 || $this->response->getStatus() == 302) {
+								$this->header = $this->response->getHeader();
+							}
+
+							return empty($this->header['location'])?$url:$this->header['location'];
 						}
 					}
 				}
