@@ -11,7 +11,8 @@
 	include_once 'lib/myFitzgerald.php';
 	include_once 'lib/util.php';
 	include_once 'lib/imageURLParser.php';
-	include_once 'lib/shortenUrl.php';
+	// include_once 'lib/shortenUrl.php';
+	include_once 'lib/cache.php';
 
 	include_once 'lib/Net/Socket/Tiarra.php';
 
@@ -369,12 +370,12 @@
 					// URLの短縮と展開
 					global $jsConf;
 					$uri = $url;
-					$short_url = new shortenUrl();
+					$cache_url = new cacheUrl();
 					if ($jsConf['shorten_url'] === true) {
-						$url = $short_url->shorten($uri);
+						$url = $cache_url->get_shorten($uri);
 					}
 					if ($jsConf['expand_url'] === true) {
-						$uri = $short_url->expand($uri);
+						$uri = $cache_url->get_url($uri);
 					}
 
 					// 画像サムネイルビューの生成
@@ -384,7 +385,7 @@
 						if( empty( $resutlt[0] ) ){
 							$after .= '<br><span href="'.$url.'" class="'.$link_class.'"><img src="'.$resutlt[1].'"></span>';
 						}else{
-							$after .= '<br><a href="'.$short_url->shorten($resutlt[0]).'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
+							$after .= '<br><a href="'.$cache_url->get_shorten($resutlt[0]).'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
 						}
 					}
 
