@@ -26,7 +26,7 @@ tiarra_socket_name: 'tiarrametro'
 #cookie_save_time: 86400
 
 #disable_swipe: false # trueでスワイプ無効
-
+#disable_icon_hideout: false # trueでチャンネル名タップでアイコン表示をON/OFFする機能を無効
 #on_icon: false
 #on_image: 0
 #update_time: 3

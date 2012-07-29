@@ -208,12 +208,15 @@ $(function(){
 				$('#setting_view_keymapping_input_histry').text( self.jsConf['keymapping']['input_histry']?'ON':'OFF' );
 				$('#setting_view_quickpost_auto_close').text( self.jsConf['quickpost_auto_close']?'ON':'OFF' );
 				$('#setting_view_disable_swipe').text( self.jsConf['disable_swipe']?'OFF':'ON' );
+				$('#setting_view_disable_icon_hideout').text( self.jsConf['disable_icon_hideout']?'OFF':'ON' );
+				$('#setting_view_auto_tail_delete').text( self.jsConf['auto_tail_delete']?'ON':'OFF' );
 				$('#setting_view_template').text( self.jsConf['template'] );
 				// Cookie|Session
 				$('#setting_view_cookie').text( document.cookie.indexOf('UniqueId=')>=0 ? 'Cookie':'セッション' );
 
 				// クライアント設定の読み込み
 				$('form#client_setting_form input:checkbox[name=enable_swipe]').attr( { checked: ( self.jsConf['disable_swipe']?false:true ) } );	// スワイプ
+				$('form#client_setting_form input:checkbox[name=enable_icon_hideout]').attr( { checked: ( self.jsConf['disable_icon_hideout']?false:true ) } );	// アイコン表示
 			});
 			/* 設定画面を閉じる */
 			$('input#setting_close').click(function(){
@@ -230,10 +233,13 @@ $(function(){
 
 				// スワイプ(※設定≒localStorage|conf.yml上では disable_swipe つまり !enable_swipe であることに注意)
 				enable_swipe = $('form#client_setting_form input:checkbox[name=enable_swipe]:checked').val()=='on'?true:false;
+				enable_icon_hideout = $('form#client_setting_form input:checkbox[name=enable_icon_hideout]:checked').val()=='on'?true:false;
 
 				// 設定の保存
 				localStorage.setItem('disable_swipe', !enable_swipe);
+				localStorage.setItem('disable_icon_hideout', !enable_icon_hideout);
 				self.jsConf['disable_swipe'] = !enable_swipe;
+				self.jsConf['disable_icon_hideout'] = !enable_icon_hideout;
 
 				submit.removeAttr('disabled');
 				return false;
@@ -616,13 +622,15 @@ $(function(){
 						$("ul.channel_list").toggleClass("invisible");
 						break;
 					case 'channel':
-						on_icon = $('#list').hasClass( 'on_icon' );
-						if( on_icon ){ 
-							$('#list').removeClass( 'on_icon' );
-						}else{
-							$('#list').addClass( 'on_icon' );
+						if (!self.jsConf.disable_icon_hideout) {
+							on_icon = $('#list').hasClass( 'on_icon' );
+							if( on_icon ){ 
+								$('#list').removeClass( 'on_icon' );
+							}else{
+								$('#list').addClass( 'on_icon' );
+							}
+							self.setChannelSetting( self.currentChannel, 'on_icon', !on_icon );
 						}
-						self.setChannelSetting( self.currentChannel, 'on_icon', !on_icon );
 						break;
 				}
 			}

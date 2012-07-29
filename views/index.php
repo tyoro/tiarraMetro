@@ -79,6 +79,10 @@
 			<dd id='setting_view_expand_url'></dd>
 			<dt>スワイプでタブを切り替える</dt>
 			<dd id='setting_view_disable_swipe'></dd>
+			<dt>アイコン表示の切り替え</dt>
+			<dd id='setting_view_disable_icon_hideout'></dd>
+			<dt>ID末尾の '_' を自動削除</dt>
+			<dd id='setting_view_auto_tail_delete'></dd>
 			<dt>入力ヒストリ機能</dt>
 			<dd id='setting_view_keymapping_input_histry'></dd>
 			<dt>クイック投稿を自動で閉じる</dt>
@@ -90,6 +94,7 @@
                 <form id="client_setting_form" >
                         <ul>
                                 <li><input type='checkbox' id='enable_swipe' name='enable_swipe' value='on' /><label for='enable_swipe'>スワイプでタブを切り替える</label></li>
+				<li><input type='checkbox' id='enable_icon_hideout' name='enable_icon_hideout' value='on' /><label for='enable_icon_hideout'>ヘッダをタップしてアイコン表示の切り替え</label></li>
                         </ul>
                         <input type='submit' name='submit' value='save' />
                 </form>

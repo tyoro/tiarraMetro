@@ -46,6 +46,7 @@ $jsConf = Array(
 	,'pickup_word' => false
 	,'pickup_channel'=> '.*'
 	,'disable_swipe' => false
+	,'disable_icon_hideout' => false
 	,'on_icon' => false
 	,'on_image' => 0
 	,'on_twitter_link' => 1
