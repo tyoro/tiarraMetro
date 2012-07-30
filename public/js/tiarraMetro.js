@@ -310,7 +310,7 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 					data:{
-						value: $('form#setting_form input:checkbox[name=view]:checked').val()
+						value: $('form#setting_form input:checkbox[name=view]:checked').val() || 'off'
 					},
 					success: function( data ){
 						submit.removeAttr('disabled');
