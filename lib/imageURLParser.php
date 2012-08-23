@@ -295,7 +295,13 @@ class ImageURLParser {
 		$queries = explode($delimiter, $query);
 
 		foreach ($queries as $pair) {
-			list($name, $value) = explode('=', $pair);
+			$pair_array = explode('=', $pair);
+			if( count( $pair_array ) > 1 ){
+				list($name, $value) = $pair_array;
+			}else{
+				$name = $pair_array[0];
+				$value = "";
+			}
 
 			if (!empty($should_decode)) {
 				$name = urldecode($name);
