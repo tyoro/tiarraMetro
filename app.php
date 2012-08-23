@@ -379,7 +379,7 @@
 					}
 
 					// 画像サムネイルビューの生成
-					if( ImageURLParser::isImageFileURL( $uri ) ){
+					if( $on_image != 0 && ImageURLParser::isImageFileURL( $uri ) ){
 						$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'" data-player="img"><img src="'.$uri.'"></a>';
 					}else if( $resutlt = ImageURLParser::getServiceImageURL( $uri ) ){
 						if( empty( $resutlt[0] ) ){
