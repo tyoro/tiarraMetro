@@ -378,14 +378,17 @@
 						$uri = $cache_url->get_url($uri);
 					}
 
-					// 画像サムネイルビューの生成
-					if( $on_image != 0 && ImageURLParser::isImageFileURL( $uri ) ){
-						$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'" data-player="img"><img src="'.$uri.'"></a>';
-					}else if( $resutlt = ImageURLParser::getServiceImageURL( $uri ) ){
-						if( empty( $resutlt[0] ) ){
-							$after .= '<br><span href="'.$url.'" class="'.$link_class.'"><img src="'.$resutlt[1].'"></span>';
-						}else{
-							$after .= '<br><a href="'.$cache_url->get_shorten($resutlt[0]).'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
+					if( $on_image != 0 )
+					{
+						// 画像サムネイルビューの生成
+						if( ImageURLParser::isImageFileURL( $uri ) ){
+							$after .= '<br><a href="'.$url.'" target="_blank" class="'.$link_class.'" data-player="img"><img src="'.$uri.'"></a>';
+						}else if( $resutlt = ImageURLParser::getServiceImageURL( $uri ) ){
+							if( empty( $resutlt[0] ) ){
+								$after .= '<br><span href="'.$url.'" class="'.$link_class.'"><img src="'.$resutlt[1].'"></span>';
+							}else{
+								$after .= '<br><a href="'.$cache_url->get_shorten($resutlt[0]).'" target="_blank" class="'.$link_class.'" data-player="'.$resutlt[2].'"><img src="'.$resutlt[1].'"></a>';
+							}
 						}
 					}
 
