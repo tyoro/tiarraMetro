@@ -353,7 +353,7 @@
 			$logs = array_map( function($log) use ($on_image,$link_class) {
 				$after = "";
 				
-				$log[ 'log' ] = str_replace( ' ', '&nbsp;',  htmlspecialchars( $log[ 'log' ] ) );
+				$log[ 'log' ] = str_replace( '  ', ' &nbsp;',  htmlspecialchars( $log[ 'log' ] ) );
 
 				if (preg_match_all('/\\x03([0-9]+)([^\\x03]+)(\\x03)?/', $log['log'], $m)) {
 					if ($m[0]) {
