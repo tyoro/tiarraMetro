@@ -24,6 +24,7 @@ $(function(){
 			this.addedLogCount = 0;
 			this.unread_num = 0;
 			this.history = { i:-1, log: new Array() };
+			this.baseTitle = $('title').text();
 
 			// localStorageからの設定読み込み
 			disable_swipe = localStorage.getItem('disable_swipe');
@@ -1086,14 +1087,23 @@ $(function(){
 			$('ul.channel_list').removeClass('invisible');
 		},
 		updateStatusNotifier: function() {
+			var fnew = (!!$('.channel_list li.new').length);
+			var fhit = (!!$('.channel_list li.hit').length);
+
 			$(".status-notifier")
-				.toggleClass('new', !!$('.channel_list li.new').length)
-				.toggleClass('hit', !!$('.channel_list li.hit').length)
+				.toggleClass('new', fnew)
+				.toggleClass('hit', fhit)
 				;
 			$('div.headers span.header[name="list"]')
-				.toggleClass('new', !!$('.channel_list li.new').length)
-				.toggleClass('hit', !!$('.channel_list li.hit').length)
+				.toggleClass('new', fnew)
+				.toggleClass('hit', fhit)
 				;
+
+			//タイトルへの反映もここでやる。
+			if( fhit ){ $('title').text(this.baseTitle+' -hit-'); }
+			else if( fnew ){ $('title').text(this.baseTitle+' *'); }
+			else{ $('title').text(this.baseTitle); }
+			
 		},
 		viewScroll: function( elm ){
 			var et = elm.offset().top;
