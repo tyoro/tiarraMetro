@@ -1033,6 +1033,44 @@ $(function(){
 				});
 			});
 			$('div#ch_foot').html(button);
+
+			self.addLastReadButton();
+		},
+		addLastReadButton : function() {
+			var self = this;
+
+			if( self.unread_num-self.addedLogCount > 0 ){
+				button = $('<input type="button" value="last read">');
+				button.click(function(){
+					$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..."></div>' );
+
+					$.ajax({
+						url:self.mountPoint+'/api/logs/'+self.currentChannel,
+						data:{
+							prev_id: $('#list div.line').last().attr('id'),
+							num: self.unread_num-self.addedLogCount+10,
+						},
+						dataType:'json',
+						type:'POST',
+						success:function(json){
+							if( json['error'] ){ return; }
+
+							logs = json['logs'];
+							$.each(logs, function(i, log) { self.more_log(i, log, self.unread_num-self.addedLogCount); });
+							self.addedLogCount += logs.length;
+
+							if (logs.length > 0) {
+								self.addMoreButton();
+							} else {
+								$('div#ch_foot').empty();
+							}
+
+							self.afterAdded(self.currentChannel);
+						}
+					});
+				});
+				$('div#ch_foot').append(button);
+			}
 		},
 		onListInvisible: function(){
 			if( $('ul.channel_list li.new').length || $('ul.channel_list li.hit').length ){

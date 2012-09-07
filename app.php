@@ -212,8 +212,10 @@
 			else{
 				$return = array( 'error' => false );
 				$prev_id= null;
+				$num = 100;
 				if( strlen($this->request->prev_id ) ){ $prev_id = $this->request->prev_id; }
-				$return['logs'] = $this->logFilter($this->db->log->getLog($channel_id,$prev_id,100,'old')); 
+				if( strlen($this->request->num ) ){ $num = $this->request->num-0; }
+				$return['logs'] = $this->logFilter($this->db->log->getLog($channel_id,$prev_id,$num,'old')); 
 
 			}
 			return json_encode($return);
