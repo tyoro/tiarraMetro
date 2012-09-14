@@ -37,6 +37,7 @@ $conf = Array(
 	,'expand_url' => false
 	,'wallparper' => ''
 	,'base_uri' => 'absolute' //absolute,relative 
+	,'search_log_around_num' => 7
 );
 
 // javascript setting

@@ -231,6 +231,16 @@ ul.channel_list li.select {
 	background: transparent url("../images/icon_external.gif") no-repeat center right;
 	color: #bbf;
 }
+.line .result_sub {
+	padding-left: 20px;
+}
+.line .result_sub .line.text.baseline {
+	color: lawngreen;
+}
+.line .result_sub.invisible {
+	padding-left: 20px;
+	display:none;
+}
 /* */
 
 div { display:block; }

@@ -308,6 +308,7 @@ class dao_log extends dao_base{
 					log.id, 
 					nick.name as nick, 
 					channel.name as channel_name, 
+					channel.id as channel_id, 
 					log.log as log, 
 					log.created_on as time,
 					log.is_notice as is_notice 
@@ -345,4 +346,44 @@ class dao_log extends dao_base{
 		return $this->_conn->GetOne($this->_conn->Prepare($sql));
 	}
 
+	function getLogAround( $log_id, $channel_id = null, $log_around_num = 15 )
+	{
+		if( is_null( $channel_id ) )
+		{
+			$sql = "SELECT channel_id FROM channel WHERE id = ? ";
+
+			$channel_id = $this->_conn->GetOne(
+				$this->_conn->Prepare($sql),
+				array($log_id)
+			);
+			if( $channel_id === false ){ return null; }
+		}
+
+		$sql = "SELECT COUNT(*) FROM log WHERE channel_id = ? AND id < ? ";
+
+		$count = $this->_conn->GetOne(
+			$this->_conn->Prepare($sql),
+			array($channel_id,$log_id)
+		);
+
+		$sql = "SELECT 
+					log.id, 
+					nick.name as nick, 
+					channel.name as channel_name, 
+					channel.id as channel_id, 
+					log.log as log, 
+					log.created_on as time,
+					log.is_notice as is_notice 
+				FROM log 
+					JOIN nick ON log.nick_id = nick.id 
+					JOIN channel ON log.channel_id = channel.id  
+				WHERE  channel_id = ? LIMIT ?,?";
+
+		$offset = $count - $log_around_num;
+		$row_count = $log_around_num*2+1;
+		if( $offset < 0 ){ $row_count += $offset; $offset = 0; }
+
+		$values = array($channel_id, $offset, $row_count);
+		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
+	}
 }

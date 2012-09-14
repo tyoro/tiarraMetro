@@ -226,6 +226,11 @@
 			else{ $return = $this->db->log->searchLog( $this->request->keyword, $this->request->channel_id ); }
 			return json_encode($return);
 		}
+		public function api_search_around( $channel_id, $log_id ){
+			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
+			else{ $return = $this->db->log->getLogAround( $log_id, $channel_id, $this->options->search_log_around_num ); }
+			return json_encode($return);
+		}
 		public function api_read($channel_id){
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
 			else{
@@ -439,6 +444,7 @@
 	$app->post('/api/logs/:channel_id','api_next', array('channel_id'=>'\d+' ));
 	$app->post('/api/post/','api_post');
 	$app->post('/api/search/','api_search');
+	$app->post('/api/search/around/:channel_id/:log_id','api_search_around', array( 'channel_id'=>'\d+','log_id'=>'\d+') );
 	$app->post('/api/read/:channel_id','api_read',array('channel_id'=>'\d+'));
 	$app->post('/api/reset/unread','api_reset_unread');
 	$app->post('/api/setting/view/:channel_id','api_set_view',array('channel_id'=>'\d+'));

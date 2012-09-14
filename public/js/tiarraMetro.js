@@ -786,7 +786,15 @@ $(function(){
 			$('#list').append(row);
 		},
 		add_result : function( i, log ){
-			$('#search-list').prepend(this.createRow(log,true));
+			$('#search-list').prepend(this.createRow(log,'result'));
+		},
+		add_result_sub : function( i, log, parent_id ){
+			var row = this.createRow(log,'result_sub')
+
+			if(log.id == log_id){
+				row.addClass('baseline');
+			}
+			$('#'+parent_id+ ' .result_sub').prepend(row);
 		},
 		afterAdded : function(channel_id){
 			if(this.jsConf.on_image === 2 ) {
@@ -802,17 +810,18 @@ $(function(){
 				});
 			}
 		},
-		createRow : function( log,searchFlag ){
+		createRow : function( log,type ){
 			var self = this;
 
 			log = self.logFilter(log);
 
 			self.variable.alternate = !self.variable.alternate;
 			var result =  '<div id="'+log.id+'" type="'+(log.is_notice == 1?'notice':'privmsg')+'" class="line text" nick="'+log.nick+'" alternate="'+(self.variable.alternate?'odd':'even')+'" highlight="'+(log.pickup?'true':'false')+'" >';
-			searchFlag = (searchFlag==undefined?false:searchFlag);
+			type = (type==undefined?false:type);
 			/* 検索の場合はチャンネルも記述する */
-			if( searchFlag ){
-				result += '<span class="channel">'+log.channel_name+'</span>';
+			if( type ){
+				result += '<span class="channel" channel_id="'+log.channel_id+'">'+log.channel_name+'</span>';
+
 				time = log.time.substring(log.time.indexOf('-')+1,log.time.lastIndexOf(' '))+' '+log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
 			}else{
 				time = log.time.substring(log.time.indexOf(' ')+1,log.time.lastIndexOf(':'));
@@ -837,7 +846,7 @@ $(function(){
 			result = $(result);
 
 			/* log popup menuの処理 */
-			if( !searchFlag && self.currentMenu != null ){
+			if( !type && self.currentMenu != null ){
 				logElement = result;//$('span.message',result);
 				if( !( 'match' in self.currentMenu) ||  logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
 					if( 'match' in self.currentMenu){
@@ -924,6 +933,35 @@ $(function(){
 						event.stopPropagation();
 					});
 				}
+			}else if( type == 'result'  ){
+				//検索の場合
+				var logElement = result;
+				$(".message",logElement).on( "click", function(event){
+					event.stopPropagation();
+					if( (result_sub = $('.result_sub',logElement)).length ){
+						result_sub.toggleClass('invisible');
+						return;
+					}
+
+					channel_id = $('.channel',logElement).attr('channel_id');
+					log_id = $(logElement).attr('id');
+
+					result.append('<div class="result_sub text" />');
+					console.log(log_id);
+
+					if(confirm( 'around log check?')){
+						$.ajax({
+							url:self.mountPoint+'/api/search/around/'+channel_id+'/'+log_id,
+							dataType:'json',
+							type:'POST',
+							success:function(json){
+								if( json.length	){
+									$.each( json, function(i,log){ self.add_result_sub(i,log,log_id); } ); 
+								}
+							},
+						});
+					}
+				});
 			}
 			return result;
 		},
