@@ -517,6 +517,7 @@ $(function(){
 											prev_line = $("#list .line:first");
 										}
 
+
 										if (!!prev_line.length) {
 											current_line.removeClass("select");
 											prev_line.addClass("select");
@@ -550,6 +551,9 @@ $(function(){
 											current_line.removeClass("select");
 											next_line.addClass("select");
 											self.viewScroll(next_line);
+										} else {
+											//more
+											$('#more_button').click();
 										}
 									}
 								});
@@ -1073,7 +1077,7 @@ $(function(){
 		},
 		addMoreButton : function(){
 			var self = this;
-			button = $('<input type="button" value="more">');
+			button = $('<input type="button" value="more" id="more_button">');
 			button.click(function(){
 				$('div#ch_foot').html( '<div id="spinner"><img src="images/spinner_b.gif" width="32" height="32" border="0" align="center" alt="loading..."></div>' );
 
