@@ -157,6 +157,9 @@ ul.channel_list li.select {
 .line.unread_border.unread_border_more {
 	border-bottom: 3px dashed #b22222;
 }
+.line.select {
+	background-color: #333333;
+}
 
 .line[type="notice"] {
 	color: #aaa;

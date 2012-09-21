@@ -492,35 +492,65 @@ $(function(){
 						switch(key){
 							case 'up':
 								$(document).bind('keydown', val, function(){ 
-									var current = $(".channel_list li.select");
-									prev = current;
-									while( prev.length ){
-										if( (p =prev.prev( ':visible' ).addClass( 'select' ) ).length ){
-											current.removeClass( 'select' );
-											self.viewScroll( p );
-											break;
+									if (self.isCurrentPivotByName("list")) {
+										var current = $(".channel_list li.select");
+										prev = current;
+										while( prev.length ){
+											if( (p =prev.prev( ':visible' ).addClass( 'select' ) ).length ){
+												current.removeClass( 'select' );
+												self.viewScroll( p );
+												break;
+											}
+											prev = prev.prev();
 										}
-										prev = prev.prev();
-									}
-									if( !prev.length ){
-										if( ( prev = $(".channel_list li:visible:last").addClass( 'select' ) ).length ){
-											current.removeClass( 'select' );
-											self.viewScroll( prev );
+										if( !prev.length ){
+											if( ( prev = $(".channel_list li:visible:last").addClass( 'select' ) ).length ){
+												current.removeClass( 'select' );
+												self.viewScroll( prev );
+											}
+										}
+									} else if (self.isCurrentPivotByName("channel")) {
+										var current_line = $("#list .line.select");
+										var prev_line = current_line.prev();
+
+										if (!current_line.length) {
+											prev_line = $("#list .line:first");
+										}
+
+										if (!!prev_line.length) {
+											current_line.removeClass("select");
+											prev_line.addClass("select");
+											self.viewScroll(prev_line);
 										}
 									}
 								});
 								break;
 							case 'down':
 								$(document).bind('keydown', val, function(){
-									var current = $(".channel_list li.select");
+									if (self.isCurrentPivotByName("list")) {
+										var current = $(".channel_list li.select");
 
-									if( ! ( next = $(".channel_list li.select ~ li:visible:first") ).length ){
-										next = $(".channel_list li:visible:first");
-									}
-									
-									if( next.addClass( 'select' ).length ){
-										current.removeClass( 'select' );
-										self.viewScroll( next );
+										if( ! ( next = $(".channel_list li.select ~ li:visible:first") ).length ){
+											next = $(".channel_list li:visible:first");
+										}
+
+										if( next.addClass( 'select' ).length ){
+											current.removeClass( 'select' );
+											self.viewScroll( next );
+										}
+									} else if (self.isCurrentPivotByName("channel")) {
+										var current_line = $("#list .line.select");
+										var next_line = current_line.next();
+
+										if (!current_line.length) {
+											next_line = $("#list .line:first");
+										}
+
+										if (!!next_line.length) {
+											current_line.removeClass("select");
+											next_line.addClass("select");
+											self.viewScroll(next_line);
+										}
 									}
 								});
 								break;
