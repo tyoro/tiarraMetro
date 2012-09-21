@@ -125,7 +125,7 @@ ul.channel_list li span.ch_num small {
 	padding-right: .4em;
 	-moz-border-radius: 1em;
 	-webkit-border-radius: 1em;
-	border-radius: 1em,1em,1em,1em;
+	border-radius: 1em;
 
 }
 ul.channel_list li.hit span.ch_num small {
