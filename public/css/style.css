@@ -282,7 +282,7 @@ input[type=submit] {
 	background-color: #202c64;
 	-moz-border-radius: .5em;
 	-webkit-border-radius: .5em;
-	border-radius: .5em,.5em,.5em,.5em;
+	border-radius: .5em;
 }
 input[type=submit]:disabled {
 	color: gray;
@@ -296,7 +296,7 @@ input[type=button] {
 	background: #000000;
 	-moz-border-radius: .5em;
 	-webkit-border-radius: .5em;
-	border-radius: .5em,.5em,.5em,.5em;
+	border-radius: .5em;
 }
 select {
 	height: 1.8em;
@@ -338,7 +338,7 @@ div#log_popup_menu {
 	background-color: #808080;
 	-moz-border-radius: .6em;
 	-webkit-border-radius: .6em;
-	border-radius: .6em,.6em,.6em,.6em;
+	border-radius: .6em;
 	z-index:1;
 }
 div#log_popup_menu form {
