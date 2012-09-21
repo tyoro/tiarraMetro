@@ -571,6 +571,25 @@ $(function(){
 						}
 					});
 				}
+				if( keymapping.hasOwnProperty( 'channel' ) ){
+					$.each( keymapping[ 'channel' ] , function(key,val){
+						switch(key){
+							case 're':
+								$(document).bind('keydown', val, function(){  });
+								break;
+							case 'popup':
+								$(document).bind('keydown', val, function(){ 
+									var current_line = $("#list .line.select");
+									if (current_line.length) {
+										current_line.click();
+										console.log(current_line);
+										self.popup.css('top', current_line.offset().top+current_line.height()/2 );
+									}
+								});
+								break;
+						}
+					});
+				}
 				if( keymapping.hasOwnProperty( 'pivot_controller' ) ){
 					$.each( keymapping[ 'pivot_controller' ] , function(key,val){
 						switch(key){
@@ -881,92 +900,7 @@ $(function(){
 
 			/* log popup menuの処理 */
 			if( !type && self.currentMenu != null ){
-				logElement = result;//$('span.message',result);
-				if( !( 'match' in self.currentMenu) ||  logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
-					if( 'match' in self.currentMenu){
-						var matchStr = RegExp.$1;
-					}
-					logElement.on( "click", function(event){
-						event.stopPropagation();
-						if( self.popup.css('display') == 'block' ){
-							self.popup.css('display','none');
-							return;
-						}
-						var ul = $('ul',self.popup);
-						if( ul.children().length ){
-							ul.empty();
-						}
-						$('form#quick_form input[name="post"]').val('' );
-						if( 'menu' in self.currentMenu ){
-							$.each( self.currentMenu['menu'], function(label,menu){
-								var li = $('<li />').text(menu['label']?menu['label']:label);
-								switch( menu['type'] ){
-									case 'typablemap':
-										li.on('click',function(event){
-											self.popup.css('display','none');
-											$.ajax({
-												url:self.mountPoint+'/api/post/',
-												data:{
-													channel_id:self.currentChannel,
-													post:label+' '+matchStr,
-													notice:false,
-												},
-												dataType:'json',
-												type:'POST',
-											});
-										});
-										break;
-									case 'typablemap_comment':
-										li.on('click',function(event){
-											ul.empty();
-											$('form#quick_form input[name="post"]').val(label+' '+matchStr+' ' ).focus();
-										});
-										break;
-									case 'action':
-										li.on('click',function(event){
-											switch( label ){
-												case 'close':
-													$('div.headers span.header[name=channel]').html( '' );
-												case 'list':
-													if (!self.isCurrentPivotByName("list")) {
-														self.goToPivotByName("list");
-														self.onListInvisible();
-													}
-													break;
-												case 'tour':
-													$(".status-notifier").click();
-													break;
-												case 'top':
-													$( window ).scrollTop(0);
-													self.popup.css('display','none');
-													break;
-												case 'post':
-													self.popup.css('display','none');
-													$.ajax({
-														url:self.mountPoint+'/api/post/',
-														data:{
-															channel_id:self.currentChannel,
-															post:menu['value'],
-															notice:false,
-														},
-														dataType:'json',
-														type:'POST',
-													});
-													break;
-											}
-										});
-										break;
-								}
-								ul.append( li );
-							});
-						}	
-						self.popup.css('top', event.pageY).append(ul).css('display','block');
-					} );
-					//リンククリック時にメニューが出るのを阻止する。
-					logElement.on( "click", 'a', function( event ){
-						event.stopPropagation();
-					});
-				}
+				self.popupMenu(result);
 			}else if( type == 'result'  ){
 				//検索の場合
 				var logElement = result;
@@ -998,6 +932,95 @@ $(function(){
 				});
 			}
 			return result;
+		},
+		popupMenu : function (logElement){
+			var self = this;
+			if( !( 'match' in self.currentMenu) ||  logElement.text().match(new RegExp((self.currentMenu['match']) ) ) ){
+				if( 'match' in self.currentMenu){
+					var matchStr = RegExp.$1;
+				}
+				logElement.on( "click", function(event){
+					event.stopPropagation();
+					if( self.popup.css('display') == 'block' ){
+						self.popup.css('display','none');
+						return;
+					}
+					var ul = $('ul',self.popup);
+					if( ul.children().length ){
+						ul.empty();
+					}
+					$('form#quick_form input[name="post"]').val('' );
+					if( 'menu' in self.currentMenu ){
+						$.each( self.currentMenu['menu'], function(label,menu){
+							var li = $('<li />').text(menu['label']?menu['label']:label);
+							switch( menu['type'] ){
+								case 'typablemap':
+									li.on('click',function(event){
+										self.popup.css('display','none');
+										$.ajax({
+											url:self.mountPoint+'/api/post/',
+											data:{
+												channel_id:self.currentChannel,
+												post:label+' '+matchStr,
+												notice:false,
+											},
+											dataType:'json',
+											type:'POST',
+										});
+									});
+									break;
+								case 'typablemap_comment':
+									li.on('click',function(event){
+										ul.empty();
+										$('form#quick_form input[name="post"]').val(label+' '+matchStr+' ' ).focus();
+									});
+									break;
+								case 'action':
+									li.on('click',function(event){
+										switch( label ){
+											case 'close':
+												$('div.headers span.header[name=channel]').html( '' );
+											case 'list':
+												if (!self.isCurrentPivotByName("list")) {
+													self.goToPivotByName("list");
+													self.onListInvisible();
+												}
+												break;
+											case 'tour':
+												$(".status-notifier").click();
+												break;
+											case 'top':
+												$( window ).scrollTop(0);
+												self.popup.css('display','none');
+												break;
+											case 'post':
+												self.popup.css('display','none');
+												$.ajax({
+													url:self.mountPoint+'/api/post/',
+													data:{
+														channel_id:self.currentChannel,
+														post:menu['value'],
+														notice:false,
+													},
+													dataType:'json',
+													type:'POST',
+												});
+												break;
+										}
+									});
+									break;
+							}
+							ul.append( li );
+						});
+					}	
+					self.popup.css('top', event.pageY).append(ul).css('display','block');
+				} );
+				//リンククリック時にメニューが出るのを阻止する。
+				logElement.on( "click", 'a', function( event ){
+					event.stopPropagation();
+				});
+			}
+
 		},
 		getIconString : function ( log ){
 			nick = log.nick;
