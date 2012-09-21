@@ -1174,11 +1174,14 @@ $(function(){
 			
 		},
 		viewScroll: function( elm ){
-			var et = elm.offset().top;
-			var eh = elm.height();
-			var st = $(window).scrollTop();
-			var wh = $(window).height();
-			if ( st+wh < et+eh || st > et ) $("html,body").animate( {scrollTop:et-$('div.headers').height()},100);
+			if (elm.length) {
+				var hh = $("div.headers").outerHeight();
+				var et = elm.offset().top;
+				var eh = elm.height();
+				var st = $(window).scrollTop() + hh; // ヘッダ分下げる
+				var wh = $(window).height();
+				if (st+wh < et+eh || st > et) $("html,body").animate({scrollTop:et-hh}, 50);
+			}
 		},
 		/* local strage */
 		getChannelSettings: function( channel_id ){
