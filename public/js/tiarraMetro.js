@@ -904,32 +904,34 @@ $(function(){
 			}else if( type == 'result'  ){
 				//検索の場合
 				var logElement = result;
-				$(".message",logElement).on( "click", function(event){
+				var button = $('<button class="load_button">load</button>').on( "click", function(event){
 					event.stopPropagation();
 					if( (result_sub = $('.result_sub',logElement)).length ){
 						result_sub.toggleClass('invisible');
+						button.html('open');
 						return;
 					}
+
+					button.html('wait...').attr('disabled', true);
 
 					channel_id = $('.channel',logElement).attr('channel_id');
 					log_id = $(logElement).attr('id');
 
 					result.append('<div class="result_sub text" />');
-					console.log(log_id);
 
-					if(confirm( 'around log check?')){
-						$.ajax({
-							url:self.mountPoint+'/api/search/around/'+channel_id+'/'+log_id,
-							dataType:'json',
-							type:'POST',
-							success:function(json){
-								if( json.length	){
-									$.each( json, function(i,log){ self.add_result_sub(i,log,log_id); } ); 
-								}
-							},
-						});
-					}
+					$.ajax({
+						url:self.mountPoint+'/api/search/around/'+channel_id+'/'+log_id,
+						dataType:'json',
+						type:'POST',
+						success:function(json){
+							button.html('close').attr('disabled', false);
+							if( json.length	){
+								$.each( json, function(i,log){ self.add_result_sub(i,log,log_id); } ); 
+							}
+						},
+					});
 				});
+				$(".sender",logElement).after(button);
 			}
 			return result;
 		},
