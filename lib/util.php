@@ -196,5 +196,4 @@ function is_absolute_path($path)
     return false;
 }
 // }}}
-?>
 
