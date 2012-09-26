@@ -1197,8 +1197,8 @@ $(function(){
 				;
 
 			//タイトルへの反映もここでやる。
-			if( fhit ){ $('title').text(this.baseTitle+' -hit-'); }
-			else if( fnew ){ $('title').text(this.baseTitle+' *'); }
+			if( fhit ){ $('title').text('! '+this.baseTitle); }
+			else if( fnew ){ $('title').text('* '+this.baseTitle); }
 			else{ $('title').text(this.baseTitle); }
 			
 		},
