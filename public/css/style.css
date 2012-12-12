@@ -1,6 +1,10 @@
 /* vim: set noet: */
 @charset "utf-8";
 
+@-ms-viewport {
+	width: device-width;
+}
+
 * {
 	font-family: sans-serif;
 }
