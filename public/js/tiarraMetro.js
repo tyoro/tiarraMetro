@@ -998,7 +998,7 @@ $(function(){
 					$('form#quick_form input[name="post"]').val('' );
 					if( 'menu' in self.currentMenu ){
 						$.each( self.currentMenu['menu'], function(label,menu){
-							var li = $('<li />').text(menu['label']?menu['label']:label);
+							var li = $('<li />').append( $('<a href="#" />').text(menu['label']?menu['label']:label));
 							switch( menu['type'] ){
 								case 'typablemap':
 									li.on('click',function(event){
@@ -1016,9 +1016,10 @@ $(function(){
 									});
 									break;
 								case 'typablemap_comment':
-									li.on('click',function(event){
+									li.on('click',function(e){
 										ul.empty();
 										$('form#quick_form input[name="post"]').val(label+' '+matchStr+' ' ).focus();
+										e.preventDefault();
 									});
 									break;
 								case 'action':

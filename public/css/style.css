@@ -394,6 +394,13 @@ div#log_popup_menu ul li:hover {
 	background-color: #404040;
 }
 
+div#log_popup_menu ul li a:link,
+div#log_popup_menu ul li a:visited,
+div#log_popup_menu ul li a:active,
+div#log_popup_menu ul li a:hover {
+	color: #fff;
+}
+
 div.setting_view {
 	position: relative;
 	width: 93.3%;
