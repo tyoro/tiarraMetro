@@ -79,6 +79,9 @@ keymapping:
     open: 'o'
     channel_toggle: 'e'
   channel:
+    up: 'k'
+    down: 'j'
+    open: 'o'
     re: 'r'
     popup: 'p'
   pivot_controller:

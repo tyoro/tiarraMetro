@@ -509,7 +509,76 @@ $(function(){
 												self.viewScroll( prev );
 											}
 										}
-									} else if (self.isCurrentPivotByName("channel")) {
+									}
+								});
+								break;
+							case 'down':
+								$(document).bind('keydown', val, function(){
+									if (self.isCurrentPivotByName("list")) {
+										var current = $(".channel_list li.select");
+
+										if( ! ( next = $(".channel_list li.select ~ li:visible:first") ).length ){
+											next = $(".channel_list li:visible:first");
+										}
+
+										if( next.addClass( 'select' ).length ){
+											current.removeClass( 'select' );
+											self.viewScroll( next );
+										}
+									}
+								});
+								break;
+							case 'open':
+								$(document).bind('keydown', val, function(){
+									if (self.isCurrentPivotByName("list")) {
+										$(".channel_list li.select").click();
+									}
+								});
+								break;
+							case 'channel_toggle':
+								$(document).bind('keydown', val, function(){
+									if (self.isCurrentPivotByName("list")) {
+										$("ul.channel_list").toggleClass("invisible");
+									}
+								});
+								break;
+						}
+					});
+				}
+				if( keymapping.hasOwnProperty( 'channel' ) ){
+					$.each( keymapping[ 'channel' ] , function(key,val){
+						switch(key){
+							case 're':
+								$(document).bind('keydown', val, function(e){
+									if (self.isCurrentPivotByName("channel")) {
+										var current_line = $("#list .line.select");
+										if (current_line.length) {
+											if( $(".message", current_line).text().match(new RegExp(/\((\w+)\)/i) ) ){
+												var matchStr = RegExp.$1;
+												current_line.click();
+												self.popup.css('top', current_line.offset().top+current_line.height()/2 );
+												$('ul',self.popup).empty();
+												$('form#quick_form input[name="post"]').val('re '+matchStr+' ' ).focus();
+												e.preventDefault();
+											}
+										}
+									}
+								});
+								break;
+							case 'popup':
+								$(document).bind('keydown', val, function(){ 
+									if (self.isCurrentPivotByName("channel")) {
+										var current_line = $("#list .line.select");
+										if (current_line.length) {
+											current_line.click();
+											self.popup.css('top', current_line.offset().top+current_line.height()/2 );
+										}
+									}
+								});
+								break;
+							case 'up':
+								$(document).bind('keydown', val, function(){ 
+									if (self.isCurrentPivotByName("channel")) {
 										var current_line = $("#list .line.select");
 										var prev_line = current_line.prev();
 
@@ -528,18 +597,7 @@ $(function(){
 								break;
 							case 'down':
 								$(document).bind('keydown', val, function(){
-									if (self.isCurrentPivotByName("list")) {
-										var current = $(".channel_list li.select");
-
-										if( ! ( next = $(".channel_list li.select ~ li:visible:first") ).length ){
-											next = $(".channel_list li:visible:first");
-										}
-
-										if( next.addClass( 'select' ).length ){
-											current.removeClass( 'select' );
-											self.viewScroll( next );
-										}
-									} else if (self.isCurrentPivotByName("channel")) {
+									if (self.isCurrentPivotByName("channel")) {
 										var current_line = $("#list .line.select");
 										var next_line = current_line.next();
 
@@ -560,30 +618,16 @@ $(function(){
 								break;
 							case 'open':
 								$(document).bind('keydown', val, function(){
-									$(".channel_list li.select").click();
-								});
-								break;
-							case 'channel_toggle':
-								$(document).bind('keydown', val, function(){
-									$("ul.channel_list").toggleClass("invisible");
-								});
-								break;
-						}
-					});
-				}
-				if( keymapping.hasOwnProperty( 'channel' ) ){
-					$.each( keymapping[ 'channel' ] , function(key,val){
-						switch(key){
-							case 're':
-								$(document).bind('keydown', val, function(){  });
-								break;
-							case 'popup':
-								$(document).bind('keydown', val, function(){ 
-									var current_line = $("#list .line.select");
-									if (current_line.length) {
-										current_line.click();
-										console.log(current_line);
-										self.popup.css('top', current_line.offset().top+current_line.height()/2 );
+									if (self.isCurrentPivotByName("channel")) {
+										var current_line = $("#list .line.select");
+										if (current_line.length) {
+											console.log(current_line);
+											if( $(".message", current_line).text().match(new RegExp(/(https?:\/\/[\x21-\x7e]+)/g) ) ){
+												var matchStr = RegExp.$1;
+												window.open( matchStr );
+											}
+											
+										}
 									}
 								});
 								break;
