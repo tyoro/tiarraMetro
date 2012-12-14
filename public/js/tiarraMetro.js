@@ -664,6 +664,7 @@ $(function(){
 							case 'input_focus':
 								$(document).bind('keydown', val, function(e){
 									$('input#message').focus();
+									$(window).scrollTop(0);
 									e.preventDefault();
 								});
 								break;
