@@ -367,7 +367,7 @@ div#log_popup_menu ul {
 
 div#log_popup_menu ul li {
 	font-size: 1.6em;
-	padding: .4em .8em;
+	padding: 0;
 	margin-bottom: 2px;
 	list-style-type: none;
 	cursor: pointer;
@@ -390,8 +390,10 @@ div#log_popup_menu ul li:last-child {
 	-moz-border-radius-bottomleft: .3em;
 	-moz-border-radius-bottomright: .3em;
 }
-div#log_popup_menu ul li:hover {
-	background-color: #404040;
+
+div#log_popup_menu ul li a {
+	display: block;
+	padding: .4em .8em;
 }
 
 div#log_popup_menu ul li a:link,
@@ -399,6 +401,11 @@ div#log_popup_menu ul li a:visited,
 div#log_popup_menu ul li a:active,
 div#log_popup_menu ul li a:hover {
 	color: #fff;
+}
+
+div#log_popup_menu ul li a:hover,
+div#log_popup_menu ul li a:active {
+	background-color: #404040;
 }
 
 div.setting_view {
