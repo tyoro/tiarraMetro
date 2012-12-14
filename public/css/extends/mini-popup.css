@@ -26,16 +26,19 @@ div#log_popup_menu ul:after {
 }
 
 div#log_popup_menu ul li {
-    width: 2.5em;
-    padding: 0.3em 0.7em;
+    padding: 0;
     float: left;
-    overflow: hidden;
     text-align: center;
     border: 2px solid #202020;
     margin: 0.1em;
     -webkit-border-radius: 0.3em;
     -moz-border-radius: 0.3em;
     border-radius: 0.3em;
+}
+
+div#log_popup_menu ul li a {
+    width: 3.0em;
+    padding: 0.3em 0.5em;
 }
 
 div#log_popup_menu ul li:nth-child(3n + 4) {
