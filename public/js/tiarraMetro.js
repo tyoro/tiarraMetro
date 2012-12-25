@@ -1002,7 +1002,7 @@ $(function(){
 							var li = $('<li />').append( $('<a href="#" />').text(menu['label']?menu['label']:label));
 							switch( menu['type'] ){
 								case 'typablemap':
-									li.on('click',function(event){
+									li.on('click',function(e){
 										self.popup.css('display','none');
 										$.ajax({
 											url:self.mountPoint+'/api/post/',
@@ -1014,6 +1014,7 @@ $(function(){
 											dataType:'json',
 											type:'POST',
 										});
+										e.preventDefault();
 									});
 									break;
 								case 'typablemap_comment':
@@ -1024,7 +1025,7 @@ $(function(){
 									});
 									break;
 								case 'action':
-									li.on('click',function(event){
+									li.on('click',function(e){
 										switch( label ){
 											case 'close':
 												$('div.headers span.header[name=channel]').html( '' );
@@ -1055,6 +1056,7 @@ $(function(){
 												});
 												break;
 										}
+										e.preventDefault();
 									});
 									break;
 							}
