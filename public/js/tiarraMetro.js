@@ -914,7 +914,7 @@ $(function(){
 			log = self.logFilter(log);
 
 			self.variable.alternate = !self.variable.alternate;
-			var result =  '<div id="'+log.id+'" type="'+(log.is_notice == 1?'notice':'privmsg')+'" class="line text" nick="'+log.nick+'" alternate="'+(self.variable.alternate?'odd':'even')+'" highlight="'+(log.pickup?'true':'false')+'" >';
+			var result =  '<div id="'+log.id+'" data-type="'+(log.is_notice == 1?'notice':'privmsg')+'" class="line text" data-nick="'+log.nick+'" data-alternate="'+(self.variable.alternate?'odd':'even')+'" data-highlight="'+(log.pickup?'true':'false')+'" >';
 			type = (type==undefined?false:type);
 			/* 検索の場合はチャンネルも記述する */
 			if( type ){
@@ -932,10 +932,10 @@ $(function(){
 			result += self.getIconString(log);
 
 			//sender
-			result += '<span class="sender" type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+'</span>';
+			result += '<span class="sender" data-type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+'</span>';
 
 			//log
-			result += '<span class="message" type="'+(log.is_notice == 1?'notice':'privmsg')+'">'+log.log+'</span>';
+			result += '<span class="message" data-type="'+(log.is_notice == 1?'notice':'privmsg')+'">'+log.log+'</span>';
 			//TODO: ここのtypeいんのか？
 
 			//end
