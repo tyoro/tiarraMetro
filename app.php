@@ -223,12 +223,12 @@
 		}
 		public function api_search(){
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
-			else{ $return = $this->db->log->searchLog( $this->request->keyword, $this->request->channel_id ); }
+			else{ $return = $this->logFilter( $this->db->log->searchLog( $this->request->keyword, $this->request->channel_id ) ); }
 			return json_encode($return);
 		}
 		public function api_search_around( $channel_id, $log_id ){
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
-			else{ $return = $this->db->log->getLogAround( $log_id, $channel_id, $this->options->search_log_around_num ); }
+			else{ $return = $this->logFilter( $this->db->log->getLogAround( $log_id, $channel_id, $this->options->search_log_around_num ) ); }
 			return json_encode($return);
 		}
 		public function api_read($channel_id){
