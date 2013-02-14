@@ -306,17 +306,14 @@ class dao_log extends dao_base{
 
 	function searchLog( $word, $channel_id = null ){
 		$sql = "SELECT 
-					log.id, 
-					nick.name as nick, 
-					channel.name as channel_name, 
-					channel.id as channel_id, 
-					log.log as log, 
-					log.created_on as time,
-					log.is_notice as is_notice 
-				FROM log 
-					JOIN nick ON log.nick_id = nick.id 
-					JOIN channel ON log.channel_id = channel.id  
-				WHERE log.log like ? ";
+                   tmplog.id, 
+                   nick.name as nick, 
+                   channel.name as channel_name, 
+                   channel.id as channel_id, 
+                   tmplog.log as log, 
+                   tmplog.created_on as time,
+                   tmplog.is_notice as is_notice 
+				FROM (SELECT * FROM log WHERE log.log like ? "; 
 
 		$values = array("%$word%");
 
@@ -324,7 +321,9 @@ class dao_log extends dao_base{
 			$sql .= " AND log.channel_id = ? ";
 			$values[] = $channel_id;
 		}
-		$sql .= " ORDER BY log.created_on DESC LIMIT 0,30 ";
+		$sql .= " ORDER BY log.created_on DESC LIMIT 0,30  ) tmplog 
+                   JOIN nick ON tmplog.nick_id = nick.id 
+                   JOIN channel ON tmplog.channel_id = channel.id  ";
 
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
@@ -368,17 +367,16 @@ class dao_log extends dao_base{
 		);
 
 		$sql = "SELECT 
-					log.id, 
+					tmplog.id, 
 					nick.name as nick, 
 					channel.name as channel_name, 
 					channel.id as channel_id, 
-					log.log as log, 
-					log.created_on as time,
-					log.is_notice as is_notice 
-				FROM log 
-					JOIN nick ON log.nick_id = nick.id 
-					JOIN channel ON log.channel_id = channel.id  
-				WHERE  channel_id = ? LIMIT ?,?";
+					tmplog.log as log, 
+					tmplog.created_on as time,
+					tmplog.is_notice as is_notice 
+				FROM ( SELECT * FROM log WHERE  channel_id = ? LIMIT ?,? ) tmplog 
+					JOIN nick ON tmplog.nick_id = nick.id 
+					JOIN channel ON tmplog.channel_id = channel.id";
 
 		$offset = $count - $log_around_num;
 		$row_count = $log_around_num*2+1;
