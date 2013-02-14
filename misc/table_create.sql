@@ -39,6 +39,7 @@ create table log (
   foreign key (nick_id) references nick (id),
   primary key (id),
   KEY `nick_id` (`nick_id`),
+  KEY `created_on` (`created_on`),
   KEY `channel_id_and_created_on` (`channel_id`,`created_on`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
