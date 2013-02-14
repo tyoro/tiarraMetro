@@ -123,7 +123,7 @@ class dao_channel extends dao_base{
 		$values = array(1);
 
 		if( !empty($server) ){
-			$sql .= " WHERE name like ? ";
+			$sql .= " AND name like ? ";
 			$values[] = "%@".$server;
 		}
 
@@ -257,15 +257,13 @@ class dao_log extends dao_base{
 	var $_name = 'log';
 
 	function getLog( $channel_id, $log_id = null,  $num = 30, $type = "new"  ){
-		$sql = "SELECT 
-					log.id as id, 
-					nick.name as nick, 
-					log.log as log, 
-					log.created_on as time, 
-					log.is_notice as is_notice 
-				FROM log 
-					JOIN nick ON log.nick_id = nick.id 
-				WHERE channel_id = ? ";
+		$sql = "select 
+                   tmplog.id as id, 
+                   nick.name as nick, 
+                   tmplog.log as log, 
+                   tmplog.created_on as time, 
+                   tmplog.is_notice as is_notice 
+				   FROM ( SELECT * FROM log WHERE channel_id = ? ";
 		$values = array($channel_id);
 
 		if( !is_null( $log_id ) ){
@@ -275,6 +273,9 @@ class dao_log extends dao_base{
 		
 		$sql .= " ORDER BY log.created_on DESC LIMIT 0, ?";
 		$values[] = $num;
+
+		$sql .= ") as tmplog 
+                   JOIN nick ON tmplog.nick_id = nick.id ";
 		
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
