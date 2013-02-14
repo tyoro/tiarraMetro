@@ -154,6 +154,14 @@ $(function(){
 				if( select.length ){
 					d['channel_id'] = select;
 				}
+				begin_date = $('input[name=begin_date]').val();
+				end_date = $('input[name=end_date]').val();
+				if( begin_date.length ){
+					d['begin_date'] = begin_date;
+				}
+				if( end_date.length ){
+					d['end_date'] = end_date;
+				}
 
 				$.ajax({
 					url:self.mountPoint+'/api/search/',

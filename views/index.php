@@ -45,6 +45,8 @@
 			<option value="<?php print $ch['id']; ?>"><?php print $ch['name']; ?></option>
 			<?php } ?>
 		</select>
+		<br/>
+		<input type="date" name="begin_date">～<input type="date" name="end_date">
 		<input type="submit" id="search" name="search" value='search' />
 	</form>
 

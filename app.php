@@ -223,7 +223,7 @@
 		}
 		public function api_search(){
 			if( !$this->isLoggedIn() ){ $return = array( 'error' => true, 'msg' => 'no login.' ); }
-			else{ $return = $this->logFilter( $this->db->log->searchLog( $this->request->keyword, $this->request->channel_id ) ); }
+			else{ $return = $this->logFilter( $this->db->log->searchLog( $this->request->keyword, $this->request->channel_id, $this->request->begin_date, $this->request->end_date ) ); }
 			return json_encode($return);
 		}
 		public function api_search_around( $channel_id, $log_id ){

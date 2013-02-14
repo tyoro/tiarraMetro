@@ -296,7 +296,7 @@ class dao_log extends dao_base{
 					JOIN channel ON log.channel_id = channel.id 
 				WHERE channel.view = ? 
 					AND log.id > ? 
-				ORDER BY log.id DESC,log.created_on DESC
+				ORDER BY log.created_on DESC
 				";
 
 		$values = array(1, $max_id);
@@ -304,7 +304,7 @@ class dao_log extends dao_base{
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
 
-	function searchLog( $word, $channel_id = null ){
+	function searchLog( $word, $channel_id = null, $begin_date = null, $end_date = null  ){
 		$sql = "SELECT 
                    tmplog.id, 
                    nick.name as nick, 
@@ -320,6 +320,14 @@ class dao_log extends dao_base{
 		if( !is_null( $channel_id ) ){
 			$sql .= " AND log.channel_id = ? ";
 			$values[] = $channel_id;
+		}
+		if( !is_null( $begin_date ) ){
+			$sql .= " AND log.created_on >= ? ";
+			$values[] = $begin_date;
+		}
+		if( !is_null( $end_date ) ){
+			$sql .= " AND log.created_on <= ? ";
+			$values[] = $end_date;
 		}
 		$sql .= " ORDER BY log.created_on DESC LIMIT 0,30  ) tmplog 
                    JOIN nick ON tmplog.nick_id = nick.id 
