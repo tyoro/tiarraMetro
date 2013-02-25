@@ -5,12 +5,11 @@
 	width: device-width;
 }
 
-* {
-	font-family: sans-serif;
-}
 body {
 	/* for fix font size at screen lotation on iPhone */
 	-webkit-text-size-adjust: 96%;
+	font-family:'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
+
 }
 div {display:block;}
 body,div,span,font,input,select {
