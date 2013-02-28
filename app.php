@@ -409,6 +409,7 @@
 			$prev_log = null;
 			foreach ($logs as $log) {
 				if ($prev_log &&
+					strpos( $log['log'], 'typablemap_key colorcode' ) === FALSE  &&
 					$prev_log['nick'] == $log['nick'] &&
 					$prev_log['time'] == $log['time'] &&
 					( !isset( $prev_log['channel_id'] ) || $prev_log['channel_id'] == $log['channel_id']) )
