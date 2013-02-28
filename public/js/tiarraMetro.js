@@ -561,8 +561,8 @@ $(function(){
 									if (self.isCurrentPivotByName("channel")) {
 										var current_line = $("#list .line.select");
 										if (current_line.length) {
-											if( $(".message", current_line).text().match(new RegExp(/\((\w+)\)/i) ) ){
-												var matchStr = RegExp.$1;
+											if( typablemap_key = $(".message .typablemap_key", current_line).text() ){
+												typablemap_key = typablemap_key.substring( 1, typablemap_key.length -1);
 												current_line.click();
 												self.popup.css('top', current_line.offset().top+current_line.height()/2 );
 												$('ul',self.popup).empty();

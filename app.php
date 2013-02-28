@@ -366,7 +366,7 @@
 					if ($m[0]) {
 						foreach ($m[0] as $k=>$v) {
               				$cc = sprintf("%02d", $m[1][$k]);
-							$log['log'] = str_replace($m[0][$k], "<span class='colorcode{$cc}'>{$m[2][$k]}</span>", $log['log']);
+							$log['log'] = str_replace($m[0][$k], "<span class='typablemap_key colorcode{$cc}'>{$m[2][$k]}</span>", $log['log']);
 						}
 					}
 				}
