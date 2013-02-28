@@ -296,7 +296,7 @@ class dao_log extends dao_base{
 					JOIN channel ON log.channel_id = channel.id 
 				WHERE channel.view = ? 
 					AND log.id > ? 
-				ORDER BY log.created_on DESC
+				ORDER BY log.id DESC
 				";
 
 		$values = array(1, $max_id);
