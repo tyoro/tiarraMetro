@@ -19,7 +19,7 @@
 <link type="text/css" rel="stylesheet" href="<?php print ((strpos( $options->style, 'http' )!==false)?'':'css/').$options->style; ?>" />
 <script type="text/javascript" src= "js/jquery.js"></script>
 <script type="text/javascript" src= "js/jquery.metro.js"></script>
-<script type="text/javascript" src= "js/jquery.touchwipe.min.js"></script>
+<script type="text/javascript" src= "js/jquery.hammer.min.js"></script>
 <script type="text/javascript" src= "js/jquery.jgrowl_minimized.js"></script>
 <?php if( !empty( $jsConf['keymapping'] )){ ?>
 <script type="text/javascript" src= "js/jquery.hotkeys.js"></script>

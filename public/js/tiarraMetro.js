@@ -385,12 +385,24 @@ $(function(){
 			});
 
 			/* フリックによるヘッダー遷移 */
-			$(document).touchwipe({
-				preventDefaultEvents: false,
-				min_move_x: 75,
-				wipeLeft: function() { if (!self.jsConf['disable_swipe']) { self.goToNextPivot(); } },
-				wipeRight: function() { if (!self.jsConf['disable_swipe']) { self.goToPreviousPivot(); } }
-			});
+			if (!self.jsConf['disable_swipe']) {
+				$(document).hammer({
+					stop_browser_behavior: {
+						userSelect: 'none',
+						touchCallout: 'none',
+						// touchAction: 'none',
+						contentZooming: 'none',
+						userDrag: 'none',
+						tapHighlightColor: 'rgba(0,0,0,0)'
+					},
+					drag: true,
+					drag_block_horizontal: true,
+					swipe: true,
+				}).on({
+					swipeleft: function(e) { self.goToNextPivot(); },
+					swiperight: function(e) { self.goToPreviousPivot(); },
+				});
+			}
 
 			/* pivot化 */
 			$(".metro-pivot").metroPivot({
