@@ -388,13 +388,14 @@ $(function(){
 			if (!self.jsConf['disable_swipe']) {
 				$(document).hammer({
 					stop_browser_behavior: {
-						userSelect: 'none',
-						touchCallout: 'none',
+						// userSelect: 'none',
+						// touchCallout: 'none',
 						// touchAction: 'none',
-						contentZooming: 'none',
-						userDrag: 'none',
-						tapHighlightColor: 'rgba(0,0,0,0)'
+						// contentZooming: 'none',
+						// userDrag: 'none',
+						// tapHighlightColor: 'rgba(0,0,0,0)'
 					},
+					prevent_mouseevents: true,
 					drag: true,
 					drag_block_horizontal: true,
 					swipe: true,
