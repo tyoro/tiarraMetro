@@ -229,8 +229,9 @@ body[accent="tiarra"] ul.channel_list li:hover {
 .on_icon .line .message {
 	margin-left: 37px;
 }
-.line .message strong.highlight {
+.line .message mark.highlight {
 	color: #fbb;
+	background-color: transparent;
 }
 .line .message a {
 	padding-right: 18px;

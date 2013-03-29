@@ -876,7 +876,7 @@ $(function(){
 			/* pickupタグの適用 */
 			if( log.pickup ){
 				$.each( self.jsConf.pickup_word,function(j,w){
-					log.log = log.log.replace( w, '<strong class="highlight">'+w+'</strong>' );
+					log.log = log.log.replace( w, '<mark class="highlight">'+w+'</mark>' );
 				});
 			}
 
