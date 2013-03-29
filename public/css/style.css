@@ -1,8 +1,10 @@
 /* vim: set noet: */
 @charset "utf-8";
 
-@-ms-viewport {
-	width: device-width;
+@media screen and (max-width: 400px) {
+	@-ms-viewport {
+		width: 320px;
+	}
 }
 
 body {
