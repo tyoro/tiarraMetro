@@ -371,7 +371,7 @@
 					}
 				}
 
-				$log[ 'log' ] = preg_replace_callback( "/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/", function($url) use ($on_image,$link_class,&$after){
+				$log[ 'log' ] = preg_replace_callback( "/(https?|ftp)(:\/\/[^\s]+)/", function($url) use ($on_image,$link_class,&$after){
 					$url = $url[0];
 
 					// URLの短縮と展開
