@@ -23,7 +23,7 @@
 <div class='pivot-item' name="channel">
 	<h3></h3>
 	<form method="POST" id="post_form" class="theme-bg">
-		<input type="text" name="post" id="message" />
+		<input type="text" name="post" id="message" autocomplete="off" />
 		<input type="submit" id='post_submit' name='post' value="post" />
 		<input type="checkbox" name="notice" id="notice" value="true" /><label for='notice'>notice</label>
 	</form>
@@ -136,7 +136,7 @@
 </div>
 <div id="log_popup_menu" style="display:none;">
 	<form method="post" id="quick_form" >
-		<input type="text" name="post" id="quick_message">
+		<input type="text" name="post" id="quick_message" autocomplete="off">
 		<input type="submit" value="post">
 	</form>
 	<ul id='click_menu'>
