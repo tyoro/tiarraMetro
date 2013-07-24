@@ -371,7 +371,23 @@
 					}
 				}
 
-				$log[ 'log' ] = preg_replace_callback( "/(https?|ftp):\/\/([^\s.\/]+\.)+([a-zA-Z]+)(:\d+)?(\/[^\s]+)?/iu", function($url) use ($on_image,$link_class,&$after){
+				$protocol_regexp = "(?:https?|ftp)";
+				$ipv4_regexp = "(?:\d+(.\d+){3})";
+				$ipv6_regexp = "(?:[a-f0-9:.]+)";
+				$ip_regexp = "(?:".$ipv4_regexp."|".$ipv6_regexp.")";
+				$domain_regexp = "(?:([^\s.\/]+\.)+([a-z]+))";
+				$port_regexp = "\d+";
+				$path_regexp = "[^\s]+";
+
+				$url_regexp =
+					"/(".
+						"(".$protocol_regexp.":\/\/)".
+						"(".$domain_regexp."|".$domain_regexp.")".
+						"(:".$port_regexp.")?".
+						"(\/".$path_regexp.")?".
+					")/iu";
+
+				$log[ 'log' ] = preg_replace_callback($url_regexp, function($url) use ($on_image,$link_class,&$after){
 					$url = $url[0];
 
 					// URLの短縮と展開
