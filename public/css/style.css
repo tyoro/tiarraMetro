@@ -79,6 +79,20 @@ h3 {
 	content: '▽';
 }
 
+.bottom-pane {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000;
+	padding: 0 10px;
+	height: 70px;
+}
+
+#ch_foot {
+	margin-bottom: 70px;
+}
+
 .channel_list {
 	margin: 0;
 	padding: 0;
@@ -254,8 +268,8 @@ body[accent="tiarra"] ul.channel_list li:hover {
 
 div { display:block; }
 hr { display: inline-block; width: 100%; zoom: 1; border: 2px solid #c0c0c0; }
-.status-notifier { width: 100%; height: 2em; line-height: 1em; }
-.status-notifier hr { margin: 0; padding: 0; }
+.status-notifier { width: 100%; height: 2em; }
+.status-notifier hr { margin: 0; padding: 0; box-sizing: border-box; }
 .status-notifier.new hr { border-color: #404cd0; }
 .status-notifier.hit hr { border-color: #f0b0b0; }
 
@@ -268,11 +282,10 @@ dl {margin:0;}
 dd {margin:0 0 0 1em;}
 form {
 	margin:0;
-	margin-top: .5em;
 	margin-bottom: .5em;
 }
 input[type=text],input[type=password]{
-	width: 288px;
+	width: 60%;
 	height: 1.8em;
 	/* padding-top: 20px; */
 	padding: 0 .2em;

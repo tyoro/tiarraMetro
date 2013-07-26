@@ -22,13 +22,17 @@
 </div>
 <div class='pivot-item' name="channel">
 	<h3></h3>
-	<form method="POST" id="post_form" class="theme-bg">
-		<input type="text" name="post" id="message" autocomplete="off" />
-		<input type="submit" id='post_submit' name='post' value="post" />
-		<input type="checkbox" name="notice" id="notice" value="true" /><label for='notice'>notice</label>
-	</form>
-	<div class="status-notifier">
-		<hr />
+	<div class="bottom-pane theme-bg">
+		<div class="bottom-pane-wrapper">
+			<div class="status-notifier">
+				<hr />
+			</div>
+			<form method="POST" id="post_form" class="theme-bg">
+				<input type="text" name="post" id="message" autocomplete="off" />
+				<input type="submit" id='post_submit' name='post' value="post" />
+				<input type="checkbox" name="notice" id="notice" value="true" /><label for='notice'>notice</label>
+			</form>
+		</div>
 	</div>
 	<div id="list" class="list">
 	</div>
