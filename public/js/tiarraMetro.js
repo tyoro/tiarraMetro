@@ -61,7 +61,7 @@ $(function(){
 					return false;
 				}
 
-				$('input#message').attr('disabled','disabled');
+				$('input#message').attr('readonly','readonly');
 				$('form#post_form input[type=submit]').attr('disabled','disabled');
 
 				self.history.log.unshift( message );
@@ -78,18 +78,18 @@ $(function(){
 					type:'POST',
 					success:function( json ){
 						if( json[ 'error' ] ){
-							$('input#message').removeAttr('disabled').addClass('error');
+							$('input#message').removeAttr('readonly').addClass('error');
 							$('form#post_form input[type=submit]').removeAttr('disabled');
 							alert( "Socket通信時にエラーが発生しました(投稿に成功している場合もあります)。\r\n" + json[ 'msg' ] );
 							return;
 						}
-						$('input#message').removeAttr('disabled').removeClass('error');
+						$('input#message').removeAttr('readonly').removeClass('error');
 						$('form#post_form input[type=submit]').removeAttr('disabled');
 						$('input#message').val('');
 						$('input#notice').removeAttr('checked');
 					},
 					error:function(){
-						$('input#message').removeAttr('disabled').addClass('error');
+						$('input#message').removeAttr('readonly').addClass('error');
 						$('form#post_form input[type=submit]').removeAttr('disabled');
 					},
 				});
@@ -108,7 +108,7 @@ $(function(){
                                 self.history.log.unshift( message );
                                 self.history.i = -1;
 
-				post.attr('disabled','disabled');
+				post.attr('readonly','readonly');
 				$('input[type=submit]',form).attr('disabled','disabled');
 				$.ajax({
 					url:self.mountPoint+'/api/post/',
@@ -120,7 +120,7 @@ $(function(){
 					dataType:'json',
 					type:'POST',
 					success:function(){
-						post.removeAttr('disabled').removeClass('error').val('');
+						post.removeAttr('readonly').removeClass('error').val('');
 						$('input[type=submit]',form).removeAttr('disabled');
 						if( !('auto_close' in self.currentMenu) || self.currentMenu[ 'auto_close' ] ){
 							self.popup.css('display','none');
@@ -128,7 +128,7 @@ $(function(){
 						self.sending = false;
 					},
 					error:function(){
-						post.removeAttr('disabled').removeClass('error');
+						post.removeAttr('readonly').removeClass('error');
 						$('input[type=submit]',form).removeAttr('disabled');
 						self.sending = false;
 					},
