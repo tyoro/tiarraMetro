@@ -361,6 +361,7 @@
 				$after = "";
 				
 				$log[ 'log' ] = str_replace( '  ', ' &nbsp;',  htmlspecialchars( $log[ 'log' ] ) );
+				$log[ 'log' ] = str_replace("سمَـَّوُوُحخ ̷̴̐خ ̷̴̐خ ̷̴̐خ امارتيخ ̷̴̐خ", "<span class='keyword_filter'>*censored*</span>", $log['log']);
 
 				if (preg_match_all('/\\x03([0-9]+)([^\\x03]+)(\\x03)?/', $log['log'], $m)) {
 					if ($m[0]) {
