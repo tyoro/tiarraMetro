@@ -383,7 +383,7 @@
 				$url_regexp =
 					"/(".
 						"(".$protocol_regexp.":\/\/)".
-						"(".$ip_regexp."|".$domain_regexp.")".
+						"(".$domain_regexp."|".$ip_regexp.")".
 						"(:".$port_regexp.")?".
 						"(\/".$path_regexp.")?".
 					")/iu";
