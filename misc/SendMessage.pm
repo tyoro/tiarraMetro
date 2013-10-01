@@ -85,13 +85,17 @@ sub control_requested {
         Auto::Utils::sendto_channel_closure(
             $receiver, $command, undef, undef, undef, 0
         )->($text);
-        $this->_runloop->mod_manager->get('Log::Channel')->message_arrived(
-            Tiarra::IRC::Message->new(
-                Command => $command,
-                Params  => [ $receiver, $text ]
-            ),
-            $this->_runloop->{sockets}->[1]
-        );
+
+        my $log_channel = $this->_runloop->mod_manager->get('Log::Channel');
+        if ($log_channel) {
+            $log_channel->message_arrived(
+                Tiarra::IRC::Message->new(
+                    Command => $command,
+                    Params  => [ $receiver, $text ]
+                ),
+                $this->_runloop->{sockets}->[1]
+            );
+        }
 
         my $reply = ControlPort::Reply->new(200, 'OK');
         $reply->MatchedChannels($matched);
