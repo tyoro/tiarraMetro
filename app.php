@@ -361,6 +361,7 @@
 				$after = "";
 				
 				$log[ 'log' ] = str_replace( '  ', ' &nbsp;',  htmlspecialchars( $log[ 'log' ] ) );
+				$log[ 'log' ] = preg_replace("/[\x{0300}-\x{036F}]|[\x{1DC0}-\x{1DFF}]|[\x{20D0}-\x{20FF}]|[\x{FE20}-\x{FE2F}]/u", '?', $log['log']);
 
 				if (preg_match_all('/\\x03([0-9]+)([^\\x03]+)(\\x03)?/', $log['log'], $m)) {
 					if ($m[0]) {
@@ -382,7 +383,7 @@
 				$url_regexp =
 					"/(".
 						"(".$protocol_regexp.":\/\/)".
-						"(".$domain_regexp."|".$domain_regexp.")".
+						"(".$domain_regexp."|".$ip_regexp.")".
 						"(:".$port_regexp.")?".
 						"(\/".$path_regexp.")?".
 					")/iu";

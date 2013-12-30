@@ -198,7 +198,11 @@ Text: %s\r
                 )
             );
 
-            $response = fgets($this->_socket_resource, 128);
+            $response = '';
+            while (!feof($this->_socket_resource)) {
+              $response .= fgets($this->_socket_resource, 128);
+            }
+
             if(!preg_match('@^' . preg_quote(Net_Socket_Tiarra::protocol, '@') . ' 200 OK@', $response)) {
                 throw new Net_Socket_Tiarra_Exception("error: " . $response);
             };
