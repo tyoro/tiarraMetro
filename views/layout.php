@@ -31,6 +31,7 @@
 <?php }else{ ?>
 <script type="text/javascript" src= "js/tiarraMetro.js"></script>
 <?php } ?>
+<script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
 </head>
 <body theme="<?php print $options->theme; ?>" accent="<?php print $options->accent; ?>">
 <?php if( !empty( $options->wallparper )){ ?>

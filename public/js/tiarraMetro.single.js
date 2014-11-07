@@ -392,6 +392,8 @@ $(function(){
 				});
 			}
 
+      log.log = twemoji.parse(log.log);
+
 			log.filtered = true;
 
 			return log;
