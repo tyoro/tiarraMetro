@@ -208,7 +208,7 @@ $(function(){
 				// conf.ymlから読み込んだ内容の表示
 				$('#setting_view_my_name_title').html( "<a href='http://mobile.twitter.com/"+self.jsConf['my_name']+"' target='_blank'><img src='"+self.jsConf['icon_server_uri']+self.jsConf['my_name']+"' title='"+self.jsConf['my_name']+"' /></a>" );
 				$('#setting_view_my_name').text( self.jsConf['my_name'] );
-				$('#setting_view_pickup_word').text( self.jsConf['pickup_word'] );
+				$('#setting_view_pickup_word').text( self.jsConf['pickup_word'].join(' / ') );
 				$('#setting_view_on_icon').text( self.jsConf['on_icon']?'ON':'OFF' );
 				$('#setting_view_on_image').text( (self.jsConf['on_image']==2?'Lightbox':(self.jsConf['on_image']==1?'インライン':'展開しない')) );
 				$('#setting_view_on_twitter_link').text( self.jsConf['on_twitter_link']?'ON':'OFF' );

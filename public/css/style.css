@@ -507,6 +507,9 @@ select {
 }
 
 /* colorcode */
+.colorcode00 {
+	color: White;
+}
 .colorcode01 {
 	color: Black;
 }
@@ -551,9 +554,6 @@ select {
 }
 .colorcode15 {
 	color: LightGray;
-}
-.colorcode16 {
-	color: White;
 }
 
 /* clearfix */
