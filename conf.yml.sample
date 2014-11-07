@@ -15,6 +15,7 @@ tiarra_socket_name: 'tiarrametro'
 
 #on_icon: false
 #on_image: 0
+#emoji: false
 #update_time: 3
 #pickup_word: [ 'hoge', 'ほげ' ]
 

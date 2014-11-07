@@ -392,7 +392,9 @@ $(function(){
 				});
 			}
 
-      log.log = twemoji.parse(log.log);
+      if (self.jsConf['emoji']) {
+        log.log = twemoji.parse(log.log);
+      }
 
 			log.filtered = true;
 

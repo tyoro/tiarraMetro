@@ -54,6 +54,7 @@ $jsConf = Array(
 	,'shorten_url' => false
 	,'shorten_url_api_key' => ''
 	,'expand_url' => false
+	,'emoji' => false
 	,'template' => 'table'
 	,'icon_server_uri' => 'http://img.tweetimag.es/i/'
 	,'channel_filter' => false
