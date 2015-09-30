@@ -271,11 +271,11 @@ class dao_log extends dao_base{
 			$values[] = $log_id;
 		}
 		
-		$sql .= " ORDER BY log.created_on DESC LIMIT 0, ?";
+		$sql .= " ORDER BY id DESC LIMIT 0, ?";
 		$values[] = $num;
 
 		$sql .= ") as tmplog 
-                   JOIN nick ON tmplog.nick_id = nick.id ";
+                   LEFT JOIN nick ON tmplog.nick_id = nick.id ";
 		
 		return $this->_conn->getArray($this->_conn->Prepare($sql), $values);
 	}
@@ -329,7 +329,7 @@ class dao_log extends dao_base{
 			$sql .= " AND log.created_on <= ? ";
 			$values[] = $end_date;
 		}
-		$sql .= " ORDER BY log.created_on DESC LIMIT 0,30  ) tmplog 
+		$sql .= " ORDER BY id DESC LIMIT 0,30  ) tmplog 
                    JOIN nick ON tmplog.nick_id = nick.id 
                    JOIN channel ON tmplog.channel_id = channel.id  ";
 
