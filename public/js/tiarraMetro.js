@@ -40,6 +40,8 @@ $(function(){
 
 			Shadowbox.init({skipSetup: true});
 			$(document).on("click", "#sb-player", function() { Shadowbox.close(); });
+
+			this.notificationInitilize();
 		},
 		htmlInitialize: function( param ){
 			var self = this;
@@ -731,6 +733,32 @@ $(function(){
 					});
 				}
 			}
+		},//keymappingInitialize
+		notificationInitilize: function(){
+			var self = this;
+			if(self.jsConf['web_notification']){
+				if (window.Notification){
+					switch(window.Notification.permission){
+						case 'default':
+							self.jsConf['web_notification'] = false;
+							Notification.requestPermission(function(result) {
+									switch(result){
+										case 'denied':
+										case 'default':
+											self.jsConf['web_notification'] = false;
+											break;
+										case 'granted':
+											self.jsConf['web_notification'] = true;
+											break;
+									}
+								});
+							break;
+						case 'denied':
+							self.jsConf['web_notification'] = false;
+							break;
+					}
+				}else{ self.jsConf['web_notification'] = false;}
+			}
 		},
 		onClickPivotHeader: function(header) {
 			var self = this;
@@ -820,7 +848,7 @@ $(function(){
 									if( log.is_notice != 1 && log.nick != self.jsConf.my_name ){
 										$.each( self.jsConf.pickup_word,function(j,w){
 											if( log.log.indexOf(w) >= 0 ){
-												$.jGrowl( log.nick+':'+ log.log +'('+self.getChannelName(channel_id)+')' ,{ header: 'keyword hit',life: 5000 } );
+												self.setNotification( log, channel_id );
 												$('#ch_'+channel_id).addClass('hit');
 												logs[i].pickup = true;
 											}
@@ -953,8 +981,8 @@ $(function(){
 			//time
 			result += '<span class="time">'+time+'</span>';
 
-			//icon
-			result += self.getIconString(log);
+			//user(icon)
+			result += self.getUserString(log);
 
 			//sender
 			result += '<span class="sender" data-type="'+(log.nick==self.jsConf['my_name']?'myself':'normal')+'">'+log.nick+'</span>';
@@ -1097,16 +1125,41 @@ $(function(){
 			}
 
 		},
-		getIconString : function ( log ){
-			nick = log.nick;
-			
-			if( this.jsConf[ 'auto_tail_delete' ] ){
-				nick = nick.replace(/_+$/g, "");
-			}
+		setNotification : function ( log, channel_id ){
+			channel_name = this.getChannelName(channel_id);
+			body = log.log;
 
-			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
+			title = log.nick+' : ('+channel_name+')'
+			message = log.nick+':'+ log.log +'('+channel_name+')';
+			iconUrl = this.getIconUrl(log);
+			$.jGrowl( message ,{ header: 'keyword hit',life: 5000 } );
+			if( this.jsConf['web_notification'] ){
+				var options = {
+					body: body,
+					icon: iconUrl
+				};
+				var n = new Notification(title,options);
+				setTimeout(n.close.bind(n), 5000);
+				n.onclick = function(){
+					n.close();
+					//window.open().close();
+					//window.focus();
+
+					/*
+					current_channel_name = $('div.headers span.header[name=channel]').text();
+					if( current_channel_name != channel_name ){
+						target = $(".channel_list li:contains('"+channel_name+"')");
+						target.click();
+					}
+					//*/
+				};
+			}
+		},
+		getUserString : function ( log ){
+			nick = this.changeSimpleUserNick( log.nick );
+			url = this.getIconUrl( log );
 			
-			var ret = '<img src="'+this.jsConf['icon_server_uri']+nick+'" alt="'+nick+'">';
+			var ret = '<img src="'+url+'" alt="'+nick+'">';
 
 			if( this.jsConf['on_twitter_link'] == 1 ){
 				ret = '<a class="avatar" href="http://mobile.twitter.com/'+nick+'" target="_blank">'+ret+'</a>';
@@ -1115,6 +1168,23 @@ $(function(){
 			}
 
 			return ret;
+		},
+		getIconUrl : function ( log ){
+
+			nick = this.changeSimpleUserNick( log.nick );
+
+			var url = this.jsConf['icon_server_uri']+nick;
+
+			return url;
+		},
+		changeSimpleUserNick : function ( nick ){
+			if( this.jsConf[ 'auto_tail_delete' ] ){
+				nick = nick.replace(/_+$/g, "");
+			}
+
+			if( this.jsConf['alias'] && nick in this.jsConf['alias'] ){ nick = this.jsConf['alias'][ nick ]; }
+			
+			return nick;
 		},
 		getChannelName : function( i ){
 			return $('li#ch_'+i+' span.ch_name').text();

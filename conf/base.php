@@ -69,6 +69,7 @@ $jsConf = Array(
 	,'auto_tail_delete' => false
 	,'side_channel_list' => false
 	,'single_mode' => false
+	,'web_notification' => false
 );
 
 $tig_default_popup_menu = Array(
