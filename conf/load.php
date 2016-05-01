@@ -9,7 +9,9 @@ if( $y2c->check() ){
 	print $y2c->errorMessage();
 	exit;
 }
+$y2c->proofread();
 
+// グローバル変数へ設定
 $conf = $y2c->conf;
 $jsConf = $y2c->jsConf;
 
@@ -28,6 +30,11 @@ class  yaml2conf
 		$this->jsConf = $jsConf;
 	}
 
+	// 表記ゆれの吸収
+	public function proofread()
+	{
+		$this->conf['mountPoint'] = rtrim( $this->conf['mountPoint'], '/');
+	}
 	
 	public function check()
 	{	
